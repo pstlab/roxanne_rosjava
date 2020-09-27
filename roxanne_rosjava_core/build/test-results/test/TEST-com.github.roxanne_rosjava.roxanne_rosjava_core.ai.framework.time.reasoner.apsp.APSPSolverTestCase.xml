@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.time.reasoner.apsp.APSPSolverTestCase" tests="6" skipped="0" failures="0" errors="0" timestamp="2020-09-27T23:00:27" hostname="rosbeef" time="5.321">
+  <properties/>
+  <testcase name="example2Incremental" classname="com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.time.reasoner.apsp.APSPSolverTestCase" time="1.586"/>
+  <testcase name="init" classname="com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.time.reasoner.apsp.APSPSolverTestCase" time="0.658"/>
+  <testcase name="updateTemporalNetworkEdges" classname="com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.time.reasoner.apsp.APSPSolverTestCase" time="0.606"/>
+  <testcase name="updateTemporalNetworkPoint" classname="com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.time.reasoner.apsp.APSPSolverTestCase" time="0.449"/>
+  <testcase name="example1" classname="com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.time.reasoner.apsp.APSPSolverTestCase" time="1.01"/>
+  <testcase name="example2" classname="com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.time.reasoner.apsp.APSPSolverTestCase" time="1.012"/>
+  <system-out><![CDATA[**********************************************************************************
+****************************** APSPU Solver Test Case ****************************
+**********************************************************************************
+- SimpleTemporalNetworkWithUncertainty {
+	[TimePoint id=0, lb= 0, ub= 0]
+		[TimePointDistanceConstraint id= (0:0-1) <c> duration= [500, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (14:0-2) <c> duration= [10, 20] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=2, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (3:0-3) <c> duration= [0, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=3, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (5:0-4) <c> duration= [0, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=4, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (15:0-5) <c> duration= [60, 70] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=5, lb= 0, ub= 500]]
+	[TimePoint id=1, lb= 500, ub= 500]
+	[TimePoint id=2, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (2:2-1) <c> duration= [0, 500] reference= [TimePoint id=2, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (11:2-3) <c> duration= [30, 40] reference= [TimePoint id=2, lb= 0, ub= 500] target= [TimePoint id=3, lb= 0, ub= 500]]
+	[TimePoint id=3, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (4:3-1) <c> duration= [0, 500] reference= [TimePoint id=3, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+	[TimePoint id=4, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (6:4-1) <c> duration= [0, 500] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (12:4-3) <c> duration= [10, 20] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=3, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (13:4-5) <c> duration= [40, 50] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=5, lb= 0, ub= 500]]
+	[TimePoint id=5, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (8:5-1) <c> duration= [0, 500] reference= [TimePoint id=5, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+}
+
+[Test]: example2Incremental() --------------------
+[Minimum Distance Matrix] - Computed by Floyd-Warshall Algorithm
+	0	500	10	30
+	-500	0	-490	-470
+	-5	495	0	20
+	-25	475	-20	0
+
+**********************************************************************************
+****************************** APSPU Solver Test Case ****************************
+**********************************************************************************
+- SimpleTemporalNetworkWithUncertainty {
+	[TimePoint id=0, lb= 0, ub= 0]
+		[TimePointDistanceConstraint id= (24:0-1) <c> duration= [500, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (38:0-2) <c> duration= [10, 20] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=2, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (27:0-3) <c> duration= [0, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=3, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (29:0-4) <c> duration= [0, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=4, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (39:0-5) <c> duration= [60, 70] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=5, lb= 0, ub= 500]]
+	[TimePoint id=1, lb= 500, ub= 500]
+	[TimePoint id=2, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (26:2-1) <c> duration= [0, 500] reference= [TimePoint id=2, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (35:2-3) <c> duration= [30, 40] reference= [TimePoint id=2, lb= 0, ub= 500] target= [TimePoint id=3, lb= 0, ub= 500]]
+	[TimePoint id=3, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (28:3-1) <c> duration= [0, 500] reference= [TimePoint id=3, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+	[TimePoint id=4, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (30:4-1) <c> duration= [0, 500] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (36:4-3) <c> duration= [10, 20] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=3, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (37:4-5) <c> duration= [40, 50] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=5, lb= 0, ub= 500]]
+	[TimePoint id=5, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (32:5-1) <c> duration= [0, 500] reference= [TimePoint id=5, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+}
+
+[Test]: init() --------------------
+[Minimum Distance Matrix] - Computed by Floyd-Warshall Algorithm
+	0	500	20	50	30	70
+	-500	0	-480	-450	-470	-430
+	-10	490	0	40	20	60
+	-40	460	-30	0	-10	30
+	-20	480	-10	20	0	50
+	-60	440	-50	-20	-40	0
+
+**********************************************************************************
+****************************** APSPU Solver Test Case ****************************
+**********************************************************************************
+- SimpleTemporalNetworkWithUncertainty {
+	[TimePoint id=0, lb= 0, ub= 0]
+		[TimePointDistanceConstraint id= (40:0-1) <c> duration= [500, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (54:0-2) <c> duration= [10, 20] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=2, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (43:0-3) <c> duration= [0, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=3, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (45:0-4) <c> duration= [0, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=4, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (55:0-5) <c> duration= [60, 70] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=5, lb= 0, ub= 500]]
+	[TimePoint id=1, lb= 500, ub= 500]
+	[TimePoint id=2, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (42:2-1) <c> duration= [0, 500] reference= [TimePoint id=2, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (51:2-3) <c> duration= [30, 40] reference= [TimePoint id=2, lb= 0, ub= 500] target= [TimePoint id=3, lb= 0, ub= 500]]
+	[TimePoint id=3, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (44:3-1) <c> duration= [0, 500] reference= [TimePoint id=3, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+	[TimePoint id=4, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (46:4-1) <c> duration= [0, 500] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (52:4-3) <c> duration= [10, 20] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=3, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (53:4-5) <c> duration= [40, 50] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=5, lb= 0, ub= 500]]
+	[TimePoint id=5, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (48:5-1) <c> duration= [0, 500] reference= [TimePoint id=5, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+}
+
+[Test]: updateTemporalNetworkEdges() --------------------
+[Minimum Distance Matrix] - Computed by Floyd-Warshall Algorithm
+	0	500	15	45	25	65
+	-500	0	-485	-455	-475	-435
+	-10	490	0	35	15	55
+	-40	460	-30	0	-15	25
+	-20	480	-10	20	0	45
+	-61	439	-50	-20	-40	0
+
+[Minimum Distance Matrix] - Computed by Floyd-Warshall Algorithm
+	0	500	20	60	50	100
+	-500	0	-480	-440	-450	-400
+	-10	490	0	40	30	80
+	-40	460	-30	0	-10	40
+	-20	480	-10	20	0	50
+	-60	440	-50	-20	-40	0
+
+**********************************************************************************
+****************************** APSPU Solver Test Case ****************************
+**********************************************************************************
+- SimpleTemporalNetworkWithUncertainty {
+	[TimePoint id=0, lb= 0, ub= 0]
+		[TimePointDistanceConstraint id= (59:0-1) <c> duration= [500, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (73:0-2) <c> duration= [10, 20] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=2, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (62:0-3) <c> duration= [0, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=3, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (64:0-4) <c> duration= [0, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=4, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (74:0-5) <c> duration= [60, 70] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=5, lb= 0, ub= 500]]
+	[TimePoint id=1, lb= 500, ub= 500]
+	[TimePoint id=2, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (61:2-1) <c> duration= [0, 500] reference= [TimePoint id=2, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (70:2-3) <c> duration= [30, 40] reference= [TimePoint id=2, lb= 0, ub= 500] target= [TimePoint id=3, lb= 0, ub= 500]]
+	[TimePoint id=3, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (63:3-1) <c> duration= [0, 500] reference= [TimePoint id=3, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+	[TimePoint id=4, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (65:4-1) <c> duration= [0, 500] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (71:4-3) <c> duration= [10, 20] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=3, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (72:4-5) <c> duration= [40, 50] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=5, lb= 0, ub= 500]]
+	[TimePoint id=5, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (67:5-1) <c> duration= [0, 500] reference= [TimePoint id=5, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+}
+
+[Test]: updateTemporalNetworkPoint() --------------------
+[Minimum Distance Matrix] - Computed by Floyd-Warshall Algorithm
+	0	500	20	50	30	70	500	500
+	-500	0	-480	-450	-470	-430	0	0
+	-10	490	0	40	20	60	490	490
+	-40	460	-30	0	-10	30	460	460
+	-20	480	-10	20	0	50	480	480
+	-60	440	-50	-20	-40	0	440	440
+	0	500	20	50	30	70	0	500
+	0	500	20	50	30	70	500	0
+
+**********************************************************************************
+****************************** APSPU Solver Test Case ****************************
+**********************************************************************************
+- SimpleTemporalNetworkWithUncertainty {
+	[TimePoint id=0, lb= 0, ub= 0]
+		[TimePointDistanceConstraint id= (79:0-1) <c> duration= [500, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (93:0-2) <c> duration= [10, 20] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=2, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (82:0-3) <c> duration= [0, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=3, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (84:0-4) <c> duration= [0, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=4, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (94:0-5) <c> duration= [60, 70] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=5, lb= 0, ub= 500]]
+	[TimePoint id=1, lb= 500, ub= 500]
+	[TimePoint id=2, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (81:2-1) <c> duration= [0, 500] reference= [TimePoint id=2, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (90:2-3) <c> duration= [30, 40] reference= [TimePoint id=2, lb= 0, ub= 500] target= [TimePoint id=3, lb= 0, ub= 500]]
+	[TimePoint id=3, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (83:3-1) <c> duration= [0, 500] reference= [TimePoint id=3, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+	[TimePoint id=4, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (85:4-1) <c> duration= [0, 500] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (91:4-3) <c> duration= [10, 20] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=3, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (92:4-5) <c> duration= [40, 50] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=5, lb= 0, ub= 500]]
+	[TimePoint id=5, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (87:5-1) <c> duration= [0, 500] reference= [TimePoint id=5, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+}
+
+[Test]: example1() --------------------
+[Minimum Distance Matrix] - Computed by Floyd-Warshall Algorithm
+	0	500	460	470	450
+	-500	0	-40	-30	-50
+	-30	470	-30	-20	-40
+	-40	460	-40	-30	-50
+	-50	450	-50	-40	-60
+
+**********************************************************************************
+****************************** APSPU Solver Test Case ****************************
+**********************************************************************************
+- SimpleTemporalNetworkWithUncertainty {
+	[TimePoint id=0, lb= 0, ub= 0]
+		[TimePointDistanceConstraint id= (105:0-1) <c> duration= [500, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (119:0-2) <c> duration= [10, 20] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=2, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (108:0-3) <c> duration= [0, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=3, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (110:0-4) <c> duration= [0, 500] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=4, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (120:0-5) <c> duration= [60, 70] reference= [TimePoint id=0, lb= 0, ub= 0] target= [TimePoint id=5, lb= 0, ub= 500]]
+	[TimePoint id=1, lb= 500, ub= 500]
+	[TimePoint id=2, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (107:2-1) <c> duration= [0, 500] reference= [TimePoint id=2, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (116:2-3) <c> duration= [30, 40] reference= [TimePoint id=2, lb= 0, ub= 500] target= [TimePoint id=3, lb= 0, ub= 500]]
+	[TimePoint id=3, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (109:3-1) <c> duration= [0, 500] reference= [TimePoint id=3, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+	[TimePoint id=4, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (111:4-1) <c> duration= [0, 500] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+		[TimePointDistanceConstraint id= (117:4-3) <c> duration= [10, 20] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=3, lb= 0, ub= 500]]
+		[TimePointDistanceConstraint id= (118:4-5) <c> duration= [40, 50] reference= [TimePoint id=4, lb= 0, ub= 500] target= [TimePoint id=5, lb= 0, ub= 500]]
+	[TimePoint id=5, lb= 0, ub= 500]
+		[TimePointDistanceConstraint id= (113:5-1) <c> duration= [0, 500] reference= [TimePoint id=5, lb= 0, ub= 500] target= [TimePoint id=1, lb= 500, ub= 500]]
+}
+
+[Test]: example2() --------------------
+[Minimum Distance Matrix] - Computed by Floyd-Warshall Algorithm
+	0	500	10	30
+	-500	0	-490	-470
+	-5	495	0	20
+	-25	475	-20	0
+
+]]></system-out>
+  <system-err><![CDATA[Sep 28, 2020 1:00:27 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster created with settings {hosts=[127.0.0.1:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+Sep 28, 2020 1:00:27 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster description not yet available. Waiting for 30000 ms before timing out
+Sep 28, 2020 1:00:27 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:1, serverValue:16}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:27 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Monitor thread successfully connected to server with description ServerDescription{address=127.0.0.1:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 8]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=4968174}
+Sep 28, 2020 1:00:27 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:2, serverValue:17}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:28 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster created with settings {hosts=[127.0.0.1:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+Sep 28, 2020 1:00:28 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:3, serverValue:18}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:28 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster description not yet available. Waiting for 30000 ms before timing out
+Sep 28, 2020 1:00:28 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Monitor thread successfully connected to server with description ServerDescription{address=127.0.0.1:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 8]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=1014961}
+Sep 28, 2020 1:00:28 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:4, serverValue:19}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:28 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster created with settings {hosts=[127.0.0.1:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+Sep 28, 2020 1:00:28 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster description not yet available. Waiting for 30000 ms before timing out
+Sep 28, 2020 1:00:28 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:5, serverValue:20}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:28 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Monitor thread successfully connected to server with description ServerDescription{address=127.0.0.1:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 8]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=3453150}
+Sep 28, 2020 1:00:28 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:6, serverValue:21}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:29 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster created with settings {hosts=[127.0.0.1:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+Sep 28, 2020 1:00:29 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:7, serverValue:22}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:29 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster description not yet available. Waiting for 30000 ms before timing out
+Sep 28, 2020 1:00:29 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Monitor thread successfully connected to server with description ServerDescription{address=127.0.0.1:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 8]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=941609}
+Sep 28, 2020 1:00:29 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:8, serverValue:23}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:30 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster created with settings {hosts=[127.0.0.1:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+Sep 28, 2020 1:00:30 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:9, serverValue:24}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:30 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster description not yet available. Waiting for 30000 ms before timing out
+Sep 28, 2020 1:00:30 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Monitor thread successfully connected to server with description ServerDescription{address=127.0.0.1:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 8]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=1037423}
+Sep 28, 2020 1:00:30 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:10, serverValue:25}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:30 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster created with settings {hosts=[127.0.0.1:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+Sep 28, 2020 1:00:30 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:11, serverValue:26}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:30 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Monitor thread successfully connected to server with description ServerDescription{address=127.0.0.1:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 8]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=802941}
+Sep 28, 2020 1:00:30 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:12, serverValue:27}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:30 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster created with settings {hosts=[127.0.0.1:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+Sep 28, 2020 1:00:31 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:13, serverValue:28}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:31 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Monitor thread successfully connected to server with description ServerDescription{address=127.0.0.1:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 8]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=975205}
+Sep 28, 2020 1:00:31 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster description not yet available. Waiting for 30000 ms before timing out
+Sep 28, 2020 1:00:31 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:14, serverValue:29}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:31 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster created with settings {hosts=[127.0.0.1:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+Sep 28, 2020 1:00:31 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster description not yet available. Waiting for 30000 ms before timing out
+Sep 28, 2020 1:00:31 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:15, serverValue:30}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:31 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Monitor thread successfully connected to server with description ServerDescription{address=127.0.0.1:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 8]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=2979275}
+Sep 28, 2020 1:00:31 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:16, serverValue:31}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:32 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster created with settings {hosts=[127.0.0.1:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+Sep 28, 2020 1:00:32 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster description not yet available. Waiting for 30000 ms before timing out
+Sep 28, 2020 1:00:32 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:17, serverValue:32}] to 127.0.0.1:27017
+Sep 28, 2020 1:00:32 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Monitor thread successfully connected to server with description ServerDescription{address=127.0.0.1:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[4, 2, 8]}, minWireVersion=0, maxWireVersion=8, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=964529}
+Sep 28, 2020 1:00:32 AM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:18, serverValue:33}] to 127.0.0.1:27017
+]]></system-err>
+</testsuite>

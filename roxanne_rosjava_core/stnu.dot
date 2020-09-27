@@ -1,0 +1,11 @@
+digraph stnu {
+	rankdir=LR;
+	node [with=.2, height=.2, fontsize=5, shape=circle, style=filled, fillcolor=white];	2 -> 1 [fontsize=8, arrowsize= .5, label = "[0,500]"];
+	2 -> 3 [fontsize=8, arrowsize= .5, label = "[20,20]"];
+	3 -> 1 [fontsize=8, arrowsize= .5, label = "[0,500]"];
+	0 -> 1 [fontsize=8, arrowsize= .5, label = "[500,500]"];
+	0 -> 2 [fontsize=8, arrowsize= .5, label = "[5,10]"];
+	0 -> 3 [fontsize=8, arrowsize= .5, label = "[0,500]"];
+
+}
+
