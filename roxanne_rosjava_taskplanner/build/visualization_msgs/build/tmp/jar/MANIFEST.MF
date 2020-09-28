@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Export-Package: visualization_msgs;version="1.12.7";uses:="geometry_ms
+ gs,org.ros.internal.message,org.ros.message,std_msgs"
+Bundle-SymbolicName: org.ros.rosjava_messages.visualization_msgs
+Bundle-Version: 1.12.7
+Bundle-Name: visualization_msgs
+Bundle-ManifestVersion: 2
+Bnd-LastModified: 1601304247000
+Import-Package: geometry_msgs;version="[1.12,2)",org.ros.internal.mess
+ age,org.ros.message,std_msgs;version="[0.5,1)"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+Created-By: 1.8.0_241 (Oracle Corporation)
+Tool: Bnd-3.4.0.201707252008
+

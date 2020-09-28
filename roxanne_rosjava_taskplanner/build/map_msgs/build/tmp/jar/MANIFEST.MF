@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Export-Package: map_msgs;version="1.13.0";uses:="nav_msgs,org.jboss.ne
+ tty.buffer,org.ros.internal.message,sensor_msgs,std_msgs"
+Bundle-SymbolicName: org.ros.rosjava_messages.map_msgs
+Bundle-Version: 1.13.0
+Bundle-Name: map_msgs
+Bundle-ManifestVersion: 2
+Bnd-LastModified: 1601304285000
+Import-Package: nav_msgs;version="[1.12,2)",org.jboss.netty.buffer;ver
+ sion="[3.5,4)",org.ros.internal.message,sensor_msgs;version="[1.12,2)
+ ",std_msgs;version="[0.5,1)"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+Created-By: 1.8.0_241 (Oracle Corporation)
+Tool: Bnd-3.4.0.201707252008
+

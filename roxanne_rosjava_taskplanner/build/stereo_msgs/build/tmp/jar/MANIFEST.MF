@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Export-Package: stereo_msgs;version="1.12.7";uses:="org.ros.internal.m
+ essage,sensor_msgs,std_msgs"
+Bundle-SymbolicName: org.ros.rosjava_messages.stereo_msgs
+Bundle-Version: 1.12.7
+Bundle-Name: stereo_msgs
+Bundle-ManifestVersion: 2
+Bnd-LastModified: 1601304291000
+Import-Package: org.ros.internal.message,sensor_msgs;version="[1.12,2)
+ ",std_msgs;version="[0.5,1)"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+Created-By: 1.8.0_241 (Oracle Corporation)
+Tool: Bnd-3.4.0.201707252008
+

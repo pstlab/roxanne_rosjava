@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Export-Package: bond;version="1.8.5";uses:="org.ros.internal.message,s
+ td_msgs"
+Bundle-SymbolicName: org.ros.rosjava_messages.bond
+Bundle-Version: 1.8.5
+Bundle-Name: bond
+Bundle-ManifestVersion: 2
+Bnd-LastModified: 1601304226000
+Import-Package: org.ros.internal.message,std_msgs;version="[0.5,1)"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+Created-By: 1.8.0_241 (Oracle Corporation)
+Tool: Bnd-3.4.0.201707252008
+

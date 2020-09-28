@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Export-Package: controller_manager_msgs;version="0.18.2";uses:="org.ro
+ s.internal.message,org.ros.message,std_msgs"
+Bundle-SymbolicName: org.ros.rosjava_messages.controller_manager_msgs
+Bundle-Version: 0.18.2
+Bundle-Name: controller_manager_msgs
+Bundle-ManifestVersion: 2
+Bnd-LastModified: 1601304227000
+Import-Package: org.ros.internal.message,org.ros.message,std_msgs;vers
+ ion="[0.5,1)"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+Created-By: 1.8.0_241 (Oracle Corporation)
+Tool: Bnd-3.4.0.201707252008
+
