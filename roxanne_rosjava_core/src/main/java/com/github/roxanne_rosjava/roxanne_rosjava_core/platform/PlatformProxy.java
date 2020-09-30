@@ -42,7 +42,7 @@ public abstract class PlatformProxy
 	 *  The interactions between the executive and the physical platform are 
 	 *  managed through a dedicated PROXY which must implement this interface
 	 * 
-	 * @param executive
+	 * @param obesrver
 	 */
 	public void register(PlatformObserver observer) {
 		// register a new observer
@@ -78,7 +78,7 @@ public abstract class PlatformProxy
 	 * in charge of the execution of the related command and therefore it will then notify the 
 	 * acting agent about the successful execution or failures.
 	 * 
-	 * Feedbacks about the execution of the command will be then received through the PlatformObserver 
+	 * Feedback about the execution of the command will be then received through the PlatformObserver
 	 * interface
 	 * 
 	 * @param node
