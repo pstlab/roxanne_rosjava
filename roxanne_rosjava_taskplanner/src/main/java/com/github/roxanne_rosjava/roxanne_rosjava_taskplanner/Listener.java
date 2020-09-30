@@ -16,6 +16,7 @@
 
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner;
 
+import actionlib_msgs.GoalID;
 import org.apache.commons.logging.Log;
 import org.ros.message.MessageListener;
 import org.ros.namespace.GraphName;
