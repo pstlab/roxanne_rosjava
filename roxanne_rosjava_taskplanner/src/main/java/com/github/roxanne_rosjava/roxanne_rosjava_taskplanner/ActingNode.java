@@ -2,7 +2,9 @@ package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner;
 
 import com.github.roxanne_rosjava.roxanne_rosjava_core.control.lang.AgentTaskDescription;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.control.lang.Goal;
+import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.PlatformProxy;
 import com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.control.acting.GoalOrientedActingAgent;
+import com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.ROSJavaPlatformProxy;
 import org.apache.commons.logging.Log;
 import org.ros.message.MessageListener;
 import org.ros.namespace.GraphName;
@@ -31,7 +33,7 @@ public class ActingNode extends AbstractNodeMain
     @Override
     public GraphName getDefaultNodeName() {
         // set node name
-        return GraphName.of("roxanne/acting");
+        return GraphName.of("/roxanne/acting");
     }
 
     /**
@@ -45,8 +47,11 @@ public class ActingNode extends AbstractNodeMain
         this.log = connectedNode.getLog();
         try
         {
+            // create ROSJava platform proxy
+            PlatformProxy proxy = new ROSJavaPlatformProxy(connectedNode);
+
             // create the acting agent
-            this.agent = new GoalOrientedActingAgent(PROPERTY_FILE);
+            this.agent = new GoalOrientedActingAgent(PROPERTY_FILE, proxy);
             // start the agent
             this.log.info("Starting acting agent...");
             // set acting agent

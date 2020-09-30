@@ -127,7 +127,68 @@ public class GoalOrientedActingAgent
 			throw new RuntimeException(ex.getMessage());
 		}
 	}
-	
+
+	/**
+	 *
+	 * @param propertyFile
+	 * @param proxy
+	 */
+	public GoalOrientedActingAgent(String propertyFile, PlatformProxy proxy)
+	{
+		try
+		{
+			// set lock and status
+			this.lock = new Object();
+			// set status
+			this.status = ActingAgentStatus.OFFLINE;
+			// set goal buffer
+			this.queue = new HashMap<>();
+			// set goal queue
+			for (GoalStatus s : GoalStatus.values()) {
+				this.queue.put(s, new LinkedList<Goal>());
+			}
+
+			// set internal plan database representation
+			this.pdb = null;
+			// set platform
+			this.processes = null;
+
+
+			// get agent property file
+			this.properties = new FilePropertyReader(propertyFile);
+
+			// get DDL file
+			String ddlFile = this.properties.getProperty("model");
+			// check if null
+			if (ddlFile == null || ddlFile.equals("")) {
+				throw new RuntimeException("You need to specify an acting model of the agent in \"etc/agent.properties\"!");
+			}
+
+			// set the model
+			this.ddl = ddlFile;
+
+			// read the class name of the planner
+			String plannerClassName = this.properties.getProperty("planner");
+			// set planner class
+			this.pClass = (Class<? extends Planner>) Class.forName(plannerClassName);
+			// set display plan flag
+			this.displayPlan = this.properties.getProperty("display_plan").equals("1") ? true : false;
+
+			// read the class name of the executive
+			String executiveClassName = this.properties.getProperty("executive");
+			// set executive class
+			this.eClass = (Class<? extends Executive>) Class.forName(executiveClassName);
+
+			// set platform proxy
+			this.proxy = proxy;
+			// setup deliberative and executive processes
+			this.setupProcesses();
+		}
+		catch (Exception ex) {
+			throw new RuntimeException(ex.getMessage());
+		}
+	}
+
 	
 	/**
 	 * 
