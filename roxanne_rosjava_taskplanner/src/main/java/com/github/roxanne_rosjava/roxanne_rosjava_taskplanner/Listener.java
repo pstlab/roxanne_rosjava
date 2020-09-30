@@ -24,6 +24,7 @@ import org.ros.node.AbstractNodeMain;
 import org.ros.node.ConnectedNode;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Subscriber;
+import roxanne_rosjava_msgs.*;
 
 /**
  * A simple {@link Subscriber} {@link NodeMain}.
@@ -37,6 +38,9 @@ public class Listener extends AbstractNodeMain {
 
   @Override
   public void onStart(ConnectedNode connectedNode) {
+
+    // try to use custom message
+    DispatchedToken msg; 
     final Log log = connectedNode.getLog();
     Subscriber<std_msgs.String> subscriber = connectedNode.newSubscriber("chatter", std_msgs.String._TYPE);
     subscriber.addMessageListener(new MessageListener<std_msgs.String>() {

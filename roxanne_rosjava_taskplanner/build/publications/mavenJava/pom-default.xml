@@ -13,6 +13,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>org.ros.rosjava_messages</groupId>
+      <artifactId>roxanne_rosjava_msgs</artifactId>
+      <version>0.1.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>com.github.rosjava.roxanne_rosjava</groupId>
       <artifactId>roxanne_rosjava_core</artifactId>
       <version>0.1.0</version>
