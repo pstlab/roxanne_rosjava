@@ -59,18 +59,18 @@ public class ActingNode extends AbstractNodeMain
 
 
             // create a subscriber to the goal input topic
-            Subscriber<std_msgs.String> subscriber = connectedNode.newSubscriber(
+            Subscriber<roxanne_rosjava_msgs.ActingGoal> subscriber = connectedNode.newSubscriber(
                     "roxanne/acting/goal",
-                    std_msgs.String._TYPE);
+                    roxanne_rosjava_msgs.ActingGoal._TYPE);
 
             // synchronous goal management
-            subscriber.addMessageListener(new MessageListener<std_msgs.String>()
+            subscriber.addMessageListener(new MessageListener<roxanne_rosjava_msgs.ActingGoal>()
             {
                 @Override
-                public void onNewMessage(std_msgs.String message)
+                public void onNewMessage(roxanne_rosjava_msgs.ActingGoal message)
                 {
                     // received input goal
-                    log.info("I have received a goal to plan for: \"" + message.getData() + "\"");
+                    //log.info("I have received a goal to plan for: \"" + message.getData() + "\"");
                     // create task descriptor
                     AgentTaskDescription goal = new AgentTaskDescription();
 

@@ -24,7 +24,7 @@ public class ROSJavaPlatformProxy extends PlatformProxy
     private static final String OBSERVATION_TOPIC = "/roxanne/acting/observation";
 
     private ConnectedNode node;
-    private Subscriber<roxanne_rosjava_msgs.DispatchedTokenFeedback> fSubscriber;
+    private Subscriber<roxanne_rosjava_msgs.TokenExecutionFeedback> fSubscriber;
     private Subscriber<roxanne_rosjava_msgs.Observation> oSubscriber;
 
     private Map<String, PlatformCommand> dispatchedIndex;   // index of dispatched commands by ID
@@ -53,12 +53,12 @@ public class ROSJavaPlatformProxy extends PlatformProxy
         // subscribe to feedback topic
         this.fSubscriber = this.node.newSubscriber(
                 FEEDBACK_TOPIC,
-                roxanne_rosjava_msgs.DispatchedTokenFeedback._TYPE);
+                roxanne_rosjava_msgs.TokenExecutionFeedback._TYPE);
         // set execution feedback listener
-        fSubscriber.addMessageListener(new MessageListener<roxanne_rosjava_msgs.DispatchedTokenFeedback>() {
+        fSubscriber.addMessageListener(new MessageListener<roxanne_rosjava_msgs.TokenExecutionFeedback>() {
 
             @Override
-            public void onNewMessage(roxanne_rosjava_msgs.DispatchedTokenFeedback message) {
+            public void onNewMessage(roxanne_rosjava_msgs.TokenExecutionFeedback message) {
 
                 /*
                  * TODO
@@ -96,13 +96,13 @@ public class ROSJavaPlatformProxy extends PlatformProxy
          */
 
         // create a message publisher
-        Publisher<roxanne_rosjava_msgs.DispatchedToken> publisher =
+        Publisher<roxanne_rosjava_msgs.TokenExecution> publisher =
                 this.node.newPublisher(
                         DISPATCHING_TOPIC,
-                        roxanne_rosjava_msgs.DispatchedToken._TYPE);
+                        roxanne_rosjava_msgs.TokenExecution._TYPE);
 
         // create message too dispatch
-        roxanne_rosjava_msgs.DispatchedToken msg = publisher.newMessage();
+        roxanne_rosjava_msgs.TokenExecution msg = publisher.newMessage();
         // set data eg. msg.setData("x");
         // publish dispatched token
         publisher.publish(msg);
@@ -124,13 +124,13 @@ public class ROSJavaPlatformProxy extends PlatformProxy
          */
 
         // create a message publisher
-        Publisher<roxanne_rosjava_msgs.DispatchedToken> publisher =
+        Publisher<roxanne_rosjava_msgs.TokenExecution> publisher =
                 this.node.newPublisher(
                         DISPATCHING_TOPIC,
-                        roxanne_rosjava_msgs.DispatchedToken._TYPE);
+                        roxanne_rosjava_msgs.TokenExecution._TYPE);
 
         // create message too dispatch
-        roxanne_rosjava_msgs.DispatchedToken msg = publisher.newMessage();
+        roxanne_rosjava_msgs.TokenExecution msg = publisher.newMessage();
         // set data eg. msg.setData("x");
         // publish dispatched token
         publisher.publish(msg);
@@ -166,3 +166,5 @@ public class ROSJavaPlatformProxy extends PlatformProxy
 
 
 }
+
+
