@@ -166,7 +166,8 @@ public class GoalOrientedActingAgent
 
 			// set the model
 			this.ddl = ddlFile;
-
+		
+			System.out.println("Setting up planner");
 			// read the class name of the planner
 			String plannerClassName = this.properties.getProperty("planner");
 			// set planner class
@@ -174,6 +175,7 @@ public class GoalOrientedActingAgent
 			// set display plan flag
 			this.displayPlan = this.properties.getProperty("display_plan").equals("1") ? true : false;
 
+			System.out.println("Setting up executive");
 			// read the class name of the executive
 			String executiveClassName = this.properties.getProperty("executive");
 			// set executive class
@@ -181,6 +183,8 @@ public class GoalOrientedActingAgent
 
 			// set platform proxy
 			this.proxy = proxy;
+
+			System.out.println("Finalizing agent preparation...");
 			// setup deliberative and executive processes
 			this.setupProcesses();
 		}

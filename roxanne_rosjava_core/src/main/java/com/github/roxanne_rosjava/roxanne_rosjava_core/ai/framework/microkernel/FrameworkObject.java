@@ -10,6 +10,8 @@ import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.utils.log.Fr
  */
 public abstract class FrameworkObject 
 {
+	protected static final String FRAMEWORK_HOME = System.getenv("ROXANNE_HOME") != null ? System.getenv("ROXANNE_HOME") + "/" : "";
+
 	@FrameworkLoggerPlaceholder
 	private static FrameworkLogger logger;
 
