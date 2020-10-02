@@ -78,7 +78,8 @@ public class GoalOrientedActingAgent
 			this.processes = null;
 			
 			// get default agent property file
-			this.properties = new FilePropertyReader(FilePropertyReader.DEFAULT_AGENT_PROPERTY);
+			this.properties = new FilePropertyReader(
+					System.getenv("ROXANNE_HOME") != null ? System.getenv("ROXANNE_HOME") + "/" + FilePropertyReader.DEFAULT_AGENT_PROPERTY : FilePropertyReader.DEFAULT_AGENT_PROPERTY);
 			
 			// get DDL file 
 			String ddlFile = this.properties.getProperty("model");
@@ -153,10 +154,8 @@ public class GoalOrientedActingAgent
 			// set platform
 			this.processes = null;
 
-
 			// get agent property file
 			this.properties = new FilePropertyReader(propertyFile);
-
 			// get DDL file
 			String ddlFile = this.properties.getProperty("model");
 			// check if null
@@ -166,16 +165,12 @@ public class GoalOrientedActingAgent
 
 			// set the model
 			this.ddl = ddlFile;
-		
-			System.out.println("Setting up planner");
 			// read the class name of the planner
 			String plannerClassName = this.properties.getProperty("planner");
 			// set planner class
 			this.pClass = (Class<? extends Planner>) Class.forName(plannerClassName);
 			// set display plan flag
 			this.displayPlan = this.properties.getProperty("display_plan").equals("1") ? true : false;
-
-			System.out.println("Setting up executive");
 			// read the class name of the executive
 			String executiveClassName = this.properties.getProperty("executive");
 			// set executive class
@@ -183,8 +178,6 @@ public class GoalOrientedActingAgent
 
 			// set platform proxy
 			this.proxy = proxy;
-
-			System.out.println("Finalizing agent preparation...");
 			// setup deliberative and executive processes
 			this.setupProcesses();
 		}

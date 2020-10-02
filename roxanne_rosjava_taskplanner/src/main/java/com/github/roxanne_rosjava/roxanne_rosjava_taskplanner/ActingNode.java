@@ -12,7 +12,6 @@ import org.ros.node.AbstractNodeMain;
 import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
 import org.ros.node.topic.Subscriber;
-
 import java.util.List;
 
 /**
@@ -48,12 +47,12 @@ public class ActingNode extends AbstractNodeMain
         this.log = connectedNode.getLog();
         try
         {
-	    // creating platform
-	    this.log.info("Setting up platform...");
+	        // creating platform
+	        this.log.info("Setting up platform...");
             // create ROSJava platform proxy
             PlatformProxy proxy = new ROSJavaPlatformProxy(connectedNode);
-	    // creating acting agent
-	    this.log.info("Setting up goal-oriented agent...");
+	        // creating acting agent
+	        this.log.info("Setting up goal-oriented agent...");
             // create the acting agent
             this.agent = new GoalOrientedActingAgent(PROPERTY_FILE, proxy);
             // start the agent

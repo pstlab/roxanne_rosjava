@@ -65,7 +65,9 @@ public abstract class SearchStrategy extends FrameworkObject implements Comparat
 		this.label = label;
 		
 		// get deliberative property file
-		FilePropertyReader properties = new FilePropertyReader(FilePropertyReader.DEFAULT_DELIBERATIVE_PROPERTY);
+		FilePropertyReader properties = new FilePropertyReader(
+				// concat deliberative file property and framework home path
+				FRAMEWORK_HOME + FilePropertyReader.DEFAULT_DELIBERATIVE_PROPERTY);
 		// set operation costs from parameters
 		this.planningCost = Double.parseDouble(properties.getProperty("expansion-cost"));
 		this.expansionCost = Double.parseDouble(properties.getProperty("expansion-cost"));
@@ -287,8 +289,9 @@ public abstract class SearchStrategy extends FrameworkObject implements Comparat
 		
 		try 
 		{
-			File pdlFile = new File("hierarchy_graph.dot");
-			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pdlFile), "UTF-8"))) {
+			// set output file
+			File oFile = new File(FRAMEWORK_HOME + "hierarchy_graph.dot");
+			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(oFile), "UTF-8"))) {
 				// write file
 				writer.write(str);
 			}
@@ -324,8 +327,9 @@ public abstract class SearchStrategy extends FrameworkObject implements Comparat
 		
 		try 
 		{
-			File pdlFile = new File("dependency_graph.dot");
-			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pdlFile), "UTF-8"))) {
+			// set output file
+			File oFile = new File(FRAMEWORK_HOME + "dependency_graph.dot");
+			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(oFile), "UTF-8"))) {
 				// write file
 				writer.write(str);
 			}
@@ -440,8 +444,9 @@ public abstract class SearchStrategy extends FrameworkObject implements Comparat
 		
 		try 
 		{
-			File pdlFile = new File("decomposition_graph.dot");
-			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pdlFile), "UTF-8"))) {
+			// set output file
+			File oFile = new File(FRAMEWORK_HOME + "decomposition_graph.dot");
+			try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(oFile), "UTF-8"))) {
 				// write file
 				writer.write(str);
 			}

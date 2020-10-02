@@ -91,7 +91,9 @@ public class Executive extends FrameworkObject implements ExecutionManager, Plat
 	{
 		super();
 		// get executive file properties
-		this.properties = new FilePropertyReader(FilePropertyReader.DEFAULT_EXECUTIVE_PROPERTY);
+		this.properties = new FilePropertyReader(
+				// concat executive property path and framework home path
+				FRAMEWORK_HOME + FilePropertyReader.DEFAULT_EXECUTIVE_PROPERTY);
 		// set clock and initial status
 		this.lock = new Object();
 		// set status

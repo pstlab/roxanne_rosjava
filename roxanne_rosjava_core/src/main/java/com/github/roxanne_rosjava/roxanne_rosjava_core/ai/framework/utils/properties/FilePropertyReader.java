@@ -29,7 +29,8 @@ public class FilePropertyReader
 	{
 		// set property data
 		this.key2value = new HashMap<String, String>();
-		try {
+		try
+		{
 			// setup file property
 			Properties properties = new Properties();
 			properties.load(new FileInputStream(new File(path)));

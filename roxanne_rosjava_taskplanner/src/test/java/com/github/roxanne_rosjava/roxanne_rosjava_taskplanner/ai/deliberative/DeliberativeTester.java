@@ -23,7 +23,7 @@ public class DeliberativeTester
 	
 	private static final String DDL = "domains/satellite.ddl";
 	private static final String PDL = "domains/satellite.pdl";
-	private static final String OUT = "plans";
+	private static final String OUT = System.getenv("ROXANNE_HOME") != null ? System.getenv("ROXANNE_HOME") : "";
 	
 	
 	/**

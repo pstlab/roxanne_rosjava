@@ -40,7 +40,7 @@ public abstract class DomainKnowledge extends FrameworkObject
 	 * 
 	 *  Each value x of the domain is associated with a list of sets of values. Each set 
 	 *  represents a disjunction with respect to the possible decomposition of a value x i.e., 
-	 *  OR nodes of the graph. The values within the same set are congjunctions of values 
+	 *  OR nodes of the graph. The values within the same set are consjunctions of values
 	 *  that should be considered when decomposing a value x i.e., AND nodes of the graph.
 	 *  
 	 *  Recursive references into the domain theory are ignored and not represented into 

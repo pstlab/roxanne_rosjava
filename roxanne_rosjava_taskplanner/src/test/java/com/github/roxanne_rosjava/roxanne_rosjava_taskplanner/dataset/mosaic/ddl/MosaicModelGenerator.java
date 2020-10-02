@@ -19,7 +19,7 @@ import com.mongodb.client.MongoDatabase;
  */
 public class MosaicModelGenerator 
 {
-	private static final String OUTPUT_FOLDER = "gen/sharework";
+	private static final String OUTPUT_FOLDER = System.getenv("ROXANNE_HOME") != null ? System.getenv("ROXANNE_HOME") + "/domains" : "domains";
 	private static int HORIZON = 7000;
 	private static int UNCERTAINTY = 10;
 	
