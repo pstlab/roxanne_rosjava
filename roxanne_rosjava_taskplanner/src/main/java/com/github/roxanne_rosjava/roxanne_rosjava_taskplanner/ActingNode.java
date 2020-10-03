@@ -60,7 +60,6 @@ public class ActingNode extends AbstractNodeMain
             // set acting agent
             this.agent.initialize();
 
-
             // create a subscriber to the goal input topic
             Subscriber<roxanne_rosjava_msgs.ActingGoal> subscriber = connectedNode.newSubscriber(
                     "roxanne/acting/goal",
