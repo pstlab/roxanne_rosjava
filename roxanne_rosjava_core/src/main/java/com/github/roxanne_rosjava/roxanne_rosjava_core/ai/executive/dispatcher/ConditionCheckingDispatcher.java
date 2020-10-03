@@ -18,8 +18,7 @@ import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.executive.pdb.Executio
 public class ConditionCheckingDispatcher extends Dispatcher<Executive> 
 {
 	/**
-	 * 
-	 * @param exec
+	 *
 	 */
 	protected ConditionCheckingDispatcher() {
 		super();

@@ -1,8 +1,7 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_core.platform;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.executive.pdb.ExecutionNode;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.lang.PlatformCommand;
@@ -17,14 +16,21 @@ import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.lang.ex.Platform
  */
 public abstract class PlatformProxy 
 {
+	protected static final AtomicInteger OBS_COUNTER = new AtomicInteger(0);
+	protected static final AtomicInteger CMD_COUNTER = new AtomicInteger(0);
+
 	protected final List<PlatformObserver> observers;							// list of platform observers
-	
+
+	protected Map<String, PlatformCommand> dispatchedIndex;   // index of dispatched commands by ID
+
 	/**
 	 * 
 	 */
 	protected PlatformProxy() {
 		// setup data structures
 		this.observers = new ArrayList<>();
+		// set dispatched index
+		this.dispatchedIndex = new HashMap<>();
 	}
 	
 	/**
@@ -42,7 +48,7 @@ public abstract class PlatformProxy
 	 *  The interactions between the executive and the physical platform are 
 	 *  managed through a dedicated PROXY which must implement this interface
 	 * 
-	 * @param obesrver
+	 * @param observer
 	 */
 	public void register(PlatformObserver observer) {
 		// register a new observer
@@ -110,10 +116,11 @@ public abstract class PlatformProxy
 	 * This method is usually meant for controllable commands. The acting agent is in charge of 
 	 * deciding when to stop the execution of a previously started command.  
 	 * 
-	 * @param cmd
+	 * @param node
+	 * @return
 	 * @throws PlatformException
 	 */
-	public abstract void stopNode(ExecutionNode node) 
+	public abstract PlatformCommand stopNode(ExecutionNode node)
 			throws PlatformException;
 	
 	/**

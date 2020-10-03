@@ -24,8 +24,7 @@ import com.github.roxanne_rosjava.roxanne_rosjava_core.stats.dataset.TokenExecut
 public class ConditionCheckingMonitor extends Monitor<Executive> 
 {
 	/**
-	 * 
-	 * @param exec
+	 *
 	 */
 	protected ConditionCheckingMonitor() {
 		super();

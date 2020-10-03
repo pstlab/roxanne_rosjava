@@ -10,8 +10,10 @@ import org.ros.node.ConnectedNode;
 import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * ROSJava connector proxy
@@ -19,15 +21,17 @@ import java.util.Map;
  */
 public class ROSJavaPlatformProxy extends PlatformProxy
 {
+
     private static final String DISPATCHING_TOPIC = "/roxanne/acting/dispatching";
     private static final String FEEDBACK_TOPIC = "/roxanne/acting/feedback";
     private static final String OBSERVATION_TOPIC = "/roxanne/acting/observation";
 
     private ConnectedNode node;
+
     private Subscriber<roxanne_rosjava_msgs.TokenExecutionFeedback> fSubscriber;
     private Subscriber<roxanne_rosjava_msgs.Observation> oSubscriber;
 
-    private Map<String, PlatformCommand> dispatchedIndex;   // index of dispatched commands by ID
+
 
     /**
      *
@@ -35,8 +39,6 @@ public class ROSJavaPlatformProxy extends PlatformProxy
      */
     public ROSJavaPlatformProxy(ConnectedNode node) {
         super();
-        // set dispatched index
-        this.dispatchedIndex = new HashMap<>();
         // set connected node
         this.node = node;
     }
@@ -54,6 +56,7 @@ public class ROSJavaPlatformProxy extends PlatformProxy
         this.fSubscriber = this.node.newSubscriber(
                 FEEDBACK_TOPIC,
                 roxanne_rosjava_msgs.TokenExecutionFeedback._TYPE);
+
         // set execution feedback listener
         fSubscriber.addMessageListener(new MessageListener<roxanne_rosjava_msgs.TokenExecutionFeedback>() {
 
@@ -79,6 +82,7 @@ public class ROSJavaPlatformProxy extends PlatformProxy
                 /*
                  * TODO
                  */
+
             }
         });
     }
@@ -89,11 +93,9 @@ public class ROSJavaPlatformProxy extends PlatformProxy
      * @return
      */
     @Override
-    public PlatformCommand executeNode(ExecutionNode node) {
+    public PlatformCommand executeNode(ExecutionNode node)
+    {
 
-        /*
-         * TODO
-         */
 
         // create a message publisher
         Publisher<roxanne_rosjava_msgs.TokenExecution> publisher =
@@ -117,11 +119,12 @@ public class ROSJavaPlatformProxy extends PlatformProxy
      * @return
      */
     @Override
-    public PlatformCommand startNode(ExecutionNode node) {
-
-        /*
-         * TODO
-         */
+    public PlatformCommand startNode(ExecutionNode node)
+    {
+        // get command id
+        int id = CMD_COUNTER.getAndIncrement();
+        //  create platform command
+        PlatformCommand cmd = new PlatformCommand("CMD_" + id, node);
 
         // create a message publisher
         Publisher<roxanne_rosjava_msgs.TokenExecution> publisher =
@@ -129,13 +132,36 @@ public class ROSJavaPlatformProxy extends PlatformProxy
                         DISPATCHING_TOPIC,
                         roxanne_rosjava_msgs.TokenExecution._TYPE);
 
-        // create message too dispatch
+        // create message to dispatch
         roxanne_rosjava_msgs.TokenExecution msg = publisher.newMessage();
-        // set data eg. msg.setData("x");
+        // set id
+        msg.setTokenId(id);
+        // set component
+        msg.setComponent(node.getComponent());
+        // get ground signature
+        String gSignature = node.getPredicate().getGroundSignature();
+        // get pieces
+        String[] splits = gSignature.split("-");
+        // set predicate
+        msg.setPredicate(splits[0]);
+        // check parameters
+        if (splits.length > 1) {
+           // set  parameters
+           msg.setParameters(Arrays.asList(Arrays.copyOfRange(splits, 1, splits.length)));
+        }
+
+        // set plan start  time
+        msg.setPlanTime(node.getStart()[0]);
+        // set start command type
+        msg.setCommandType(1);
+
         // publish dispatched token
         publisher.publish(msg);
 
-        return null;
+        // add command to dispatched index
+        this.dispatchedIndex.put(cmd.getId(), cmd);
+        // get dispatched command
+        return cmd;
     }
 
     /**
@@ -143,11 +169,49 @@ public class ROSJavaPlatformProxy extends PlatformProxy
      * @param node
      */
     @Override
-    public void stopNode(ExecutionNode node) {
+    public PlatformCommand stopNode(ExecutionNode node) {
 
-        /*
-         * TODO
-         */
+        // get command id
+        int id = CMD_COUNTER.getAndIncrement();
+        //  create platform command
+        PlatformCommand cmd = new PlatformCommand("CMD_" + id, node);
+
+        // create a message publisher
+        Publisher<roxanne_rosjava_msgs.TokenExecution> publisher =
+                this.node.newPublisher(
+                        DISPATCHING_TOPIC,
+                        roxanne_rosjava_msgs.TokenExecution._TYPE);
+
+        // create message to dispatch
+        roxanne_rosjava_msgs.TokenExecution msg = publisher.newMessage();
+        // set id
+        msg.setTokenId(id);
+        // set component
+        msg.setComponent(node.getComponent());
+        // get ground signature
+        String gSignature = node.getPredicate().getGroundSignature();
+        // get pieces
+        String[] splits = gSignature.split("-");
+        // set predicate
+        msg.setPredicate(splits[0]);
+        // check parameters
+        if (splits.length > 1) {
+            // set  parameters
+            msg.setParameters(Arrays.asList(Arrays.copyOfRange(splits, 1, splits.length)));
+        }
+
+        // set plan start  time
+        msg.setPlanTime(node.getStart()[0]);
+        // set stop command type
+        msg.setCommandType(0);
+
+        // publish dispatched token
+        publisher.publish(msg);
+
+        // add command to dispatched index
+        this.dispatchedIndex.put(cmd.getId(), cmd);
+        // get dispatched command
+        return cmd;
     }
 
     /**

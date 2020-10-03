@@ -626,16 +626,25 @@ public class Executive extends FrameworkObject implements ExecutionManager, Plat
 	}
 	
 	/**
-	 * 
+	 * Only controllable nodes can be stopped
+	 *
 	 * @param node
 	 * @throws PlatformException
 	 */
 	public void sendStopCommandSignalToPlatform(ExecutionNode node) 
 			throws PlatformException
 	{
-		if (this.platformProxy != null && this.platformProxy.isPlatformCommand(node)) {
-			// also send stop command execution request
-			this.platformProxy.stopNode(node);
+		// check if a platform PROXY exists
+		if (this.platformProxy != null) {
+			// check node controllability
+			 if (node.getControllabilityType().equals(ControllabilityType.CONTROLLABLE) &&
+					 this.platformProxy.isPlatformCommand(node))
+			 {
+				// also send stop command execution request
+				PlatformCommand cmd = this.platformProxy.stopNode(node);
+				// add entry to the index
+				this.dispatchedIndex.put(cmd, node);
+			}
 		}
 	}
 	
@@ -662,7 +671,7 @@ public class Executive extends FrameworkObject implements ExecutionManager, Plat
 					this.dispatchedIndex.put(cmd, node);
 				}
 			}
-			else
+			else // controllable node
 			{
 				// check if command to execute on platform
 				if (this.platformProxy.isPlatformCommand(node)) {

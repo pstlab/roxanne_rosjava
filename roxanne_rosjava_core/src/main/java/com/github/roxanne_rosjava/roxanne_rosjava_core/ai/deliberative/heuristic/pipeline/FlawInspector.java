@@ -20,10 +20,10 @@ public abstract class FlawInspector extends FrameworkObject
 	protected PlanDataBase pdb;
 	
 	private String label;
-	
+
 	/**
-	 * 
-	 * @param type
+	 *
+	 * @param label
 	 */
 	protected FlawInspector(String label) {
 		this.label = label;

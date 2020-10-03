@@ -81,11 +81,9 @@ public class ExecutivePlanDataBase extends FrameworkObject
 	// execution dependency graphs
 	protected Map<ExecutionNode, Map<ExecutionNode, ExecutionNodeStatus>> sdg;		// start dependency graph
 	protected Map<ExecutionNode, Map<ExecutionNode, ExecutionNodeStatus>> edg;		// end dependency graph
-	
+
 	/**
-	 * 
-	 * @param origin
-	 * @param horizon
+	 *
 	 */
 	protected ExecutivePlanDataBase() {
 		super();
@@ -225,7 +223,7 @@ public class ExecutivePlanDataBase extends FrameworkObject
 								paramValues[index] = param.getValues()[0];
 							}
 						}
-						
+
 						// create a node
 						ExecutionNode node = this.createNode(tl.getComponent(), tl.getName(), 
 								signature, paramTypes, paramValues, 
