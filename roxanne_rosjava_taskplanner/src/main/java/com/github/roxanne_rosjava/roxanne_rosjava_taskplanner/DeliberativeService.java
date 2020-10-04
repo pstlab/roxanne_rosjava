@@ -81,8 +81,6 @@ public class DeliberativeService extends AbstractNodeMain
                             log.info("----------------------------------\nSolution found after " + plan.getSolvingTime() + " msecs\n"
                                     + "Solution plan:\n" + plan + "\n----------------------------------\n");
 
-                            // set response
-                            res.setResult(new Integer(1).byteValue());
                             // prepare the list of timelines
                             List<roxanne_rosjava_msgs.Timeline> tls = new ArrayList<>();
                             // set content
@@ -93,7 +91,6 @@ public class DeliberativeService extends AbstractNodeMain
                                 List<roxanne_rosjava_msgs.Token> tList = new ArrayList<>();
                                 for (Token tk : tl.getTokens())
                                 {
-
                                     // create token message object
                                     roxanne_rosjava_msgs.Token t = connectedNode.getServiceResponseMessageFactory().
                                             newFromType(roxanne_rosjava_msgs.Token._TYPE);
@@ -150,10 +147,10 @@ public class DeliberativeService extends AbstractNodeMain
                                 tlId++;
                             }
 
-
                             // set timelines to response message
                             res.setTimelines(tls);
-
+                            // set response
+                            res.setResult(new Integer(1).byteValue());
                         }
                         catch (NoSolutionFoundException ex) {
                             // no solution found

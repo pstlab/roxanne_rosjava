@@ -69,7 +69,7 @@ public class ActingNode extends AbstractNodeMain
 
             // create a subscriber to the goal input topic
             Subscriber<roxanne_rosjava_msgs.ActingGoal> subscriber = connectedNode.newSubscriber(
-                    "roxanne/acting/goal",
+                    "roxanne/acting/task",
                     roxanne_rosjava_msgs.ActingGoal._TYPE);
 
             // synchronous goal management
@@ -78,54 +78,90 @@ public class ActingNode extends AbstractNodeMain
                 @Override
                 public void onNewMessage(roxanne_rosjava_msgs.ActingGoal message)
                 {
-                    //  get token
-                    roxanne_rosjava_msgs.Token tk = message.getToken();
+                    // get goal tokens
+                    List<roxanne_rosjava_msgs.Token> goals = message.getGoals();
+                    // get facts
+                    List<roxanne_rosjava_msgs.Token> facts = message.getFacts();
 
                     // check message data
-                    if (tk == null || tk.getComponent() == null || tk.getPredicate() == null) {
+                    if (goals == null || goals.isEmpty()) {
                         // mandatory parameter missing
-                        log.warn("I have received an invalid goal request: \"" + message + "\"\n" +
-                                "Information about component and predicate are mandatory");
+                        log.warn("I have received an invalid task request: \"" + message + "\"\n" +
+                                "No goal has been specified");
                     }
                     else {
                         // received input goal
-                        log.info("I have received a goal to plan for: \"" + message + "\"\n");
+                        log.info("I have received a task to plan for: \"" + message + "\"\n");
 
-                        // get component
-                        String component = tk.getComponent();
-                        // get predicate
-                        String predicate = tk.getPredicate();
-                        // get parameters
-                        String[] params = (((List<String>) tk.getParameters()) != null && ((List<String>) tk.getParameters()).size() > 0) ? ((List<String>) tk.getParameters()).toArray(new String[tk.getParameters().size()]) : null;
-                        // get start
-                        long[] start = (((long[]) tk.getStart()) != null && ((long[]) tk.getStart()).length > 0) ? (long[]) tk.getStart() : null;
-                        // get end
-                        long[] end = (((long[]) tk.getEnd()) != null && ((long[]) tk.getEnd()).length > 0) ? (long[]) tk.getEnd() : null;
-                        // get duration
-                        long[] duration = (((long[]) tk.getDuration()) != null && ((long[]) tk.getDuration()).length > 0) ? (long[]) tk.getDuration() : null;
+                        // prepare a task description
+                        AgentTaskDescription task = new AgentTaskDescription();
+
+                        // check if facts exist
+                        if (facts != null && !facts.isEmpty()) {
+                            // set facts
+                            for (roxanne_rosjava_msgs.Token tk : facts)
+                            {
+                                // get component
+                                String component = tk.getComponent();
+                                // get predicate
+                                String predicate = tk.getPredicate();
+                                // get parameters
+                                String[] params = (((List<String>) tk.getParameters()) != null && ((List<String>) tk.getParameters()).size() > 0) ? ((List<String>) tk.getParameters()).toArray(new String[tk.getParameters().size()]) : null;
+                                // get start
+                                long[] start = (((long[]) tk.getStart()) != null && ((long[]) tk.getStart()).length > 0) ? (long[]) tk.getStart() : null;
+                                // get end
+                                long[] end = (((long[]) tk.getEnd()) != null && ((long[]) tk.getEnd()).length > 0) ? (long[]) tk.getEnd() : null;
+                                // get duration
+                                long[] duration = (((long[]) tk.getDuration()) != null && ((long[]) tk.getDuration()).length > 0) ? (long[]) tk.getDuration() : null;
+
+                                // add fact description from received request
+                                task.addFactDescription(new TokenDescription(
+                                        component,
+                                        predicate,
+                                        params,
+                                        start,
+                                        end,
+                                        duration));
+                            }
+                        }
+
+                        // set goals
+                        for (roxanne_rosjava_msgs.Token tk : goals)
+                        {
+                            // get component
+                            String component = tk.getComponent();
+                            // get predicate
+                            String predicate = tk.getPredicate();
+                            // get parameters
+                            String[] params = (((List<String>) tk.getParameters()) != null && ((List<String>) tk.getParameters()).size() > 0) ? ((List<String>) tk.getParameters()).toArray(new String[tk.getParameters().size()]) : null;
+                            // get start
+                            long[] start = (((long[]) tk.getStart()) != null && ((long[]) tk.getStart()).length > 0) ? (long[]) tk.getStart() : null;
+                            // get end
+                            long[] end = (((long[]) tk.getEnd()) != null && ((long[]) tk.getEnd()).length > 0) ? (long[]) tk.getEnd() : null;
+                            // get duration
+                            long[] duration = (((long[]) tk.getDuration()) != null && ((long[]) tk.getDuration()).length > 0) ? (long[]) tk.getDuration() : null;
 
 
-                        // create task descriptor
-                        AgentTaskDescription goal = new AgentTaskDescription();
-                        // add goal description from received request
-                        goal.addGoalDescription(new TokenDescription(
-                                component,
-                                predicate,
-                                params,
-                                start,
-                                end,
-                                duration));
+                            // add goal description from received request
+                            task.addGoalDescription(new TokenDescription(
+                                    component,
+                                    predicate,
+                                    params,
+                                    start,
+                                    end,
+                                    duration));
+                        }
 
                         try
                         {
                             // notify goal to the agent
-                            agent.buffer(goal);
+                            agent.buffer(task);
                             // wait a response - blocking call
                             List<Goal> results = agent.getResults();
                             // print goal information
                             for (Goal result : results) {
                                 // print some statistics
-                                log.info("Completed goal " + result + ":\n" +
+                                log.info("Completed task " + result + ":\n" +
                                         "\t- Planing: " + result.getPlanningAttempts() + " attempts for a total time of " + (result.getTotalContingencyHandlingTime() / 1000) + " seconds\n" +
                                         "\t- Execution: " + result.getExecutionAttempts() + " attempts for a total time of " + (result.getTotalExecutionTime() / 1000) + " seconds\n" +
                                         "\t- Contingency handling: " + result.getContingencyHandlingAttempts() + " attempts for a total tiem of " + (result.getTotalContingencyHandlingTime() / 1000) + " seconds");

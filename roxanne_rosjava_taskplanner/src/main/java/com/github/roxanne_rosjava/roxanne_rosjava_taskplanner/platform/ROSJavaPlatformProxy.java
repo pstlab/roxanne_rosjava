@@ -100,21 +100,8 @@ public class ROSJavaPlatformProxy extends PlatformProxy
         //  create platform command
         PlatformCommand cmd = new PlatformCommand("CMD_" + id, node);
 
-        // create a message publisher
-        Publisher<roxanne_rosjava_msgs.TokenExecution> publisher =
-                this.connNode.newPublisher(
-                        DISPATCHING_TOPIC,
-                        roxanne_rosjava_msgs.TokenExecution._TYPE);
-
-        // create message to dispatch
-        roxanne_rosjava_msgs.TokenExecution msg = publisher.newMessage();
-        // set id
-        msg.setTokenId(id);
-        // set start command type
-        msg.setCommandType(1);
-
         // create message token
-        roxanne_rosjava_msgs.Token tk = this.connNode.getServiceResponseMessageFactory().
+        roxanne_rosjava_msgs.Token tk = this.connNode.getTopicMessageFactory().
                 newFromType(roxanne_rosjava_msgs.Token._TYPE);
 
         // sett id
@@ -141,8 +128,24 @@ public class ROSJavaPlatformProxy extends PlatformProxy
         tk.setDuration(node.getDuration());
 
 
+        // create a message publisher
+        Publisher<roxanne_rosjava_msgs.TokenExecution> publisher =
+                this.connNode.newPublisher(
+                        DISPATCHING_TOPIC,
+                        roxanne_rosjava_msgs.TokenExecution._TYPE);
+
+        // create message to dispatch
+        roxanne_rosjava_msgs.TokenExecution msg = publisher.newMessage();
+        // set id
+        msg.setTokenId(id);
+        // set token message
+        msg.setToken(tk);
+        // set start command type
+        msg.setCommandType(1);
+
         // publish dispatched token
         publisher.publish(msg);
+
         // add command to dispatched index
         this.dispatchedIndex.put(cmd.getId(), cmd);
         // get dispatched command
@@ -163,22 +166,10 @@ public class ROSJavaPlatformProxy extends PlatformProxy
         //  create platform command
         PlatformCommand cmd = new PlatformCommand("CMD_" + id, node);
 
-        // create a message publisher
-        Publisher<roxanne_rosjava_msgs.TokenExecution> publisher =
-                this.connNode.newPublisher(
-                        DISPATCHING_TOPIC,
-                        roxanne_rosjava_msgs.TokenExecution._TYPE);
-
-        // create message to dispatch
-        roxanne_rosjava_msgs.TokenExecution msg = publisher.newMessage();
-        // set id
-        msg.setTokenId(id);
-        // set start command type
-        msg.setCommandType(1);
-
         // create message token
-        roxanne_rosjava_msgs.Token tk = this.connNode.getServiceResponseMessageFactory().
+        roxanne_rosjava_msgs.Token tk = this.connNode.getTopicMessageFactory().
                 newFromType(roxanne_rosjava_msgs.Token._TYPE);
+
 
         // sett id
         tk.setId(node.getId());
@@ -204,7 +195,20 @@ public class ROSJavaPlatformProxy extends PlatformProxy
         tk.setDuration(node.getDuration());
 
 
+        // create a message publisher
+        Publisher<roxanne_rosjava_msgs.TokenExecution> publisher =
+                this.connNode.newPublisher(
+                        DISPATCHING_TOPIC,
+                        roxanne_rosjava_msgs.TokenExecution._TYPE);
 
+        // create message to dispatch
+        roxanne_rosjava_msgs.TokenExecution msg = publisher.newMessage();
+        // set id
+        msg.setTokenId(id);
+        // set token message
+        msg.setToken(tk);
+        // set start command type
+        msg.setCommandType(1);
 
         // publish dispatched token
         publisher.publish(msg);
@@ -227,21 +231,8 @@ public class ROSJavaPlatformProxy extends PlatformProxy
         //  create platform command
         PlatformCommand cmd = new PlatformCommand("CMD_" + id, node);
 
-        // create a message publisher
-        Publisher<roxanne_rosjava_msgs.TokenExecution> publisher =
-                this.connNode.newPublisher(
-                        DISPATCHING_TOPIC,
-                        roxanne_rosjava_msgs.TokenExecution._TYPE);
-
-        // create message to dispatch
-        roxanne_rosjava_msgs.TokenExecution msg = publisher.newMessage();
-        // set id
-        msg.setTokenId(id);
-        // set stop command type
-        msg.setCommandType(0);
-
         // create message token
-        roxanne_rosjava_msgs.Token tk = this.connNode.getServiceResponseMessageFactory().
+        roxanne_rosjava_msgs.Token tk = this.connNode.getTopicMessageFactory().
                 newFromType(roxanne_rosjava_msgs.Token._TYPE);
 
         // sett id
@@ -267,6 +258,21 @@ public class ROSJavaPlatformProxy extends PlatformProxy
         // set duration
         tk.setDuration(node.getDuration());
 
+
+        // create a message publisher
+        Publisher<roxanne_rosjava_msgs.TokenExecution> publisher =
+                this.connNode.newPublisher(
+                        DISPATCHING_TOPIC,
+                        roxanne_rosjava_msgs.TokenExecution._TYPE);
+
+        // create message to dispatch
+        roxanne_rosjava_msgs.TokenExecution msg = publisher.newMessage();
+        // set id
+        msg.setTokenId(id);
+        // set token message
+        msg.setToken(tk);
+        // set stop command type
+        msg.setCommandType(0);
 
         // publish dispatched token
         publisher.publish(msg);
