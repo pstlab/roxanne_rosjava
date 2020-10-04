@@ -78,32 +78,31 @@ public class ActingNode extends AbstractNodeMain
                 @Override
                 public void onNewMessage(roxanne_rosjava_msgs.ActingGoal message)
                 {
+                    //  get token
+                    roxanne_rosjava_msgs.Token tk = message.getToken();
 
                     // check message data
-                    if (message.getComponent() == null || message.getPredicate() == null) {
+                    if (tk == null || tk.getComponent() == null || tk.getPredicate() == null) {
                         // mandatory parameter missing
                         log.warn("I have received an invalid goal request: \"" + message + "\"\n" +
                                 "Information about component and predicate are mandatory");
                     }
                     else {
                         // received input goal
-                        log.info("I have received a goal to plan for: \"" + message + "\"\n" +
-                                "goalId: " + message.getGoalId() + "\n" +
-                                "component: " + message.getComponent() + "\n" +
-                                "predicate: " + message.getPredicate() + "\n");
+                        log.info("I have received a goal to plan for: \"" + message + "\"\n");
 
                         // get component
-                        String component = message.getComponent();
+                        String component = tk.getComponent();
                         // get predicate
-                        String predicate = message.getPredicate();
+                        String predicate = tk.getPredicate();
                         // get parameters
-                        String[] params = (((List<String>) message.getParameters()) != null && ((List<String>) message.getParameters()).size() > 0) ? ((List<String>) message.getParameters()).toArray(new String[message.getParameters().size()]) : null;
+                        String[] params = (((List<String>) tk.getParameters()) != null && ((List<String>) tk.getParameters()).size() > 0) ? ((List<String>) tk.getParameters()).toArray(new String[tk.getParameters().size()]) : null;
                         // get start
-                        long[] start = (((long[]) message.getStart()) != null && ((long[]) message.getStart()).length > 0) ? (long[]) message.getStart() : null;
+                        long[] start = (((long[]) tk.getStart()) != null && ((long[]) tk.getStart()).length > 0) ? (long[]) tk.getStart() : null;
                         // get end
-                        long[] end = (((long[]) message.getEnd()) != null && ((long[]) message.getEnd()).length > 0) ? (long[]) message.getEnd() : null;
+                        long[] end = (((long[]) tk.getEnd()) != null && ((long[]) tk.getEnd()).length > 0) ? (long[]) tk.getEnd() : null;
                         // get duration
-                        long[] duration = (((long[]) message.getDuration()) != null && ((long[]) message.getDuration()).length > 0) ? (long[]) message.getDuration() : null;
+                        long[] duration = (((long[]) tk.getDuration()) != null && ((long[]) tk.getDuration()).length > 0) ? (long[]) tk.getDuration() : null;
 
 
                         // create task descriptor

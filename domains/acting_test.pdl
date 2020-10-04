@@ -1,5 +1,7 @@
 PROBLEM ACTING_TEST_PDL (DOMAIN ACTING_TEST_DDL) {
 
 	f0 <fact> Acting.tasks.Idle() AT [0, 0] [1, +INF] [1, +INF];
+
+	g0 <goal> Goal.goals.DoSomething() AT [0, +INF] [1, +INF] [1, +INF];
 }
 
