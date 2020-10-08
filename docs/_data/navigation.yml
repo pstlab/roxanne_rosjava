@@ -1,1 +1,7 @@
-
+docs: 
+  - title: Home
+  - url: /docs/index.md
+  - title: Documentation
+  - url: /docs/tutorial.md
+ 
+  
