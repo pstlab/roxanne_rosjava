@@ -4,3 +4,17 @@ description: ROXANE ROSJava Package documentation
 show_downloads: false
 google_analytics:
 theme: jekyll-theme-minimal
+
+
+sidebar:
+  nav: "docs"
+  
+
+defaults: 
+  - scope:
+    path: ""
+    type: docs
+  - values:
+    sidebar:
+      nav: "docs"
+  
