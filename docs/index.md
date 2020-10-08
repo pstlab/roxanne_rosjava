@@ -22,7 +22,12 @@ In this context, PLATINUm (A. Umbrico et al. 2017) realizes a planning and execu
 
 # Objectives
 
-TODO
+ROXANNE aims at creating a ROS compliatn framework facilitating the use of timeline-based planning and execution capabilities in industrial settings. Target users are either researchers and manufacturing companies that want to evaluate flexible task-level controllers to better support production processes. The objectives of the project are thus the following:
+- **Facilitate industrial robot programming** by providing a general-purpose specification language to model operational and temporal constraints of production processes and the dynamics of working environment, human operators and robot behaviors.
+- Realize a **ROS-integrated goal-oriented planning and execution system** capable of autonomously synthesize the set of tasks a robot must perform to achieve production goals. Minimize production interruptions by dynamically coordinating and adapting robot behaviors by taking into account _uncontrollable_ dynamics of a working environment.
+- Preovide **process-driven modeling and robot-agnostic control capabilities** to support interoperability and integration with different robotic platforms. 
+- Define an **interoperability communication protocol** characterizing events and information exchanged within the life-cycle of a dynamic task planning system. Such a protocol defines services and dependencies that are necessary for the effective integration of the task planner with robot controllers and realize an autonomous robot architecture.
+- Enable and **facilitate the use of timeline-based control techniques** in real-world production contexts by leveraging a standard platform like ROS and an existing timeline-based framework called PLATINUm.
 
 # Acknowledgment
 
