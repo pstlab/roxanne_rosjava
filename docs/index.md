@@ -24,6 +24,10 @@ In this context, PLATINUm (A. Umbrico et al. 2017) realizes a planning and execu
 
 TODO
 
+# Acknowledgment
+
+ROXANNE has received funding from the European Union's Horizon 2020 research and innovation programme under the project ROSIN with the gran agreement No 732287. 
+
 # References
 - (F. Ingrand and M. Ghallab, 2017) F. Ingrand and M. Ghgallab "Deliberation for autonomous robots: A survey". Artificial Intelligence, vol 247, pp. 10-44. 2017.
 - (F. Ingrand et al. 1996) F. Ingrand, R. Chatila, R. Alami and F. Robert "PRS: a high level supervision and control language for autonomous mobile robots". IEEE International Conference on Robotic and Automation. 1996.
