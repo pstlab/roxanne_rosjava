@@ -16,7 +16,7 @@ ROXANNE is a ROS package aiming at facilitating the integration of Artificial In
 
 ## Additional resources
 
-Check the wiki or visit [ROXANNE | ROSJava Website](https://pstlab.github.io/roxanne_rosjava/) for more details information.
+Check the wiki or visit [ROXANNE | ROSJava Website](https://pstlab.github.io/roxanne_rosjava/) for more details.
 
 
 
