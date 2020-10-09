@@ -7,7 +7,7 @@ Aims and Scope of the tutorial
 
 TODO
 
-## Prerequesites
+## Prerequisites
 
 TODO
 
