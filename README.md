@@ -8,13 +8,13 @@ ROXANNE is a ROS package aiming at facilitating the integration of Artificial In
 
 # Acting Node and Deliberative Service
 
-### Running the acting node
+## Running the acting node
 
-### Running the deliberative service
+## Running the deliberative service
 
 
 
-## Additional resources
+# Additional resources
 
 Check the wiki or visit [ROXANNE | ROSJava Website](https://pstlab.github.io/roxanne_rosjava/) for more details.
 
