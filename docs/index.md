@@ -43,4 +43,6 @@ ROXANNE has received funding from the European Union's Horizon 2020 research and
 - (S. Fratini et al. 2011) S. Fratini, A. Cesta, R. De Benedictis, A. Orlandini, R. Rasconi "APSI-based deliberation in goal oriented autonomous controllers". ESA-ASTRA. 2011.
 - (M. Inaki et al. 2016) M. Inaki, N. Pedrocchi, A. Orlandini, J. d. G. Fernandex, C. Vogel, A. Geenen, K. Althoefer, A. Shafti "FourByThree: Imagine humans and robots working hand in hand". IEEE International Conference on Emerging Technologies and Factory Automation (ETFA). 2016.
 - (S. Pellegrinelli et al. 2017) S. Pellegrinelli, A. Orlandini, N. Pedrocchi, A. Umbrico, T. Tolio "Motion planning and scheduling for human and industrial-robot collaboration". CIRP Annals, vol. 66, pp. 1-4. 2017.
+
+# Publications
 - (M. Faroni et al. 2020) M. Faroni, M. Beschi, S. Ghidini, N. Pedrocchi, A. Umbrico, A. Orlandini, A. Cesta "A layered control approach to human-aware task and motion planning for Human-Robot Collaboration". 29th IEEE International Conference on Robot and Human Interactive Communication (RO-MAN). 2020.
