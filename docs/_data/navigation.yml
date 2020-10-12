@@ -2,4 +2,4 @@ docs:
   title: "Tutorial"
   children: 
     title: "Overview"
-    url: /tutorial/overview/
+    url: /tutorial/overview/index.md
