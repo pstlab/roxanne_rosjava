@@ -1,6 +1,6 @@
 ROXANNE is organized as a **Layered Architecture** in order to support **modularity**. Software layers consists of a number of coherent and low-coupled functional elements. Each layer extends the functionalities of underlying layers and provides upper layers with increasingly abstract and complex functionalities. 
 
-![ROXANNE Layered Architecture](https://www.dropbox.com/s/p9j400oylxz1eve/roxanne-archi.png)
+![ROXANNE Layered Architecture](roxanne-archi.png)
 
 
 ## Representation Layer
