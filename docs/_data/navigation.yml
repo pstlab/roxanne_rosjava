@@ -1,7 +1,5 @@
 docs: 
-  - title: "Tutorial"
+  title: "Tutorial"
   children: 
-    - title: "Overview"
-    - url: /tutorial/overview/
- 
-  
+    title: "Overview"
+    url: /tutorial/overview/
