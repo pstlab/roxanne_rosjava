@@ -4,3 +4,5 @@ description: ROXANE ROSJava Package
 show_downloads: false
 google_analytics:
 theme: jekyll-theme-minimal
+navigation:
+  Tutorial : tutorial/index.md
