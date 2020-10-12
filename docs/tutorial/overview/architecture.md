@@ -1,3 +1,5 @@
+# ROXANNE Software Architecture 
+
 ROXANNE is organized as a **Layered Architecture** in order to support **modularity**. Software layers consists of a number of coherent and low-coupled functional elements. Each layer extends the functionalities of underlying layers and provides upper layers with increasingly abstract and complex functionalities. 
 
 ![ROXANNE Layered Architecture](roxanne-archi.png)
@@ -19,5 +21,14 @@ The **Deliberative Layer** is in charge of synthesizing valid and pseudo-control
 ## Executive Layer
 
 The **Executive Layer** is in charge of executing a given timeline-based plan. It realizes a modular architecture to facilitate the customization of an executive process to the specific needs of deployment scenarios. The element “Dependency Graph” analyzes temporal relations of a plan in order to extract execution dependencies concerning the start and end of the execution. The element “Clock”, is in charge of discretizing the temporal axis in a number of ticks that synchronize the execution cycle. The element “Monitor” is in charge of handling execution feedback and observations in order propagate the observed duration of uncontrollable actions that have ended their execution as well as verify the validity of the plan with respect to the state of the environment. The element “Dispatcher” is in charge of deciding the actions that can start their execution and the controllable actions that can end their execution.	
+
+
+
+## Next Chapter
+
+[Acting Node Overview](acting.md)
+
+
+
 
 
