@@ -16,8 +16,10 @@ The synthesis of valid temporal behaviors of state variables (and other domain c
 
 ## Deliberative Layer
 
+The **Deliberative Layer** is in charge of synthesizing valid and pseudo-controllable timeline-based plans, starting from a domain description. It realizes a modular architecture to facilitate the composing and design of timeline-based planners. The element “Hierarchy and Decomposition Graph” analyzes domain knowledge to infer information useful at solving level like e.g., domain hierarchy or the possible decompositions of plan goals. The elements “Strategy”, “Heuristics” and “Solver” encapsulate specific logic to manage respectively the search space of a planner, the selection of flaws of a plan database and the general structure of the solving procedure and its backtracking policy. On top of these elements a (timeline-based) planner is the result of the composition of one or more of these elements. In this way, the actual behavior of a planner can be easily extended/enhanced by introducing new strategies and heuristics or by changing the structure and behavior of the solving approach.
 
 ## Executive Layer
 
+The **Executive Layer** is in charge of executing a given timeline-based plan. It realizes a modular architecture to facilitate the customization of an executive process to the specific needs of deployment scenarios. The element “Dependency Graph” analyzes temporal relations of a plan in order to extract execution dependencies concerning the start and end of the execution. The element “Clock”, is in charge of discretizing the temporal axis in a number of ticks that synchronize the execution cycle. The element “Monitor” is in charge of handling execution feedback and observations in order propagate the observed duration of uncontrollable actions that have ended their execution as well as verify the validity of the plan with respect to the state of the environment. The element “Dispatcher” is in charge of deciding the actions that can start their execution and the controllable actions that can end their execution.	
 
 
