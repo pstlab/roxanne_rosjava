@@ -1,7 +1,5 @@
 docs: 
-  - title: Home
-  - url: /
-  - title: Documentation
-  - url: /tutorial
+  - title: Tutorial
+  - url: /docs/tutorial
  
   
