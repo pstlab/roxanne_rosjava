@@ -10,4 +10,6 @@ The _default behavior_ of an acting node dispatches action execution requests th
 
 An _execution failure_ is detected every time that an observation or a feedback does not comply with the plan (i.e., the observed state of the environment does not comply with the one expected by the plan). In such a case a (generally domain-dependent) contingency handling procedure is performed to set the system to a stable state and start replanning in order to find (if possible) an alternative way of performing the requested task.
 
+### Previous Chapter
 
+[Architecture](architecture.md)
