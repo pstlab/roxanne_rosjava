@@ -26,7 +26,7 @@ The **Executive Layer** is in charge of executing a given timeline-based plan. I
 
 ## Next Chapter
 
-[Acting Node Overview](acting.md)
+[Acting Node Structure](acting.md)
 
 
 
