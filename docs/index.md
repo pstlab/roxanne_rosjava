@@ -25,34 +25,22 @@ ROXANNE aims at creating a ROS compliatn framework facilitating the use of timel
 ## Tutorial
 
 1. [Background on Automated Planning and Robotics](/tutorial/background/intro.md)
-
-  1.1. [Timeline-based Planning and Execution](/tutorial/background/timelines.md)
-  
-  1.2. [Deliberative Control](/tutorial/background/deliberative.md)
-  
-  1.3. [Goal Oriented Autonomous Agents](/tutorial/background/goaa.md)
+  1. [Timeline-based Planning and Execution](/tutorial/background/timelines.md)
+  2. [Deliberative Control](/tutorial/background/deliberative.md)
+  3. [Goal Oriented Autonomous Agents](/tutorial/background/goaa.md)
  
  
 2. [ROXANNE](/tutorial/overview/intro.md)
-
-  2.1. [Framework Architecture](/tutorial/overview/architecture.md)
-  
-  2.2. [Acting Node Structure](/tutorial/overview/acting.md)
-  
-  2.3. [Timeline-based Reasoning](/tutorial/overview/solving.md)
-  
-  2.4. [Timeline-based Execution](/tutorial/overview/execution.md)
-  
-  2.5. [Configuring and Exetending ROXANNE](/tutorial/overview/config-roxanne.md)
+  1. [Framework Architecture](/tutorial/overview/architecture.md)
+  2. [Acting Node Structure](/tutorial/overview/acting.md)
+  3. [Timeline-based Reasoning](/tutorial/overview/solving.md)
+  4. [Timeline-based Execution](/tutorial/overview/execution.md)
+  5. [Configuring and Exetending ROXANNE](/tutorial/overview/config-roxanne.md)
 
 3. [Description Language and Modeling](/tutorial/modeling/intro.md)
-
-  3.1. [Modeling Language](/tutorial/modeling/language.md)
-
-  3.2. [Hierarhical Approach](/tutorial/modeling/hierarhical.md)
-  
-  3.3. [Additional Resources](/tutorial/modeling/additional.md)
-
+  1. [Modeling Language](/tutorial/modeling/language.md)
+  2. [Hierarhical Approach](/tutorial/modeling/hierarhical.md)
+  3. [Additional Resources](/tutorial/modeling/additional.md)
 
 ## Acknowledgment
 
