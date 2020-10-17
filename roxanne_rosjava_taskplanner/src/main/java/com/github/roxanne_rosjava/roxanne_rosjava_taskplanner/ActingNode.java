@@ -56,7 +56,7 @@ public class ActingNode extends AbstractNodeMain
 	        // creating acting agent
 	        this.log.info("Setting up goal-oriented agent...");
             // create the acting agent
-            this.agent = new GoalOrientedActingAgent(PROPERTY_FILE);
+            this.agent = new GoalOrientedActingAgent(PROPERTY_FILE, connectedNode);
             // start the agent
             this.log.info("Starting agent...");
             // start   acting agent
@@ -117,7 +117,7 @@ public class ActingNode extends AbstractNodeMain
                                 task.addFactDescription(new TokenDescription(
                                         component,
                                         predicate,
-                                        params,
+                                        new String[] {},    // TODO: fix goal parameter passing
                                         start,
                                         end,
                                         duration));

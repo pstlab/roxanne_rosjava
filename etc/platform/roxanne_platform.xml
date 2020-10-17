@@ -5,7 +5,7 @@
     <environment-topic
             name="/roxanne/acting/observation"
             msg="roxanne_rosjava_msgs/Observation"
-            delegate="com.github.ros.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneObservationListener" />
+            delegate="com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneObservationListener" />
 
     <!-- wildcard matching any type of dispatchable token of a plan -->
 
@@ -14,12 +14,12 @@
         <dispatch-topic
                 name="/roxanne/acting/dispatching"
                 msg="roxanne_rosjava_msgs/TokenExecution"
-                publisher="com.github.ros.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneTokenPublisher" />
+                publisher="com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneTokenPublisher" />
 
         <feedback-topic
                 name="/roxanne/acting/feedback"
                 msg="roxanne_rosjava_msgs/TokenExecutionFeedback"
-                delegate="com.github.ros.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneFeedbackListener" />
+                delegate="com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneFeedbackListener" />
 
     </command>
 

@@ -54,7 +54,7 @@ public class RoxanneTokenPublisher
     public void doPublish(ConnectedNode connNode, PlatformCommand cmd)
     {
         // create message token
-        roxanne_rosjava_msgs.Token tk = this.connNode.getTopicMessageFactory().
+        roxanne_rosjava_msgs.Token tk = connNode.getTopicMessageFactory().
                 newFromType(roxanne_rosjava_msgs.Token._TYPE);
 
         // sett id

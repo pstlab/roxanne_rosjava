@@ -25,6 +25,7 @@ import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.utils.proper
 import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.PlatformProxy;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.PlatformProxyBuilder;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.lang.ex.PlatformException;
+import org.ros.node.ConnectedNode;
 
 /**
  * 
@@ -56,8 +57,9 @@ public class GoalOrientedActingAgent
 	/**
 	 *
 	 * @param propertyFile
+	 * @param cnode
 	 */
-	public GoalOrientedActingAgent(String propertyFile) //, PlatformProxy proxy)
+	public GoalOrientedActingAgent(String propertyFile, ConnectedNode cnode)
 	{
 		try
 		{
@@ -119,7 +121,7 @@ public class GoalOrientedActingAgent
 				Class<? extends PlatformProxy> clazz = (Class<? extends PlatformProxy>)
 						Class.forName(platformClassName);
 				// create PROXY
-				this.proxy = PlatformProxyBuilder.build(clazz, configFile);
+				this.proxy = PlatformProxyBuilder.build(clazz, cnode, configFile);
 			}
 
 			// setup deliberative and executive processes
