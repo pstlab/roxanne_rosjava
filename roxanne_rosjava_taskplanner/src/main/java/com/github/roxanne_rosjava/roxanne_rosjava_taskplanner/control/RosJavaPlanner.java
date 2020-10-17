@@ -37,12 +37,12 @@ import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.Planner;
 		// set logging level
 		level = FrameworkLoggingLevel.OFF
 )
-public class ROSJavaPlanner extends Planner
+public class RosJavaPlanner extends Planner
 {
 	/**
 	 * 
 	 */
-	protected ROSJavaPlanner() {
+	protected RosJavaPlanner() {
 		super();
 	}
 }

@@ -16,12 +16,12 @@ import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.lang.ex.Platform
  */
 public abstract class PlatformProxy 
 {
-	protected static final AtomicInteger OBS_COUNTER = new AtomicInteger(0);
-	protected static final AtomicInteger CMD_COUNTER = new AtomicInteger(0);
+	protected static final AtomicInteger obsIdCounter = new AtomicInteger(0);
+	protected static final AtomicInteger cmdIdCounter = new AtomicInteger(0);
 
-	protected final List<PlatformObserver> observers;							// list of platform observers
+	protected final List<PlatformObserver> observers;				// list of platform observers
 
-	protected Map<String, PlatformCommand> dispatchedIndex;   // index of dispatched commands by ID
+	protected Map<Long, PlatformCommand> dispatchedIndex;   		// index of dispatched commands by ID
 
 	/**
 	 * 

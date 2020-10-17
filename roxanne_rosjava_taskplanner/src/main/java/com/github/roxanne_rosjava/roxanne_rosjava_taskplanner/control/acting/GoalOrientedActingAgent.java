@@ -56,9 +56,8 @@ public class GoalOrientedActingAgent
 	/**
 	 *
 	 * @param propertyFile
-	 * @param proxy
 	 */
-	public GoalOrientedActingAgent(String propertyFile, PlatformProxy proxy)
+	public GoalOrientedActingAgent(String propertyFile) //, PlatformProxy proxy)
 	{
 		try
 		{
@@ -88,8 +87,10 @@ public class GoalOrientedActingAgent
 			}
 
 			// set the model file by taking into account the home directory
-			this.ddl = System.getenv("ROXANNE_HOME") != null ?
-					System.getenv("ROXANNE_HOME") + "/" + ddlFile : ddlFile;
+			this.ddl = ddlFile;
+
+
+
 			// read the class name of the planner
 			String plannerClassName = this.properties.getProperty("planner");
 			// set planner class
@@ -101,8 +102,26 @@ public class GoalOrientedActingAgent
 			// set executive class
 			this.eClass = (Class<? extends Executive>) Class.forName(executiveClassName);
 
-			// set platform proxy
-			this.proxy = proxy;
+
+			// read the class of the platform
+			String platformClassName = this.properties.getProperty("platform");
+			// check if a platform is necessary
+			if (platformClassName != null && !platformClassName.equals(""))
+			{
+				// get platform configuration file
+				String configFile = this.properties.getProperty("platform_config_file");
+				// check platform configuration file
+				if (configFile == null || configFile.equals("")) {
+					throw new RuntimeException("Specify a configuration file for the platform in \"" + propertyFile + "\"!");
+				}
+
+				// create platform PROXY
+				Class<? extends PlatformProxy> clazz = (Class<? extends PlatformProxy>)
+						Class.forName(platformClassName);
+				// create PROXY
+				this.proxy = PlatformProxyBuilder.build(clazz, configFile);
+			}
+
 			// setup deliberative and executive processes
 			this.setupProcesses();
 		}

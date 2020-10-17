@@ -5,7 +5,6 @@ import com.github.roxanne_rosjava.roxanne_rosjava_core.control.lang.Goal;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.control.lang.TokenDescription;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.PlatformProxy;
 import com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.control.acting.GoalOrientedActingAgent;
-import com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.ROSJavaPlatformProxy;
 import org.apache.commons.logging.Log;
 import org.ros.message.MessageListener;
 import org.ros.namespace.GraphName;
@@ -22,7 +21,9 @@ import java.util.List;
  */
 public class ActingNode extends AbstractNodeMain
 {
-    private static final String HOME = System.getenv("ROXANNE_HOME") != null ? System.getenv("ROXANNE_HOME") + "/" : "";
+    private static final String HOME = System.getenv("ROXANNE_HOME") != null ?
+            System.getenv("ROXANNE_HOME") + "/" : "";
+
     private static final String PROPERTY_FILE =  HOME + "etc/agent.properties";
 
     private GoalOrientedActingAgent agent;          // timeline-based acting agent
@@ -52,12 +53,10 @@ public class ActingNode extends AbstractNodeMain
         {
 	        // creating platform
 	        this.log.info("Setting up platform...");
-            // create ROSJava platform proxy
-            PlatformProxy proxy = new ROSJavaPlatformProxy(connectedNode);
 	        // creating acting agent
 	        this.log.info("Setting up goal-oriented agent...");
             // create the acting agent
-            this.agent = new GoalOrientedActingAgent(PROPERTY_FILE, proxy);
+            this.agent = new GoalOrientedActingAgent(PROPERTY_FILE);
             // start the agent
             this.log.info("Starting agent...");
             // start   acting agent

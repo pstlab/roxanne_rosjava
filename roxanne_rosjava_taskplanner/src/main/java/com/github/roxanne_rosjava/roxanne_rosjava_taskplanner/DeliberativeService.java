@@ -6,18 +6,15 @@ import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.PlanD
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.component.PlanDataBase;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.component.Token;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.ex.NoSolutionFoundException;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.ex.ProblemInitializationException;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.plan.SolutionPlan;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.plan.Timeline;
-import com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.control.ROSJavaPlanner;
+import com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.control.RosJavaPlanner;
 import org.apache.commons.logging.Log;
 import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;
 import org.ros.node.ConnectedNode;
 import org.ros.node.service.ServiceResponseBuilder;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -71,7 +68,7 @@ public class DeliberativeService extends AbstractNodeMain
                             // build the plan database
                             PlanDataBase pdb = PlanDataBaseBuilder.createAndSet(ddl, pdl);
                             // set a planning instance of the plan database
-                            Planner planner = PlannerBuilder.createAndSet(ROSJavaPlanner.class, pdb);
+                            Planner planner = PlannerBuilder.createAndSet(RosJavaPlanner.class, pdb);
 
                             // start planning
                             SolutionPlan plan = planner.plan();

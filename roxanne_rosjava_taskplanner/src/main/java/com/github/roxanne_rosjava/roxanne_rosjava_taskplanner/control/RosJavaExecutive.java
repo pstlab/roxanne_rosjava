@@ -57,12 +57,12 @@ import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.executive.Executive;
 @DispatcherConfiguration(
 		dispatcher = ConditionCheckingDispatcher.class
 )
-public class ROSJavaExecutive extends Executive {
+public class RosJavaExecutive extends Executive {
 	
 	/**
 	 *
 	 */
-	protected ROSJavaExecutive() {
+	protected RosJavaExecutive() {
 		super();
 	}
 }
