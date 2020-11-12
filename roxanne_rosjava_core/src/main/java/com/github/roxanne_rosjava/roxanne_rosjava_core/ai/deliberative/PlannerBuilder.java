@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.heuristic.FlawSelectionHeuristic;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.solver.ModularSolver;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.solver.Solver;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.strategy.SearchStrategy;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.component.PlanDataBase;
@@ -145,133 +144,7 @@ public class PlannerBuilder
 		catch (Exception ex) {
 			throw new RuntimeException("Error while injecting flaw selection heuristics referene into planner solver:\n- message: " + ex.getMessage() + "\n");
 		}
-		
-		
-		
-		/*
-		 * Create internal solvers in case of modular solvers
-		 */
-		
-		
-		// get solver fields annotated with modular solvers (if any)
-		List<Field> fields = FrameworkReflectionUtils.doFindFieldsAnnotatedBy(solver.getClass(), ModularSolverConfiguration.class);
-		for (Field field : fields)
-		{
-			// get modular solver annotation
-			ModularSolverConfiguration msa = field.getAnnotation(ModularSolverConfiguration.class);	
-			// get solver class
-			Class<? extends Solver> ms = msa.solver();
-			
-			// get solver heuristics configuration
-			FlawSelectionHeuristicsConfiguration msha = FrameworkReflectionUtils.doFindnAnnotation(ms, FlawSelectionHeuristicsConfiguration.class);
-			// create heuristics 
-			FlawSelectionHeuristic msh = PlannerBuilder.doCreateHueristic(msha.heuristics().getName());
-			
-			
-			try
-			{
-				// inject plan database reference
-				FrameworkReflectionUtils.doInjectReferenceThroughAnnotation(msh, PlanDataBasePlaceholder.class, pdb);
-			} 
-			catch (Exception ex) {
-				throw new RuntimeException("Error while injecting plan database reference into heuristics:\n- message: " + ex.getMessage() + "\n");
-			}
-			
-			
-			try
-			{
-				// call heuristics post construct method
-				FrameworkReflectionUtils.doInvokeMethodTaggedWithAnnotation(msh, PostConstruct.class);
-			}
-			catch (Exception ex) {
-				throw new RuntimeException("Error while invoking post construct method on heuristics:\n- message: " + ex.getMessage() + "\n");
-			}
-			
-			// get solver strategy configuration
-			SearchStrategyConfiguration mssa = FrameworkReflectionUtils.doFindnAnnotation(ms, SearchStrategyConfiguration.class);
-			// create search strategy
-			SearchStrategy mss = PlannerBuilder.doCreateSearchStrategy(mssa.strategy().getName());
-			
-			try
-			{
-				// inject plan database reference
-				FrameworkReflectionUtils.doInjectReferenceThroughAnnotation(mss, PlanDataBasePlaceholder.class, pdb);
-			} 
-			catch (Exception ex) {
-				throw new RuntimeException("Error while injecting plan database reference into heuristics:\n- message: " + ex.getMessage() + "\n");
-			}
-			
-			try
-			{
-				// call strategy post construct method
-				FrameworkReflectionUtils.doInvokeMethodTaggedWithAnnotation(mss, PostConstruct.class);
-			}
-			catch (Exception ex) {
-				throw new RuntimeException("Error while invoking post construct method on heuristics:\n- message: " + ex.getMessage() + "\n");
-			}
-			
-			
-			
-			// create modular solver
-			ModularSolver s = PlannerBuilder.doCreateSolver(ms.getName(), psAnnot.timeout());
-			
-			try
-			{
-				// inject plan database reference 
-				FrameworkReflectionUtils.doInjectReferenceThroughAnnotation(s, PlanDataBasePlaceholder.class, pdb);
-			}
-			catch (Exception ex) {
-				throw new RuntimeException("Error while injecting plan database referene into planner solver:\n- message: " + ex.getMessage() + "\n");
-			}
-			
-			try
-			{
-				// inject strategy reference 
-				FrameworkReflectionUtils.doInjectReferenceThroughAnnotation(s, SearchStrategyPlaceholder.class, mss);
-			}
-			catch (Exception ex) {
-				throw new RuntimeException("Error while injecting search strategy referene into planner solver:\n- message: " + ex.getMessage() + "\n");
-			}
-			
-			try
-			{
-				// inject heuristics reference 
-				FrameworkReflectionUtils.doInjectReferenceThroughAnnotation(s, FlawSelectionHeuristicPlaceholder.class, msh);
-			}
-			catch (Exception ex) {
-				throw new RuntimeException("Error while injecting flaw selection heuristics referene into planner solver:\n- message: " + ex.getMessage() + "\n");
-			}
-			
-			
-			try
-			{
-				// call (modular) solver post construct
-				FrameworkReflectionUtils.doInvokeMethodTaggedWithAnnotation(s, PostConstruct.class);
-			}
-			catch (Exception ex) {
-				throw new RuntimeException("Error while invoking post construct method on planner solver:\n- message: " + ex.getMessage() + "\n");
-			}
-			
-			
-			
-			
-			try
-			{
-				// inject created modular solver to the "parent" solver
-				field.setAccessible(true);
-				field.set(solver, s);
-			}
-			catch (Exception ex) {
-				throw new RuntimeException("Error while injecting flaw selection heuristics referene into planner solver:\n- message: " + ex.getMessage() + "\n");
-			}
-			
-			
-			
-		}
-		
-		
-		
-		
+
 		
 		
 		try
@@ -283,13 +156,7 @@ public class PlannerBuilder
 			throw new RuntimeException("Error while invoking post construct method on planner solver:\n- message: " + ex.getMessage() + "\n");
 		}
 		
-		
-		
-		
-		
-		
-		
-		
+
 		
 		// create planner
 		T planner = PlannerBuilder.doCreatePlanner(pClass.getName());

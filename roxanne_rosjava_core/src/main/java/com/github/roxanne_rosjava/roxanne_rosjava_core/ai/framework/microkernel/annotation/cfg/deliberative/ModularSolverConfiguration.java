@@ -5,8 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.solver.ModularSolver;
-
 /**
  * 
  * @author anacleto
