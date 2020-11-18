@@ -131,7 +131,8 @@ public class PseudoControllabilityAwareSolver extends Solver
 					doc.append("fringe-size", this.fringe.getFringeSize());
 					doc.append("node-depth", node.getDepth());
 					doc.append("node-cost", node.getCost());
-					doc.append("node-heuristic", node.getHeuristic());
+					doc.append("node-planning-heuristic", node.getPlanningHeuristic());
+					doc.append("node-makespan-heuristic", node.getMakespanHeuristic());
 					doc.append("node-min-makespan", node.getMakespan()[0]);
 					doc.append("node-max-makespan", node.getMakespan()[1]);
 					doc.append("node-min-duration", node.getBehaviorDuration()[0]);

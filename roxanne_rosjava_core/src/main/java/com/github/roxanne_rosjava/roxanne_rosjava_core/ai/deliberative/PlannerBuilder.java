@@ -1,8 +1,6 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.util.List;
 
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.heuristic.FlawSelectionHeuristic;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.solver.Solver;
@@ -10,7 +8,6 @@ import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.strategy.
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.component.PlanDataBase;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.annotation.cfg.FrameworkLoggerConfiguration;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.annotation.cfg.deliberative.FlawSelectionHeuristicsConfiguration;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.annotation.cfg.deliberative.ModularSolverConfiguration;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.annotation.cfg.deliberative.PlannerSolverConfiguration;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.annotation.cfg.deliberative.SearchStrategyConfiguration;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.annotation.inject.FrameworkLoggerPlaceholder;
