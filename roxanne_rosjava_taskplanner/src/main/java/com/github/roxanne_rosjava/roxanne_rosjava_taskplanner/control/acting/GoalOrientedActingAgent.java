@@ -6,25 +6,29 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.github.roxanne_rosjava.roxanne_rosjava_core.control.lang.*;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.Planner;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.executive.Executive;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.executive.lang.failure.ExecutionFailureCause;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.executive.pdb.ExecutionNode;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.executive.pdb.ExecutionNodeStatus;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.PlanDataBaseBuilder;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.component.ComponentValue;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.component.Decision;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.component.DomainComponent;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.component.PlanDataBase;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.component.ex.DecisionPropagationException;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.ex.NoSolutionFoundException;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.ex.SynchronizationCycleException;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.plan.SolutionPlan;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.utils.properties.FilePropertyReader;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.PlatformProxy;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.PlatformProxyBuilder;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.lang.ex.PlatformException;
+import com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RosJavaPlatformProxyBuilder;
+import it.cnr.istc.pst.platinum.ai.deliberative.Planner;
+import it.cnr.istc.pst.platinum.ai.executive.Executive;
+import it.cnr.istc.pst.platinum.ai.executive.lang.failure.ExecutionFailureCause;
+import it.cnr.istc.pst.platinum.ai.executive.pdb.ExecutionNode;
+import it.cnr.istc.pst.platinum.ai.executive.pdb.ExecutionNodeStatus;
+import it.cnr.istc.pst.platinum.ai.framework.domain.PlanDataBaseBuilder;
+import it.cnr.istc.pst.platinum.ai.framework.domain.component.ComponentValue;
+import it.cnr.istc.pst.platinum.ai.framework.domain.component.Decision;
+import it.cnr.istc.pst.platinum.ai.framework.domain.component.DomainComponent;
+import it.cnr.istc.pst.platinum.ai.framework.domain.component.PlanDataBase;
+import it.cnr.istc.pst.platinum.ai.framework.domain.component.ex.DecisionPropagationException;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.ex.NoSolutionFoundException;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.ex.SynchronizationCycleException;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.plan.SolutionPlan;
+import it.cnr.istc.pst.platinum.ai.framework.utils.properties.FilePropertyReader;
+import it.cnr.istc.pst.platinum.control.lang.AgentTaskDescription;
+import it.cnr.istc.pst.platinum.control.lang.Goal;
+import it.cnr.istc.pst.platinum.control.lang.GoalStatus;
+import it.cnr.istc.pst.platinum.control.lang.TokenDescription;
+import it.cnr.istc.pst.platinum.control.lang.ex.PlatformException;
+import it.cnr.istc.pst.platinum.control.platform.PlatformProxy;
+import it.cnr.istc.pst.platinum.control.platform.PlatformProxyBuilder;
 import org.ros.node.ConnectedNode;
 
 /**
@@ -121,7 +125,7 @@ public class GoalOrientedActingAgent
 				Class<? extends PlatformProxy> clazz = (Class<? extends PlatformProxy>)
 						Class.forName(platformClassName);
 				// create PROXY
-				this.proxy = PlatformProxyBuilder.build(clazz, cnode, configFile);
+				this.proxy = RosJavaPlatformProxyBuilder.build(clazz, cnode, configFile);
 			}
 
 			// setup deliberative and executive processes
@@ -214,7 +218,7 @@ public class GoalOrientedActingAgent
 	 * @return
 	 * @throws InterruptedException
 	 */
-	public List<Goal> getResults() 
+	public List<Goal> getResults()
 			throws InterruptedException
 	{
 		// wait some finished or aborted goal
@@ -504,7 +508,7 @@ public class GoalOrientedActingAgent
 			// get task description
 			AgentTaskDescription task = goal.getTaskDescription();
 			// set known information concerning components
-			for (TokenDescription f : task.getFacts()) 
+			for (TokenDescription f : task.getFacts())
 			{
 				// get domain component
 				DomainComponent component = this.pdb.getComponentByName(f.getComponent());

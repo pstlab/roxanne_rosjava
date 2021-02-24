@@ -1,9 +1,9 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform;
 
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.executive.pdb.ExecutionNode;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.PlatformProxy;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.lang.PlatformCommand;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.lang.ex.PlatformException;
+import it.cnr.istc.pst.platinum.ai.executive.pdb.ExecutionNode;
+import it.cnr.istc.pst.platinum.control.lang.PlatformCommand;
+import it.cnr.istc.pst.platinum.control.lang.ex.PlatformException;
+import it.cnr.istc.pst.platinum.control.platform.PlatformProxy;
 import org.ros.node.ConnectedNode;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -296,7 +296,7 @@ public class RosJavaPlatformProxy extends PlatformProxy
      * @param node
      */
     @Override
-    public PlatformCommand stopNode(ExecutionNode node) {
+    public void stopNode(ExecutionNode node) {
 
         // get command id
         int id = cmdIdCounter.getAndIncrement();
@@ -332,8 +332,6 @@ public class RosJavaPlatformProxy extends PlatformProxy
 
         // add command to dispatched index
         this.dispatchedIndex.put(cmd.getId(), cmd);
-        // get dispatched command
-        return cmd;
     }
 
     /**

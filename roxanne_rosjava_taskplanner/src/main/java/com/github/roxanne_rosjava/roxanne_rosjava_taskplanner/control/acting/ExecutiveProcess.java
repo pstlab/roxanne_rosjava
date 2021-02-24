@@ -1,18 +1,21 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.control.acting;
 
+import it.cnr.istc.pst.platinum.ai.executive.Executive;
+import it.cnr.istc.pst.platinum.ai.executive.ExecutiveBuilder;
+import it.cnr.istc.pst.platinum.ai.executive.lang.ex.ExecutionException;
+import it.cnr.istc.pst.platinum.ai.executive.lang.failure.ExecutionFailureCause;
+import it.cnr.istc.pst.platinum.ai.executive.pdb.ExecutionNode;
+import it.cnr.istc.pst.platinum.ai.executive.pdb.ExecutionNodeStatus;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.plan.SolutionPlan;
+import it.cnr.istc.pst.platinum.ai.framework.protocol.lang.PlanProtocolDescriptor;
+import it.cnr.istc.pst.platinum.control.lang.Goal;
+import it.cnr.istc.pst.platinum.control.lang.GoalStatus;
+import it.cnr.istc.pst.platinum.control.lang.TokenDescription;
+import it.cnr.istc.pst.platinum.control.lang.ex.PlatformException;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.executive.Executive;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.executive.ExecutiveBuilder;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.executive.lang.ex.ExecutionException;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.executive.lang.failure.ExecutionFailureCause;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.executive.pdb.ExecutionNode;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.executive.pdb.ExecutionNodeStatus;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.plan.SolutionPlan;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.protocol.lang.PlanProtocolDescriptor;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.lang.ex.PlatformException;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.control.lang.*;
 
 /**
  * 
@@ -74,7 +77,7 @@ public class ExecutiveProcess implements Runnable
 	 * @throws Exception
 	 */
 	protected void doExecute(Goal goal) 
-			throws InterruptedException, ExecutionException, PlatformException, Exception  
+			throws InterruptedException, ExecutionException, PlatformException, Exception
 	{
 		// get solution plan 
 		SolutionPlan plan = goal.getPlan();

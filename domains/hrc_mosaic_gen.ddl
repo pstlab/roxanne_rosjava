@@ -362,20 +362,720 @@ DOMAIN SHAREWORK_HRC_MOSAIC_GEN {
 
 	}
 
-	COMP_TYPE SingletonStateVariable HumanAgentType ( Idle() ) {
+	COMP_TYPE SingletonStateVariable HumanAgentType ( _PickPlace-A1(),  _PickPlace-A2(),  _PickPlace-A3(),  _PickPlace-A4(),  _PickPlace-A5(),  _PickPlace-B1(),  _PickPlace-B2(),  _PickPlace-B3(),  _PickPlace-B4(),  _PickPlace-B5(),  _PickPlace-C1(),  _PickPlace-C2(),  _PickPlace-C3(),  _PickPlace-C4(),  _PickPlace-C5(),  _PickPlace-D1(),  _PickPlace-D2(),  _PickPlace-D3(),  _PickPlace-D4(),  _PickPlace-D5(),  _PickPlace-E1(),  _PickPlace-E2(),  _PickPlace-E3(),  _PickPlace-E4(),  _PickPlace-E5(),  _PickPlace-F1(),  _PickPlace-F2(),  _PickPlace-F3(),  _PickPlace-F4(),  _PickPlace-F5(),  _PickPlace-G1(),  _PickPlace-G2(),  _PickPlace-G3(),  _PickPlace-G4(),  _PickPlace-G5(),  _PickPlace-H1(),  _PickPlace-H2(),  _PickPlace-H3(),  _PickPlace-H4(),  _PickPlace-H5(),  _PickPlace-I1(),  _PickPlace-I2(),  _PickPlace-I3(),  _PickPlace-I4(),  _PickPlace-I5(),  _PickPlace-J1(),  _PickPlace-J2(),  _PickPlace-J3(),  _PickPlace-J4(),  _PickPlace-J5(),  Idle() ) {
+
+		VALUE _PickPlace-A1() [16, 36]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-A2() [1, 14]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-A3() [111, 131]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-A4() [70, 90]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-A5() [19, 39]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-B1() [80, 100]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-B2() [31, 51]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-B3() [73, 93]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-B4() [85, 105]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-B5() [40, 60]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-C1() [65, 85]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-C2() [1, 17]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-C3() [56, 76]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-C4() [59, 79]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-C5() [25, 45]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-D1() [7, 27]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-D2() [57, 77]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-D3() [1, 16]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-D4() [30, 50]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-D5() [71, 91]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-E1() [119, 139]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-E2() [11, 31]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-E3() [37, 57]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-E4() [47, 67]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-E5() [128, 148]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-F1() [63, 83]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-F2() [85, 105]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-F3() [134, 154]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-F4() [77, 97]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-F5() [12, 32]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-G1() [1, 16]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-G2() [130, 150]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-G3() [78, 98]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-G4() [21, 41]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-G5() [31, 51]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-H1() [68, 88]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-H2() [114, 134]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-H3() [92, 112]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-H4() [42, 62]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-H5() [73, 93]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-I1() [62, 82]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-I2() [132, 152]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-I3() [111, 131]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-I4() [51, 71]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-I5() [11, 31]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-J1() [78, 98]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-J2() [68, 88]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-J3() [104, 124]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-J4() [55, 75]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-J5() [132, 152]
+		MEETS {
+			Idle();
+
+		}
 
 		VALUE Idle() [1, +INF]
 		MEETS {
 
+			_PickPlace-A1();
+			_PickPlace-A2();
+			_PickPlace-A3();
+			_PickPlace-A4();
+			_PickPlace-A5();
+			_PickPlace-B1();
+			_PickPlace-B2();
+			_PickPlace-B3();
+			_PickPlace-B4();
+			_PickPlace-B5();
+			_PickPlace-C1();
+			_PickPlace-C2();
+			_PickPlace-C3();
+			_PickPlace-C4();
+			_PickPlace-C5();
+			_PickPlace-D1();
+			_PickPlace-D2();
+			_PickPlace-D3();
+			_PickPlace-D4();
+			_PickPlace-D5();
+			_PickPlace-E1();
+			_PickPlace-E2();
+			_PickPlace-E3();
+			_PickPlace-E4();
+			_PickPlace-E5();
+			_PickPlace-F1();
+			_PickPlace-F2();
+			_PickPlace-F3();
+			_PickPlace-F4();
+			_PickPlace-F5();
+			_PickPlace-G1();
+			_PickPlace-G2();
+			_PickPlace-G3();
+			_PickPlace-G4();
+			_PickPlace-G5();
+			_PickPlace-H1();
+			_PickPlace-H2();
+			_PickPlace-H3();
+			_PickPlace-H4();
+			_PickPlace-H5();
+			_PickPlace-I1();
+			_PickPlace-I2();
+			_PickPlace-I3();
+			_PickPlace-I4();
+			_PickPlace-I5();
+			_PickPlace-J1();
+			_PickPlace-J2();
+			_PickPlace-J3();
+			_PickPlace-J4();
+			_PickPlace-J5();
 		}
 
 	}
 
-	COMP_TYPE SingletonStateVariable RobotAgentType ( Idle() ) {
+	COMP_TYPE SingletonStateVariable RobotAgentType ( _PickPlace-A1(),  _PickPlace-A2(),  _PickPlace-A3(),  _PickPlace-A4(),  _PickPlace-A5(),  _PickPlace-B1(),  _PickPlace-B2(),  _PickPlace-B3(),  _PickPlace-B4(),  _PickPlace-B5(),  _PickPlace-C1(),  _PickPlace-C2(),  _PickPlace-C3(),  _PickPlace-C4(),  _PickPlace-C5(),  _PickPlace-D1(),  _PickPlace-D2(),  _PickPlace-D3(),  _PickPlace-D4(),  _PickPlace-D5(),  _PickPlace-E1(),  _PickPlace-E2(),  _PickPlace-E3(),  _PickPlace-E4(),  _PickPlace-E5(),  _PickPlace-F1(),  _PickPlace-F2(),  _PickPlace-F3(),  _PickPlace-F4(),  _PickPlace-F5(),  _PickPlace-G1(),  _PickPlace-G2(),  _PickPlace-G3(),  _PickPlace-G4(),  _PickPlace-G5(),  _PickPlace-H1(),  _PickPlace-H2(),  _PickPlace-H3(),  _PickPlace-H4(),  _PickPlace-H5(),  _PickPlace-I1(),  _PickPlace-I2(),  _PickPlace-I3(),  _PickPlace-I4(),  _PickPlace-I5(),  _PickPlace-J1(),  _PickPlace-J2(),  _PickPlace-J3(),  _PickPlace-J4(),  _PickPlace-J5(),  Idle() ) {
+
+		VALUE _PickPlace-A1() [43, 63]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-A2() [45, 65]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-A3() [49, 69]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-A4() [52, 72]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-A5() [50, 70]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-B1() [19, 39]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-B2() [7, 27]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-B3() [1, 19]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-B4() [40, 60]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-B5() [1, 13]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-C1() [42, 62]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-C2() [51, 71]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-C3() [14, 34]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-C4() [16, 36]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-C5() [16, 36]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-D1() [45, 65]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-D2() [17, 37]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-D3() [37, 57]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-D4() [8, 28]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-D5() [52, 72]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-E1() [40, 60]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-E2() [1, 14]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-E3() [32, 52]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-E4() [1, 19]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-E5() [7, 27]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-F1() [23, 43]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-F2() [32, 52]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-F3() [25, 45]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-F4() [43, 63]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-F5() [32, 52]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-G1() [46, 66]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-G2() [32, 52]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-G3() [37, 57]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-G4() [2, 22]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-G5() [22, 42]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-H1() [19, 39]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-H2() [29, 49]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-H3() [12, 32]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-H4() [5, 25]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-H5() [47, 67]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-I1() [29, 49]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-I2() [25, 45]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-I3() [9, 29]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-I4() [1, 19]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-I5() [4, 24]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-J1() [27, 47]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-J2() [18, 38]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-J3() [13, 33]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-J4() [15, 35]
+		MEETS {
+			Idle();
+
+		}
+
+		VALUE _PickPlace-J5() [22, 42]
+		MEETS {
+			Idle();
+
+		}
 
 		VALUE Idle() [1, +INF]
 		MEETS {
 
+			_PickPlace-A1();
+			_PickPlace-A2();
+			_PickPlace-A3();
+			_PickPlace-A4();
+			_PickPlace-A5();
+			_PickPlace-B1();
+			_PickPlace-B2();
+			_PickPlace-B3();
+			_PickPlace-B4();
+			_PickPlace-B5();
+			_PickPlace-C1();
+			_PickPlace-C2();
+			_PickPlace-C3();
+			_PickPlace-C4();
+			_PickPlace-C5();
+			_PickPlace-D1();
+			_PickPlace-D2();
+			_PickPlace-D3();
+			_PickPlace-D4();
+			_PickPlace-D5();
+			_PickPlace-E1();
+			_PickPlace-E2();
+			_PickPlace-E3();
+			_PickPlace-E4();
+			_PickPlace-E5();
+			_PickPlace-F1();
+			_PickPlace-F2();
+			_PickPlace-F3();
+			_PickPlace-F4();
+			_PickPlace-F5();
+			_PickPlace-G1();
+			_PickPlace-G2();
+			_PickPlace-G3();
+			_PickPlace-G4();
+			_PickPlace-G5();
+			_PickPlace-H1();
+			_PickPlace-H2();
+			_PickPlace-H3();
+			_PickPlace-H4();
+			_PickPlace-H5();
+			_PickPlace-I1();
+			_PickPlace-I2();
+			_PickPlace-I3();
+			_PickPlace-I4();
+			_PickPlace-I5();
+			_PickPlace-J1();
+			_PickPlace-J2();
+			_PickPlace-J3();
+			_PickPlace-J4();
+			_PickPlace-J5();
 		}
 
 	}

@@ -1,11 +1,12 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.control.acting;
 
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.Planner;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.PlannerBuilder;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.component.PlanDataBase;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.ex.NoSolutionFoundException;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.plan.SolutionPlan;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.control.lang.*;
+import it.cnr.istc.pst.platinum.ai.deliberative.Planner;
+import it.cnr.istc.pst.platinum.ai.deliberative.PlannerBuilder;
+import it.cnr.istc.pst.platinum.ai.framework.domain.component.PlanDataBase;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.ex.NoSolutionFoundException;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.plan.SolutionPlan;
+import it.cnr.istc.pst.platinum.control.lang.Goal;
+import it.cnr.istc.pst.platinum.control.lang.GoalStatus;
 
 /**
  * 
@@ -66,8 +67,8 @@ public class DeliberativeProcess implements Runnable
 	 * @param pdb
 	 * @throws NoSolutionFoundException
 	 */
-	protected SolutionPlan doPlan(PlanDataBase pdb) 
-			throws NoSolutionFoundException 
+	protected SolutionPlan doPlan(PlanDataBase pdb)
+			throws NoSolutionFoundException
 	{
 		// setup planner on the current status of the plan database
 		Planner planner = PlannerBuilder.createAndSet(this.pClass, pdb);

@@ -1,15 +1,17 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.ai.deliberative;
 
+import it.cnr.istc.pst.platinum.ai.deliberative.Planner;
+import it.cnr.istc.pst.platinum.ai.deliberative.PlannerBuilder;
+import it.cnr.istc.pst.platinum.ai.framework.domain.PlanDataBaseBuilder;
+import it.cnr.istc.pst.platinum.ai.framework.domain.component.PlanDataBase;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.ex.NoSolutionFoundException;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.ex.ProblemInitializationException;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.plan.SolutionPlan;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.Planner;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.PlannerBuilder;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.PlanDataBaseBuilder;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.component.PlanDataBase;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.ex.NoSolutionFoundException;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.ex.ProblemInitializationException;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.plan.SolutionPlan;
+
 
 /**
  * 
@@ -18,12 +20,10 @@ import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.
  */
 public class DeliberativeTester 
 {
-	//private static final String DDL = "gen/sharework/hrc_mosaic_gen.ddl";
-	//private static final String PDL = "gen/sharework/hrc_mosaic_gen.pdl";
-	
 	private static final String DDL = "domains/satellite.ddl";
 	private static final String PDL = "domains/satellite.pdl";
-	private static final String OUT = System.getenv("ROXANNE_HOME") != null ? System.getenv("ROXANNE_HOME") : "";
+
+	private static final String OUT = System.getenv("ROXANNE_HOME") != null ? System.getenv("ROXANNE_HOME") : "plans";
 	
 	
 	/**
@@ -39,9 +39,14 @@ public class DeliberativeTester
 		try 
 		{
 			// build the plan database
-			PlanDataBase pdb = PlanDataBaseBuilder.createAndSet(ddl, pdl);
+			PlanDataBase pdb = PlanDataBaseBuilder.createAndSet(
+					ddl,
+					pdl);
+
 			// set a planning instance of the plan database
-			Planner planner = PlannerBuilder.createAndSet(PlannerTest.class, pdb);
+			Planner planner = PlannerBuilder.createAndSet(
+					PlannerTestConfiguration.class,
+					pdb);
 
 			// start planning
 			SolutionPlan plan = planner.plan();

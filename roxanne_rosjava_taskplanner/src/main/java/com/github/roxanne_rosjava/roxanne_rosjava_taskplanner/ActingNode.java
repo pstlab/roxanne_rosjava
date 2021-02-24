@@ -1,10 +1,9 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner;
 
-import com.github.roxanne_rosjava.roxanne_rosjava_core.control.lang.AgentTaskDescription;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.control.lang.Goal;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.control.lang.TokenDescription;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.PlatformProxy;
 import com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.control.acting.GoalOrientedActingAgent;
+import it.cnr.istc.pst.platinum.control.lang.AgentTaskDescription;
+import it.cnr.istc.pst.platinum.control.lang.Goal;
+import it.cnr.istc.pst.platinum.control.lang.TokenDescription;
 import org.apache.commons.logging.Log;
 import org.ros.message.MessageListener;
 import org.ros.namespace.GraphName;
@@ -13,7 +12,6 @@ import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
 import org.ros.node.topic.Subscriber;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

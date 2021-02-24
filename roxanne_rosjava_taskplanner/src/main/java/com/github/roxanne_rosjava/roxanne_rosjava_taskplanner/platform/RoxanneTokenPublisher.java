@@ -1,7 +1,6 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform;
 
-
-import com.github.roxanne_rosjava.roxanne_rosjava_core.platform.lang.PlatformCommand;
+import it.cnr.istc.pst.platinum.control.lang.PlatformCommand;
 import org.ros.node.ConnectedNode;
 import org.ros.node.topic.Publisher;
 

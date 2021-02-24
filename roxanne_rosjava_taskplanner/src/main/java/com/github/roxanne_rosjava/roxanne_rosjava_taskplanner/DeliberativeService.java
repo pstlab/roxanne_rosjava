@@ -1,19 +1,21 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner;
 
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.Planner;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.deliberative.PlannerBuilder;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.PlanDataBaseBuilder;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.component.PlanDataBase;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.domain.component.Token;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.ex.NoSolutionFoundException;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.plan.SolutionPlan;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.ai.framework.microkernel.lang.plan.Timeline;
 import com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.control.RosJavaPlanner;
+import it.cnr.istc.pst.platinum.ai.deliberative.Planner;
+import it.cnr.istc.pst.platinum.ai.deliberative.PlannerBuilder;
+import it.cnr.istc.pst.platinum.ai.framework.domain.PlanDataBaseBuilder;
+import it.cnr.istc.pst.platinum.ai.framework.domain.component.PlanDataBase;
+import it.cnr.istc.pst.platinum.ai.framework.domain.component.Token;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.ex.NoSolutionFoundException;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.plan.SolutionPlan;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.plan.Timeline;
 import org.apache.commons.logging.Log;
 import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;
 import org.ros.node.ConnectedNode;
 import org.ros.node.service.ServiceResponseBuilder;
+import roxanne_rosjava_msgs.DeliberativeServiceRequest;
+import roxanne_rosjava_msgs.DeliberativeServiceResponse;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +50,7 @@ public class DeliberativeService extends AbstractNodeMain
         // start waiting for requests
         connectedNode.newServiceServer("roxanne/service/deliberative",
                 roxanne_rosjava_msgs.DeliberativeService._TYPE,
-                new ServiceResponseBuilder<roxanne_rosjava_msgs.DeliberativeServiceRequest, roxanne_rosjava_msgs.DeliberativeServiceResponse>() {
+                new ServiceResponseBuilder<DeliberativeServiceRequest, DeliberativeServiceResponse>() {
 
                     /**
                      *
