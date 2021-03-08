@@ -209,12 +209,19 @@ public class RosJavaPlatformProxy extends PlatformProxy
     {
         // get command id
         int id = cmdIdCounter.getAndIncrement();
-        //  create platform command
-        PlatformCommand cmd = new PlatformCommand(id, node, 1);
-
         // extract command information
-        String cmdName = PlatformProxy.extractCommandName(node);
+        String cmdName = this.extractCommandName(node);
         String compName = node.getComponent();
+        // extract command parameters
+        String[] cmdParams = this.extractCommandParameters(node);
+
+        //  create platform command
+        PlatformCommand cmd = new PlatformCommand(
+                id,
+                cmdName,
+                cmdParams,
+                node,
+                1);
 
         // get dispatcher topic
         String topic = this.command2dispatchTopic.get(
@@ -255,12 +262,19 @@ public class RosJavaPlatformProxy extends PlatformProxy
     {
         // get command id
         int id = cmdIdCounter.getAndIncrement();
-        //  create platform command
-        PlatformCommand cmd = new PlatformCommand(id, node, 1);
-
         // extract command information
-        String cmdName = PlatformProxy.extractCommandName(node);
+        String cmdName = this.extractCommandName(node);
         String compName = node.getComponent();
+        // extract command parameters
+        String[] cmdParams = this.extractCommandParameters(node);
+
+        //  create platform command
+        PlatformCommand cmd = new PlatformCommand(
+                id,
+                cmdName,
+                cmdParams,
+                node,
+                1);
 
         // get dispatcher topic
         String topic = this.command2dispatchTopic.get(
@@ -300,12 +314,19 @@ public class RosJavaPlatformProxy extends PlatformProxy
 
         // get command id
         int id = cmdIdCounter.getAndIncrement();
-        //  create platform command
-        PlatformCommand cmd = new PlatformCommand(id, node, 0);
-
         // extract command information
-        String cmdName = PlatformProxy.extractCommandName(node);
+        String cmdName = this.extractCommandName(node);
         String compName = node.getComponent();
+        // extract command parameters
+        String[] cmdParams = this.extractCommandParameters(node);
+
+        //  create platform command
+        PlatformCommand cmd = new PlatformCommand(
+                id,
+                cmdName,
+                cmdParams,
+                node,
+                0);
 
         // get dispatcher topic
         String topic = this.command2dispatchTopic.get(
@@ -344,9 +365,10 @@ public class RosJavaPlatformProxy extends PlatformProxy
      * @return
      */
     @Override
-    public boolean isPlatformCommand(ExecutionNode node) {
+    public boolean isPlatformCommand(ExecutionNode node)
+    {
         // check token name
-        String cmdName = PlatformProxy.extractCommandName(node);
+        String cmdName = this.extractCommandName(node);
         // check component name
         String compName = node.getComponent();
 

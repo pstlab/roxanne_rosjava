@@ -14,5 +14,4 @@
  * the License.
  */
 
-include 'roxanne_rosjava_core'
 include 'roxanne_rosjava_taskplanner'

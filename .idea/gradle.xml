@@ -9,7 +9,6 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/roxanne_rosjava_core" />
             <option value="$PROJECT_DIR$/roxanne_rosjava_taskplanner" />
           </set>
         </option>
