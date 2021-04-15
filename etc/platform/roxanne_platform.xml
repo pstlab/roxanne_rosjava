@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ros>
+
+    <environment-topic
+            name="/roxanne/acting/observation"
+            msg="roxanne_rosjava_msgs/Observation"
+            delegate="com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneObservationListener" />
+
+    <!-- wildcard matching any type of dispatchable token of a plan -->
+
+    <command component="*" name="*">
+
+        <dispatch-topic
+                name="/roxanne/acting/dispatching"
+                msg="roxanne_rosjava_msgs/TokenExecution"
+                publisher="com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneTokenPublisher" />
+
+        <feedback-topic
+                name="/roxanne/acting/feedback"
+                msg="roxanne_rosjava_msgs/TokenExecutionFeedback"
+                delegate="com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneFeedbackListener" />
+
+    </command>
+
+</ros>
