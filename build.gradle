@@ -53,6 +53,7 @@ allprojects {
 }
 
 subprojects {
+
     /*
      * The ros-java plugin configures a few things:
      *

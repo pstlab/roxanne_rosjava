@@ -65,6 +65,9 @@ public class ExecutiveProcess implements Runnable
 			catch (InterruptedException ex) {
 				running = false;
 			}
+			catch (Exception ex) {
+				System.err.println(ex.getMessage());
+			}
 		}
 	}
 	

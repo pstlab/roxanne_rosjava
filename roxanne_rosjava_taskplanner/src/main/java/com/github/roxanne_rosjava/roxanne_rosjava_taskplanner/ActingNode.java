@@ -104,7 +104,7 @@ public class ActingNode extends AbstractNodeMain
                                 // get predicate
                                 String predicate = tk.getPredicate();
                                 // get parameters
-                                String[] params = (((List<String>) tk.getParameters()) != null && ((List<String>) tk.getParameters()).size() > 0) ? ((List<String>) tk.getParameters()).toArray(new String[tk.getParameters().size()]) : null;
+                                String[] params = tk.getParameters() != null ? tk.getParameters().toArray(new String[tk.getParameters().size()]) : null;
                                 // get start
                                 long[] start = (((long[]) tk.getStart()) != null && ((long[]) tk.getStart()).length > 0) ? (long[]) tk.getStart() : null;
                                 // get end
@@ -116,7 +116,6 @@ public class ActingNode extends AbstractNodeMain
                                         "- id: " + tk.getId() + "\n" +
                                         "- component: " + component + "\n" +
                                         "- predicate: " + predicate + "\n" +
-                                        "- params: " + Arrays.asList(params) + "\n" +
                                         "- start: [" + start[0] + "," + start[1] + "]\n" +
                                         "- end: [" + end[0] + "," + end[1] +"]\n" +
                                         "- duration: [" + duration[0] + "," + duration[1] + "]\n");
@@ -140,7 +139,7 @@ public class ActingNode extends AbstractNodeMain
                             // get predicate
                             String predicate = tk.getPredicate();
                             // get parameters
-                            String[] params = (((List<String>) tk.getParameters()) != null && ((List<String>) tk.getParameters()).size() > 0) ? ((List<String>) tk.getParameters()).toArray(new String[tk.getParameters().size()]) : null;
+                            String[] params = tk.getParameters() != null ? tk.getParameters().toArray(new String[tk.getParameters().size()]) : null;
                             // get start
                             long[] start = (((long[]) tk.getStart()) != null && ((long[]) tk.getStart()).length > 0) ? (long[]) tk.getStart() : null;
                             // get end
@@ -152,7 +151,6 @@ public class ActingNode extends AbstractNodeMain
                                     "- id: " + tk.getId() + "\n" +
                                     "- component: " + component + "\n" +
                                     "- predicate: " + predicate + "\n" +
-                                    "- params: " + Arrays.asList(params) + "\n" +
                                     "- start: [" + start[0] + "," + start[1] + "]\n" +
                                     "- end: [" + end[0] + "," + end[1] +"]\n" +
                                     "- duration: [" + duration[0] + "," + duration[1] + "]\n");

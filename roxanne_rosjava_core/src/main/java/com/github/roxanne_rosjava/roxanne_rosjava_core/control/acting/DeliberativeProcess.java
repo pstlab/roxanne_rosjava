@@ -59,6 +59,10 @@ public class DeliberativeProcess implements Runnable
 			catch (InterruptedException ex) {
 				running = false;
 			}
+			catch (Exception ex) {
+				// print an error message
+				System.err.println(ex.getMessage());
+			}
 		}
 	}
 	
