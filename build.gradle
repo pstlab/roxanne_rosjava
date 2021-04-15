@@ -52,18 +52,6 @@ allprojects {
     }
 }
 
-task printDepProperty {
-
-    doLast {
-
-        println(project.findProperty('gpr.user'))
-        println(project.findProperty('gpr.token'))
-        println(project.findProperty('gpr.ws'))
-
-    }
-}
-
-
 subprojects {
     /*
      * The ros-java plugin configures a few things:
