@@ -41,5 +41,25 @@
       <option name="name" value="MavenLocal" />
       <option name="url" value="file:$MAVEN_REPOSITORY$" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="MavenRepo" />
+      <option name="name" value="MavenRepo" />
+      <option name="url" value="https://repo.maven.apache.org/maven2/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven4" />
+      <option name="name" value="maven4" />
+      <option name="url" value="file:$PROJECT_DIR$/../../devel/share/maven/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="GiHubPackages" />
+      <option name="name" value="GiHubPackages" />
+      <option name="url" value="https://maven.pkg.github.com/pstlab/PLATINUm" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven4" />
+      <option name="name" value="maven4" />
+      <option name="url" value="file:/null/devel/share/maven" />
+    </remote-repository>
   </component>
 </project>

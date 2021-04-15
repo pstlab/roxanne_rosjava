@@ -1,6 +1,6 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner;
 
-import com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.control.acting.GoalOrientedActingAgent;
+import com.github.roxanne_rosjava.roxanne_rosjava_core.control.acting.GoalOrientedActingAgent;
 import it.cnr.istc.pst.platinum.control.lang.AgentTaskDescription;
 import it.cnr.istc.pst.platinum.control.lang.Goal;
 import it.cnr.istc.pst.platinum.control.lang.TokenDescription;
@@ -12,6 +12,7 @@ import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
 import org.ros.node.topic.Subscriber;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -66,7 +67,7 @@ public class ActingNode extends AbstractNodeMain
 
             // create a subscriber to the goal input topic
             Subscriber<roxanne_rosjava_msgs.ActingGoal> subscriber = connectedNode.newSubscriber(
-                    "roxanne/acting/task",
+                    "roxanne/acting/goal",
                     roxanne_rosjava_msgs.ActingGoal._TYPE);
 
             // synchronous goal management
@@ -111,11 +112,20 @@ public class ActingNode extends AbstractNodeMain
                                 // get duration
                                 long[] duration = (((long[]) tk.getDuration()) != null && ((long[]) tk.getDuration()).length > 0) ? (long[]) tk.getDuration() : null;
 
+                                log.info("Adding fact:\n" +
+                                        "- id: " + tk.getId() + "\n" +
+                                        "- component: " + component + "\n" +
+                                        "- predicate: " + predicate + "\n" +
+                                        "- params: " + Arrays.asList(params) + "\n" +
+                                        "- start: [" + start[0] + "," + start[1] + "]\n" +
+                                        "- end: [" + end[0] + "," + end[1] +"]\n" +
+                                        "- duration: [" + duration[0] + "," + duration[1] + "]\n");
+
                                 // add fact description from received request
                                 task.addFactDescription(new TokenDescription(
                                         component,
                                         predicate,
-                                        new String[] {},    // TODO: fix goal parameter passing
+                                        params,
                                         start,
                                         end,
                                         duration));
@@ -138,6 +148,14 @@ public class ActingNode extends AbstractNodeMain
                             // get duration
                             long[] duration = (((long[]) tk.getDuration()) != null && ((long[]) tk.getDuration()).length > 0) ? (long[]) tk.getDuration() : null;
 
+                            log.info("Adding goal:\n" +
+                                    "- id: " + tk.getId() + "\n" +
+                                    "- component: " + component + "\n" +
+                                    "- predicate: " + predicate + "\n" +
+                                    "- params: " + Arrays.asList(params) + "\n" +
+                                    "- start: [" + start[0] + "," + start[1] + "]\n" +
+                                    "- end: [" + end[0] + "," + end[1] +"]\n" +
+                                    "- duration: [" + duration[0] + "," + duration[1] + "]\n");
 
                             // add goal description from received request
                             task.addGoalDescription(new TokenDescription(

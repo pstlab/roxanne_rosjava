@@ -2,9 +2,10 @@ package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.dataset.mosaic;
 
 import java.util.Random;
 
+import com.mongodb.client.MongoClients;
 import org.bson.Document;
 
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
@@ -40,7 +41,7 @@ public class MosaicDynamicRiskDataSetup
 	public static void main(String[] args)
 	{
 		// create a data-set
-		MongoClient client = new MongoClient();
+		MongoClient client = MongoClients.create();
 		try
 		{
 			// randomly compute a dynamic risk factor

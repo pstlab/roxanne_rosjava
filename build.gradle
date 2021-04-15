@@ -32,7 +32,37 @@ allprojects {
     */
     group 'com.github.rosjava.roxanne_rosjava'
     version = project.catkin.pkg.version
+
+
+    repositories {
+
+        mavenCentral()
+
+        maven {
+            url "file://" + (project.findProperty("gpr.ws") ?: System.getenv("ROXANNE_WS")) + "/devel/share/maven"
+        }
+
+        maven {
+            url  'https://maven.pkg.github.com/pstlab/PLATINUm'
+            credentials {
+                username project.findProperty("gpr.user").toString() ?:  System.getenv("GITHUB_USER").toString()
+                password project.findProperty("gpr.token").toString() ?: System.getenv("GITHUB_TOKEN").toString()
+            }
+        }
+    }
 }
+
+task printDepProperty {
+
+    doLast {
+
+        println(project.findProperty('gpr.user'))
+        println(project.findProperty('gpr.token'))
+        println(project.findProperty('gpr.ws'))
+
+    }
+}
+
 
 subprojects {
     /*

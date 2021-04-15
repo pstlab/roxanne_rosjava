@@ -1,0 +1,21 @@
+digraph stnu {
+	rankdir=LR;
+	node [with=.2, height=.2, fontsize=5, shape=circle, style=filled, fillcolor=white];	2 -> 1 [fontsize=8, arrowsize= .5, label = "[50,50]"];
+	2 -> 3 [fontsize=8, arrowsize= .5, style= dotted, label = "[10,10]"];
+	3 -> 1 [fontsize=8, arrowsize= .5, label = "[40,40]"];
+	4 -> 1 [fontsize=8, arrowsize= .5, label = "[28,28]"];
+	4 -> 5 [fontsize=8, arrowsize= .5, style= dotted, label = "[3,3]"];
+	5 -> 1 [fontsize=8, arrowsize= .5, label = "[25,25]"];
+	6 -> 1 [fontsize=8, arrowsize= .5, label = "[0,50]"];
+	6 -> 7 [fontsize=8, arrowsize= .5, label = "[1,50]"];
+	7 -> 1 [fontsize=8, arrowsize= .5, label = "[0,50]"];
+	0 -> 1 [fontsize=8, arrowsize= .5, label = "[50,50]"];
+	0 -> 2 [fontsize=8, arrowsize= .5, label = "[0,0]"];
+	0 -> 3 [fontsize=8, arrowsize= .5, label = "[10,10]"];
+	0 -> 4 [fontsize=8, arrowsize= .5, label = "[22,22]"];
+	0 -> 5 [fontsize=8, arrowsize= .5, label = "[25,25]"];
+	0 -> 6 [fontsize=8, arrowsize= .5, label = "[0,50]"];
+	0 -> 7 [fontsize=8, arrowsize= .5, label = "[0,50]"];
+
+}
+

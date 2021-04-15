@@ -1,12 +1,13 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner;
 
-import com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.control.RosJavaPlanner;
 import it.cnr.istc.pst.platinum.ai.deliberative.Planner;
 import it.cnr.istc.pst.platinum.ai.deliberative.PlannerBuilder;
 import it.cnr.istc.pst.platinum.ai.framework.domain.PlanDataBaseBuilder;
 import it.cnr.istc.pst.platinum.ai.framework.domain.component.PlanDataBase;
 import it.cnr.istc.pst.platinum.ai.framework.domain.component.Token;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.ex.NoSolutionFoundException;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.ex.ProblemInitializationException;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.ex.SynchronizationCycleException;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.plan.SolutionPlan;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.plan.Timeline;
 import org.apache.commons.logging.Log;
@@ -63,7 +64,9 @@ public class DeliberativeService extends AbstractNodeMain
                         // get request data
                         String ddl = req.getDdl();
                         String pdl = req.getPdl();
-                        log.info("Received deliberative service request for:\n- ddl " + ddl + "\n- pdl " + pdl + "\n");
+                        log.info("Received deliberative service request for:\n" +
+                                "- DDL: \"" + ddl + "\"\n" +
+                                "- PDL: \"" + pdl + "\"\n");
 
                         try
                         {
@@ -74,11 +77,11 @@ public class DeliberativeService extends AbstractNodeMain
 
                             // start planning
                             SolutionPlan plan = planner.plan();
-                            // display plan
-                            planner.display();
                             // solution found
                             log.info("----------------------------------\nSolution found after " + plan.getSolvingTime() + " msecs\n"
                                     + "Solution plan:\n" + plan + "\n----------------------------------\n");
+
+
 
                             // prepare the list of timelines
                             List<roxanne_rosjava_msgs.Timeline> tls = new ArrayList<>();
@@ -91,8 +94,8 @@ public class DeliberativeService extends AbstractNodeMain
                                 for (Token tk : tl.getTokens())
                                 {
                                     // create token message object
-                                    roxanne_rosjava_msgs.Token t = connectedNode.getServiceResponseMessageFactory().
-                                            newFromType(roxanne_rosjava_msgs.Token._TYPE);
+                                    roxanne_rosjava_msgs.Token t =
+                                            connectedNode.getTopicMessageFactory().newFromType(roxanne_rosjava_msgs.Token._TYPE);
 
                                     // set data
                                     t.setId(tk.getId());
@@ -131,7 +134,7 @@ public class DeliberativeService extends AbstractNodeMain
                                 }
 
                                 // create timeline
-                                roxanne_rosjava_msgs.Timeline msgTl = connectedNode.getServiceResponseMessageFactory().
+                                roxanne_rosjava_msgs.Timeline msgTl = connectedNode.getTopicMessageFactory().
                                         newFromType(roxanne_rosjava_msgs.Timeline._TYPE);
 
                                 // set id
@@ -154,11 +157,10 @@ public class DeliberativeService extends AbstractNodeMain
                         catch (NoSolutionFoundException ex) {
                             // no solution found
                             log.info(ex.getMessage());
-
                             // set response
                             res.setResult(new Integer(1).byteValue());
                         }
-                        catch (Exception ex) {
+                        catch (ProblemInitializationException | SynchronizationCycleException ex) {
                             // error
                             log.warn(ex.getMessage());
                             // set response
