@@ -1,5 +1,5 @@
 /build/
 */build/*
 .gradle/*
-*/gradle.properties
-*/*.dot
+gradle.properties
+*.dot
