@@ -39,7 +39,8 @@ allprojects {
         mavenCentral()
 
         maven {
-            url "file://" + (project.findProperty("gpr.ws") ?: System.getenv("ROXANNE_WS")) + "/devel/share/maven"
+
+            url "file://" + project.getProjectDir().getAbsolutePath() + "/../../devel/share/maven"
         }
 
         maven {

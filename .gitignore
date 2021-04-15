@@ -1,5 +1,7 @@
 /build/
 */build/*
+/.idea/
+*/.idea/*
 .gradle/*
 gradle.properties
 *.dot
