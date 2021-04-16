@@ -1,25 +1,25 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform;
 
+import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.RosJavaPlatformProxy;
+import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.RosJavaTopicPublisher;
 import it.cnr.istc.pst.platinum.control.lang.PlatformCommand;
 import org.ros.node.ConnectedNode;
-import org.ros.node.topic.Publisher;
 
 import java.util.Arrays;
 
 /**
  *
  */
-public class RoxanneTokenPublisher
+public class RoxanneTokenPublisher extends RosJavaTopicPublisher<roxanne_rosjava_msgs.TokenExecution>
 {
-    private RosJavaPlatformProxy proxy;                                     // set platform proxy
-    private Publisher<roxanne_rosjava_msgs.TokenExecution> publisher;       // topic publisher
+
 
     /**
      *
      * @param proxy
      */
     protected RoxanneTokenPublisher(RosJavaPlatformProxy proxy) {
-        this.proxy = proxy;
+        super(proxy);
     }
 
 
@@ -27,30 +27,21 @@ public class RoxanneTokenPublisher
      *
      * @return
      */
+    @Override
     public String getMessageType() {
         return roxanne_rosjava_msgs.TokenExecution._TYPE;
     }
 
 
-    /**
-     *
-     * @param topicName
-     * @param node
-     */
-    public void createPublisher(String topicName, ConnectedNode node) {
-        // create message publisher
-        this.publisher = node.newPublisher(
-                topicName,
-                this.getMessageType()
-        );
-    }
+
 
     /**
      *
      * @param connNode
      * @param cmd
      */
-    public void doPublish(ConnectedNode connNode, PlatformCommand cmd)
+    @Override
+    public void publish(ConnectedNode connNode, PlatformCommand cmd)
     {
         // create message token
         roxanne_rosjava_msgs.Token tk = connNode.getTopicMessageFactory().

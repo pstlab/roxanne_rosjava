@@ -25,7 +25,6 @@
 
 dependencies {
     implementation 'junit:junit:4.12'
-    compile 'org.mongodb:mongo-java-driver:[3.12.7,)'
     compile 'org.ros.rosjava_core:rosjava:[0.3,0.4)'
     compile 'org.ros.rosjava_messages:roxanne_rosjava_msgs:[0.1.0,)'
     compile 'it.cnr.istc.pst:platinum:[1.1.1,)'

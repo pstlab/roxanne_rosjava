@@ -1,4 +1,4 @@
-package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform;
+package com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform;
 
 import it.cnr.istc.pst.platinum.ai.executive.pdb.ExecutionNode;
 import it.cnr.istc.pst.platinum.control.lang.PlatformCommand;
@@ -32,7 +32,7 @@ public class RosJavaPlatformProxy extends PlatformProxy
     private ConnectedNode connNode;
 
     private Map<String, String> command2dispatchTopic;	            // map platform commands to ROS dispatch topics
-    private Map<String, RoxanneTokenPublisher> topic2publisher;	    // map ROS topic to publisher
+    private Map<String, RosJavaTopicPublisher> topic2publisher;	    // map ROS topic to publisher
     private Set<String> subscribedTopics;                           // subscribed topics
 
 
@@ -102,14 +102,14 @@ public class RosJavaPlatformProxy extends PlatformProxy
                     System.out.println("... subscribing to topic " + topicName.getValue().trim().toLowerCase() + " ...");
 
                     // create observation listener
-                    Class<? extends RoxanneObservationListener> clazz = (Class<? extends RoxanneObservationListener>)
+                    Class<? extends RosJavaTopicListener> clazz = (Class<? extends RosJavaTopicListener>)
                             Class.forName(delegateClass.getValue().trim());
-                    Constructor<? extends RoxanneObservationListener> c =
+                    Constructor<? extends RosJavaTopicListener> c =
                             clazz.getDeclaredConstructor(RosJavaPlatformProxy.class);
                     // set visibility of constructor
                     c.setAccessible(true);
                     // create instance
-                    RoxanneObservationListener listener = c.newInstance(this);
+                    RosJavaTopicListener listener = c.newInstance(this);
                     // create subscriber
                     listener.createSubscriber(topicName.getValue().trim(), this.connNode);
                 }
@@ -148,14 +148,14 @@ public class RosJavaPlatformProxy extends PlatformProxy
                 if (!this.topic2publisher.containsKey(dispatchTopicName.getValue().trim().toLowerCase()))
                 {
                     // create publisher instance
-                    Class<? extends RoxanneTokenPublisher> clazz = (Class<? extends RoxanneTokenPublisher>)
+                    Class<? extends RosJavaTopicPublisher> clazz = (Class<? extends RosJavaTopicPublisher>)
                             Class.forName(publisherClass.getValue().trim());
-                    Constructor<? extends RoxanneTokenPublisher> c =
+                    Constructor<? extends RosJavaTopicPublisher> c =
                             clazz.getDeclaredConstructor(RosJavaPlatformProxy.class);
                     // set constructor visibility
                     c.setAccessible(true);
                     // create instance
-                    RoxanneTokenPublisher publisher = c.newInstance(this);
+                    RosJavaTopicPublisher publisher = c.newInstance(this);
                     // create publisher
                     publisher.createPublisher(dispatchTopicName.getValue().trim(), this.connNode);
 
@@ -184,14 +184,14 @@ public class RosJavaPlatformProxy extends PlatformProxy
 
 
                     // create feedback listener
-                    Class<? extends RoxanneFeedbackListener> clazz = (Class<? extends RoxanneFeedbackListener>)
+                    Class<? extends RosJavaTopicListener> clazz = (Class<? extends RosJavaTopicListener>)
                             Class.forName(delegateClass.getValue().trim());
-                    Constructor<? extends RoxanneFeedbackListener> c =
+                    Constructor<? extends RosJavaTopicListener> c =
                             clazz.getDeclaredConstructor(RosJavaPlatformProxy.class);
                     // set constructor visible
                     c.setAccessible(true);
                     // create instance
-                    RoxanneFeedbackListener listener = c.newInstance(this);
+                    RosJavaTopicListener listener = c.newInstance(this);
                     // create subscriber
                     listener.createSubscriber(feedbackTopicName.getValue().trim(), this.connNode);
                 }
@@ -244,9 +244,9 @@ public class RosJavaPlatformProxy extends PlatformProxy
         }
 
         // get message publisher
-        RoxanneTokenPublisher publisher = this.topic2publisher.get(topic);
+        RosJavaTopicPublisher publisher = this.topic2publisher.get(topic);
         // publish message
-        publisher.doPublish(this.connNode, cmd);
+        publisher.publish(this.connNode, cmd);
 
         // add command to dispatched index
         this.dispatchedIndex.put(cmd.getId(), cmd);
@@ -298,9 +298,9 @@ public class RosJavaPlatformProxy extends PlatformProxy
 
 
         // get message publisher
-        RoxanneTokenPublisher publisher = this.topic2publisher.get(topic);
+        RosJavaTopicPublisher publisher = this.topic2publisher.get(topic);
         // publish message
-        publisher.doPublish(this.connNode, cmd);
+        publisher.publish(this.connNode, cmd);
 
         // add command to dispatched index
         this.dispatchedIndex.put(cmd.getId(), cmd);
@@ -350,9 +350,9 @@ public class RosJavaPlatformProxy extends PlatformProxy
 
 
         // get message publisher
-        RoxanneTokenPublisher publisher = this.topic2publisher.get(topic);
+        RosJavaTopicPublisher publisher = this.topic2publisher.get(topic);
         // publish message
-        publisher.doPublish(this.connNode, cmd);
+        publisher.publish(this.connNode, cmd);
 
         // add command to dispatched index
         this.dispatchedIndex.put(cmd.getId(), cmd);

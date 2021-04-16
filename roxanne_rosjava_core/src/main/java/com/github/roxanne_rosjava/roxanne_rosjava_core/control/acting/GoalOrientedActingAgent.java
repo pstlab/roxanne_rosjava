@@ -83,19 +83,11 @@ public class GoalOrientedActingAgent
 			// get DDL file
 			String path = this.properties.getProperty("model");
 			// set absolute path to the file
-			String ddlFile = System.getenv("ROXANNE_HOME") != null ?
-					path.replace("~", System.getenv("ROXANNE_HOME")) :
-					path.replace("~", System.getenv("PWD"));
-
+			this.ddl = path.replace("~", System.getenv("HOME"));
 			// check if null
-			if (ddlFile == null || ddlFile.equals("")) {
+			if (this.ddl == null || this.ddl.equals("")) {
 				throw new RuntimeException("You need to specify an acting model of the agent in \"etc/agent.properties\"!");
 			}
-
-			// set the model file by taking into account the home directory
-			this.ddl = ddlFile;
-
-
 
 			// read the class name of the planner
 			String plannerClassName = this.properties.getProperty("planner");
@@ -117,10 +109,7 @@ public class GoalOrientedActingAgent
 				// get platform configuration file
 				String pCfgPath = this.properties.getProperty("platform_config_file");
 				// set absolute path to file
-				String configFile = System.getenv("ROXANNE_HOME") != null ?
-						pCfgPath.replace("~", System.getenv("ROXANNE_HOME")) :
-						pCfgPath.replace("~", System.getenv("PWD"));
-
+				String configFile = pCfgPath.replace("~", System.getenv("HOME"));
 				// check platform configuration file
 				if (configFile == null || configFile.equals("")) {
 					throw new RuntimeException("Specify a configuration file for the platform in \"" + propertyFile + "\"!");

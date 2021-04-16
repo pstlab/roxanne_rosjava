@@ -1,30 +1,27 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform;
 
 
-import org.ros.message.MessageListener;
-import org.ros.node.ConnectedNode;
-import org.ros.node.topic.Subscriber;
+import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.RosJavaTopicListener;
+import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.RosJavaPlatformProxy;
 
 /**
  *
  */
-public class RoxanneFeedbackListener implements MessageListener<roxanne_rosjava_msgs.TokenExecutionFeedback>
+public class RoxanneFeedbackListener extends RosJavaTopicListener<roxanne_rosjava_msgs.TokenExecutionFeedback>
 {
-    private RosJavaPlatformProxy proxy;                                                 // platform proxy
-    private Subscriber<roxanne_rosjava_msgs.TokenExecutionFeedback> subscriber;         // topic subscriber
-
     /**
      *
      * @param proxy
      */
     protected RoxanneFeedbackListener(RosJavaPlatformProxy proxy) {
-        this.proxy = proxy;
+        super(proxy);
     }
 
     /**
      *
      * @return
      */
+    @Override
     public String getMessageType() {
         return roxanne_rosjava_msgs.TokenExecutionFeedback._TYPE;
     }
@@ -43,27 +40,5 @@ public class RoxanneFeedbackListener implements MessageListener<roxanne_rosjava_
          */
 
     }
-
-
-
-    /**
-     *
-     * @param topicName
-     * @param node
-     * @return
-     */
-    public Subscriber<roxanne_rosjava_msgs.TokenExecutionFeedback> createSubscriber(String topicName, ConnectedNode node) {
-
-        // subscribe to topic
-        this.subscriber = node.newSubscriber(
-                topicName,
-                this.getMessageType());
-
-        // add message listener
-        this.subscriber.addMessageListener(this);
-        // get subscriber
-        return this.subscriber;
-    }
-
 
 }

@@ -81,8 +81,6 @@ public class DeliberativeService extends AbstractNodeMain
                             log.info("----------------------------------\nSolution found after " + plan.getSolvingTime() + " msecs\n"
                                     + "Solution plan:\n" + plan + "\n----------------------------------\n");
 
-
-
                             // prepare the list of timelines
                             List<roxanne_rosjava_msgs.Timeline> tls = new ArrayList<>();
                             // set content

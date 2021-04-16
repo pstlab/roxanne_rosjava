@@ -11,9 +11,6 @@ import java.lang.reflect.Constructor;
  */
 public class RosJavaPlatformProxyBuilder {
 
-    public RosJavaPlatformProxyBuilder() {
-    }
-
     /**
      *
      * @param pClass

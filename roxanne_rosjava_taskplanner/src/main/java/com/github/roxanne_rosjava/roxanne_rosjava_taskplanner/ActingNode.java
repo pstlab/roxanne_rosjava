@@ -11,8 +11,6 @@ import org.ros.node.AbstractNodeMain;
 import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
 import org.ros.node.topic.Subscriber;
-
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -53,7 +51,7 @@ public class ActingNode extends AbstractNodeMain
 	        // creating platform
 	        this.log.info("Setting up platform...");
 	        // creating acting agent
-	        this.log.info("Setting up goal-oriented agent...");
+	        this.log.info("Setting up goal-oriented agent using config file \"" + PROPERTY_FILE + "\"...");
             // create the acting agent
             this.agent = new GoalOrientedActingAgent(PROPERTY_FILE, connectedNode);
             // start the agent
