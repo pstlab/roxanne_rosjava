@@ -1,5 +1,8 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform;
 
+import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.ex.MessageUnmarshalingException;
+import it.cnr.istc.pst.platinum.control.lang.PlatformObservation;
+import org.ros.internal.message.Message;
 import org.ros.message.MessageListener;
 import org.ros.node.ConnectedNode;
 import org.ros.node.topic.Subscriber;
@@ -7,8 +10,9 @@ import org.ros.node.topic.Subscriber;
 /**
  *
  * @param <T>
+ * @param <D>
  */
-public abstract class RosJavaTopicListener<T> implements MessageListener<T> {
+public abstract class RosJavaObservationListener<T extends Message, D extends Object> implements MessageListener<T> {
 
     protected RosJavaPlatformProxy proxy;           // platform proxy
     protected Subscriber<T> subscriber;             // topic subscriber
@@ -17,7 +21,7 @@ public abstract class RosJavaTopicListener<T> implements MessageListener<T> {
      *
      * @param proxy
      */
-    protected RosJavaTopicListener(RosJavaPlatformProxy proxy) {
+    protected RosJavaObservationListener(RosJavaPlatformProxy proxy) {
         this.proxy = proxy;
     }
 
@@ -51,5 +55,27 @@ public abstract class RosJavaTopicListener<T> implements MessageListener<T> {
      * @param message
      */
     @Override
-    public abstract void onNewMessage(T message) ;
+    public void onNewMessage(T message) {
+
+        try {
+
+            // get feedback from message
+            PlatformObservation observation = this.unmarshal(message);
+            // notify feedback or observation to platform subscribers
+            this.proxy.notify(observation);
+        }
+        catch (MessageUnmarshalingException ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @param msg
+     * @return
+     * @throws MessageUnmarshalingException
+     */
+    public abstract PlatformObservation<D> unmarshal(T msg)
+            throws MessageUnmarshalingException;
+
 }

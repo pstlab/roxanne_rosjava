@@ -17,12 +17,12 @@ import it.cnr.istc.pst.platinum.ai.framework.microkernel.annotation.cfg.delibera
 @FlawSelectionHeuristicsConfiguration
 @SearchStrategyConfiguration
 @FrameworkLoggerConfiguration
-public class RosJavaPlanner extends Planner
+public class RoxannePlanner extends Planner
 {
 	/**
 	 * 
 	 */
-	protected RosJavaPlanner() {
+	protected RoxannePlanner() {
 		super();
 	}
 }

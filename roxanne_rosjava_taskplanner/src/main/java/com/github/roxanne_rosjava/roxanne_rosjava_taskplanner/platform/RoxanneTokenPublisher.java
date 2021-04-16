@@ -1,16 +1,17 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform;
 
 import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.RosJavaPlatformProxy;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.RosJavaTopicPublisher;
+import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.RosJavaCommandPublisher;
 import it.cnr.istc.pst.platinum.control.lang.PlatformCommand;
 import org.ros.node.ConnectedNode;
+import roxanne_rosjava_msgs.TokenExecution;
 
 import java.util.Arrays;
 
 /**
  *
  */
-public class RoxanneTokenPublisher extends RosJavaTopicPublisher<roxanne_rosjava_msgs.TokenExecution>
+public class RoxanneTokenPublisher extends RosJavaCommandPublisher<TokenExecution>
 {
 
 
@@ -32,16 +33,13 @@ public class RoxanneTokenPublisher extends RosJavaTopicPublisher<roxanne_rosjava
         return roxanne_rosjava_msgs.TokenExecution._TYPE;
     }
 
-
-
-
     /**
      *
      * @param connNode
      * @param cmd
      */
     @Override
-    public void publish(ConnectedNode connNode, PlatformCommand cmd)
+    public roxanne_rosjava_msgs.TokenExecution marshal(ConnectedNode connNode, PlatformCommand cmd)
     {
         // create message token
         roxanne_rosjava_msgs.Token tk = connNode.getTopicMessageFactory().
@@ -78,8 +76,7 @@ public class RoxanneTokenPublisher extends RosJavaTopicPublisher<roxanne_rosjava
         msg.setToken(tk);
         // set start command type
         msg.setCommandType(cmd.getCommandType());
-
-        // actually dispatch token
-        this.publisher.publish(msg);
+        // get message to dispatch
+        return msg;
     }
 }

@@ -73,7 +73,7 @@ public class DeliberativeService extends AbstractNodeMain
                             // build the plan database
                             PlanDataBase pdb = PlanDataBaseBuilder.createAndSet(ddl, pdl);
                             // set a planning instance of the plan database
-                            Planner planner = PlannerBuilder.createAndSet(RosJavaPlanner.class, pdb);
+                            Planner planner = PlannerBuilder.createAndSet(RoxannePlanner.class, pdb);
 
                             // start planning
                             SolutionPlan plan = planner.plan();
@@ -93,7 +93,8 @@ public class DeliberativeService extends AbstractNodeMain
                                 {
                                     // create token message object
                                     roxanne_rosjava_msgs.Token t =
-                                            connectedNode.getTopicMessageFactory().newFromType(roxanne_rosjava_msgs.Token._TYPE);
+                                            connectedNode.getTopicMessageFactory().
+                                                    newFromType(roxanne_rosjava_msgs.Token._TYPE);
 
                                     // set data
                                     t.setId(tk.getId());

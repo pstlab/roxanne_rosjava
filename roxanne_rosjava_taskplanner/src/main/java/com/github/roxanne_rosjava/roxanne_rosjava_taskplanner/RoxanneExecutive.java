@@ -23,12 +23,12 @@ import it.cnr.istc.pst.platinum.ai.framework.utils.log.FrameworkLoggingLevel;
 @DispatcherConfiguration(
 		dispatcher = ConditionCheckingDispatcher.class
 )
-public class RosJavaExecutive extends Executive {
+public class RoxanneExecutive extends Executive {
 	
 	/**
 	 *
 	 */
-	protected RosJavaExecutive() {
+	protected RoxanneExecutive() {
 		super();
 	}
 }

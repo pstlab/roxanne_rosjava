@@ -1,6 +1,6 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.testing;
 
-import com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.RosJavaPlanner;
+import com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.RoxannePlanner;
 import it.cnr.istc.pst.platinum.ai.deliberative.Planner;
 import it.cnr.istc.pst.platinum.ai.deliberative.PlannerBuilder;
 import it.cnr.istc.pst.platinum.ai.framework.domain.PlanDataBaseBuilder;
@@ -46,7 +46,7 @@ public class RosJavaPlannerTester
 
 			// set a planning instance of the plan database
 			Planner planner = PlannerBuilder.createAndSet(
-					RosJavaPlanner.class,
+					RoxannePlanner.class,
 					pdb);
 
 			// start planning

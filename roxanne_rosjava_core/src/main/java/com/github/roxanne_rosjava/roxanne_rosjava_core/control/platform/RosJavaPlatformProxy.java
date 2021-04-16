@@ -1,5 +1,6 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform;
 
+import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.ex.CommandPublisherException;
 import it.cnr.istc.pst.platinum.ai.executive.pdb.ExecutionNode;
 import it.cnr.istc.pst.platinum.control.lang.PlatformCommand;
 import it.cnr.istc.pst.platinum.control.lang.ex.PlatformException;
@@ -32,7 +33,7 @@ public class RosJavaPlatformProxy extends PlatformProxy
     private ConnectedNode connNode;
 
     private Map<String, String> command2dispatchTopic;	            // map platform commands to ROS dispatch topics
-    private Map<String, RosJavaTopicPublisher> topic2publisher;	    // map ROS topic to publisher
+    private Map<String, RosJavaCommandPublisher> topic2publisher;	    // map ROS topic to publisher
     private Set<String> subscribedTopics;                           // subscribed topics
 
 
@@ -102,14 +103,14 @@ public class RosJavaPlatformProxy extends PlatformProxy
                     System.out.println("... subscribing to topic " + topicName.getValue().trim().toLowerCase() + " ...");
 
                     // create observation listener
-                    Class<? extends RosJavaTopicListener> clazz = (Class<? extends RosJavaTopicListener>)
+                    Class<? extends RosJavaFeedbackListener> clazz = (Class<? extends RosJavaFeedbackListener>)
                             Class.forName(delegateClass.getValue().trim());
-                    Constructor<? extends RosJavaTopicListener> c =
+                    Constructor<? extends RosJavaFeedbackListener> c =
                             clazz.getDeclaredConstructor(RosJavaPlatformProxy.class);
                     // set visibility of constructor
                     c.setAccessible(true);
                     // create instance
-                    RosJavaTopicListener listener = c.newInstance(this);
+                    RosJavaFeedbackListener listener = c.newInstance(this);
                     // create subscriber
                     listener.createSubscriber(topicName.getValue().trim(), this.connNode);
                 }
@@ -148,14 +149,14 @@ public class RosJavaPlatformProxy extends PlatformProxy
                 if (!this.topic2publisher.containsKey(dispatchTopicName.getValue().trim().toLowerCase()))
                 {
                     // create publisher instance
-                    Class<? extends RosJavaTopicPublisher> clazz = (Class<? extends RosJavaTopicPublisher>)
+                    Class<? extends RosJavaCommandPublisher> clazz = (Class<? extends RosJavaCommandPublisher>)
                             Class.forName(publisherClass.getValue().trim());
-                    Constructor<? extends RosJavaTopicPublisher> c =
+                    Constructor<? extends RosJavaCommandPublisher> c =
                             clazz.getDeclaredConstructor(RosJavaPlatformProxy.class);
                     // set constructor visibility
                     c.setAccessible(true);
                     // create instance
-                    RosJavaTopicPublisher publisher = c.newInstance(this);
+                    RosJavaCommandPublisher publisher = c.newInstance(this);
                     // create publisher
                     publisher.createPublisher(dispatchTopicName.getValue().trim(), this.connNode);
 
@@ -184,14 +185,14 @@ public class RosJavaPlatformProxy extends PlatformProxy
 
 
                     // create feedback listener
-                    Class<? extends RosJavaTopicListener> clazz = (Class<? extends RosJavaTopicListener>)
+                    Class<? extends RosJavaFeedbackListener> clazz = (Class<? extends RosJavaFeedbackListener>)
                             Class.forName(delegateClass.getValue().trim());
-                    Constructor<? extends RosJavaTopicListener> c =
+                    Constructor<? extends RosJavaFeedbackListener> c =
                             clazz.getDeclaredConstructor(RosJavaPlatformProxy.class);
                     // set constructor visible
                     c.setAccessible(true);
                     // create instance
-                    RosJavaTopicListener listener = c.newInstance(this);
+                    RosJavaFeedbackListener listener = c.newInstance(this);
                     // create subscriber
                     listener.createSubscriber(feedbackTopicName.getValue().trim(), this.connNode);
                 }
@@ -209,6 +210,7 @@ public class RosJavaPlatformProxy extends PlatformProxy
      */
     @Override
     public PlatformCommand executeNode(ExecutionNode node)
+            throws PlatformException
     {
         // get command id
         int id = cmdIdCounter.getAndIncrement();
@@ -243,13 +245,20 @@ public class RosJavaPlatformProxy extends PlatformProxy
             topic = this.command2dispatchTopic.get("*.*");
         }
 
-        // get message publisher
-        RosJavaTopicPublisher publisher = this.topic2publisher.get(topic);
-        // publish message
-        publisher.publish(this.connNode, cmd);
+        try {
 
-        // add command to dispatched index
-        this.dispatchedIndex.put(cmd.getId(), cmd);
+            // get message publisher
+            RosJavaCommandPublisher publisher = this.topic2publisher.get(topic);
+            // publish message
+            publisher.publish(this.connNode, cmd);
+            // add command to dispatched index
+            this.dispatchedIndex.put(cmd.getId(), cmd);
+        }
+        catch (CommandPublisherException ex) {
+            // throw platform exception
+            throw new PlatformException(ex.getMessage());
+        }
+
         // get dispatched command
         return cmd;
 
@@ -259,9 +268,11 @@ public class RosJavaPlatformProxy extends PlatformProxy
      *
      * @param node
      * @return
+     * @throws PlatformException
      */
     @Override
     public PlatformCommand startNode(ExecutionNode node)
+            throws PlatformException
     {
         // get command id
         int id = cmdIdCounter.getAndIncrement();
@@ -297,13 +308,19 @@ public class RosJavaPlatformProxy extends PlatformProxy
         }
 
 
-        // get message publisher
-        RosJavaTopicPublisher publisher = this.topic2publisher.get(topic);
-        // publish message
-        publisher.publish(this.connNode, cmd);
+        try {
 
-        // add command to dispatched index
-        this.dispatchedIndex.put(cmd.getId(), cmd);
+            // get message publisher
+            RosJavaCommandPublisher publisher = this.topic2publisher.get(topic);
+            // publish message
+            publisher.publish(this.connNode, cmd);
+            // add command to dispatched index
+            this.dispatchedIndex.put(cmd.getId(), cmd);
+        }
+        catch (CommandPublisherException ex) {
+            throw new PlatformException(ex.getMessage());
+        }
+
         // get dispatched command
         return cmd;
     }
@@ -313,8 +330,9 @@ public class RosJavaPlatformProxy extends PlatformProxy
      * @param node
      */
     @Override
-    public void stopNode(ExecutionNode node) {
-
+    public void stopNode(ExecutionNode node)
+            throws PlatformException
+    {
         // get command id
         int id = cmdIdCounter.getAndIncrement();
         // extract command information
@@ -348,14 +366,18 @@ public class RosJavaPlatformProxy extends PlatformProxy
             topic = this.command2dispatchTopic.get("*.*");
         }
 
+        try {
 
-        // get message publisher
-        RosJavaTopicPublisher publisher = this.topic2publisher.get(topic);
-        // publish message
-        publisher.publish(this.connNode, cmd);
-
-        // add command to dispatched index
-        this.dispatchedIndex.put(cmd.getId(), cmd);
+            // get message publisher
+            RosJavaCommandPublisher publisher = this.topic2publisher.get(topic);
+            // publish message
+            publisher.publish(this.connNode, cmd);
+            // add command to dispatched index
+            this.dispatchedIndex.put(cmd.getId(), cmd);
+        }
+        catch (CommandPublisherException ex) {
+            throw new PlatformException(ex.getMessage());
+        }
     }
 
     /**

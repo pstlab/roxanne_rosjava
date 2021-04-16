@@ -70,17 +70,16 @@ public class ExecutiveProcess implements Runnable
 			}
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param goal
 	 * @throws InterruptedException
 	 * @throws ExecutionException
-	 * @throws PlatformException
 	 * @throws Exception
 	 */
 	protected void doExecute(Goal goal) 
-			throws InterruptedException, ExecutionException, PlatformException, Exception
+			throws InterruptedException, ExecutionException, Exception
 	{
 		// get solution plan 
 		SolutionPlan plan = goal.getPlan();
@@ -99,7 +98,7 @@ public class ExecutiveProcess implements Runnable
 		}
 		
 		// run the executive starting at a given tick
-		boolean complete = exec.execute(goal.getExecutionTick(), goal); //EDIT POINTER
+		boolean complete = exec.execute(goal.getExecutionTick(), goal);
 		
 		
 		// stop simulator if any

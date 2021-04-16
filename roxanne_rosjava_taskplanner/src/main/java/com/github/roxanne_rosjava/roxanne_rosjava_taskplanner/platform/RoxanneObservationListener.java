@@ -1,15 +1,17 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform;
 
 
+import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.RosJavaObservationListener;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.RosJavaPlatformProxy;
-import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.RosJavaTopicListener;
-import org.ros.node.ConnectedNode;
-import org.ros.node.topic.Subscriber;
+import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.ex.MessageUnmarshalingException;
+import it.cnr.istc.pst.platinum.control.lang.PlatformObservation;
+import org.json.JSONObject;
+import roxanne_rosjava_msgs.Observation;
 
 /**
  *
  */
-public class RoxanneObservationListener extends RosJavaTopicListener<roxanne_rosjava_msgs.Observation>
+public class RoxanneObservationListener extends RosJavaObservationListener<Observation, JSONObject>
 {
     /**
      *
@@ -28,16 +30,21 @@ public class RoxanneObservationListener extends RosJavaTopicListener<roxanne_ros
         return roxanne_rosjava_msgs.Observation._TYPE;
     }
 
+
     /**
      *
-     * @param message
+     * @param msg
+     * @return
+     * @throws MessageUnmarshalingException
      */
     @Override
-    public void onNewMessage(roxanne_rosjava_msgs.Observation message) {
+    public PlatformObservation<JSONObject> unmarshal(Observation msg)
+            throws MessageUnmarshalingException {
 
-        /*
+        /**
          * TODO
          */
-    }
 
+        return null;
+    }
 }
