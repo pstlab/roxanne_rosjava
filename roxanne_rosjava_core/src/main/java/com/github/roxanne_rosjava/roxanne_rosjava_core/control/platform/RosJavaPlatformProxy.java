@@ -5,6 +5,7 @@ import it.cnr.istc.pst.platinum.ai.executive.pdb.ExecutionNode;
 import it.cnr.istc.pst.platinum.control.lang.PlatformCommand;
 import it.cnr.istc.pst.platinum.control.lang.ex.PlatformException;
 import it.cnr.istc.pst.platinum.control.platform.PlatformProxy;
+import org.apache.commons.logging.Log;
 import org.ros.node.ConnectedNode;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -32,9 +33,9 @@ public class RosJavaPlatformProxy extends PlatformProxy
 {
     private ConnectedNode connNode;
 
-    private Map<String, String> command2dispatchTopic;	            // map platform commands to ROS dispatch topics
-    private Map<String, RosJavaCommandPublisher> topic2publisher;	    // map ROS topic to publisher
-    private Set<String> subscribedTopics;                           // subscribed topics
+    private Map<String, String> command2dispatchTopic;	              // map platform commands to ROS dispatch topics
+    private Map<String, RosJavaCommandPublisher> topic2publisher;	  // map ROS topic to publisher
+    private Set<String> subscribedTopics;                             // subscribed topics
 
 
     /**
@@ -103,14 +104,47 @@ public class RosJavaPlatformProxy extends PlatformProxy
                     System.out.println("... subscribing to topic " + topicName.getValue().trim().toLowerCase() + " ...");
 
                     // create observation listener
-                    Class<? extends RosJavaFeedbackListener> clazz = (Class<? extends RosJavaFeedbackListener>)
+                    Class<? extends RosJavaObservationListener> clazz = (Class<? extends RosJavaObservationListener>)
                             Class.forName(delegateClass.getValue().trim());
-                    Constructor<? extends RosJavaFeedbackListener> c =
+                    Constructor<? extends RosJavaObservationListener> c =
                             clazz.getDeclaredConstructor(RosJavaPlatformProxy.class);
                     // set visibility of constructor
                     c.setAccessible(true);
                     // create instance
-                    RosJavaFeedbackListener listener = c.newInstance(this);
+                    RosJavaObservationListener listener = c.newInstance(this);
+                    // create subscriber
+                    listener.createSubscriber(topicName.getValue().trim(), this.connNode);
+                }
+            }
+
+            // get (input) goal topic(s)
+            expression = xp.compile("//goal-topic");
+            elements = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
+            for (int i = 0; i < elements.getLength(); i++)
+            {
+                // get node element
+                Node topic = elements.item(i);
+                // get topic name
+                Attr topicName = (Attr) topic.getAttributes().getNamedItem("name");
+                // get delegate class
+                Attr delegateClass = (Attr) topic.getAttributes().getNamedItem("delegate");
+
+                // subscribe to topic if necessary
+                if (!this.subscribedTopics.contains(topicName.getValue().trim().toLowerCase()))
+                {
+                    // index topic
+                    this.subscribedTopics.add(topicName.getValue().trim().toLowerCase());
+                    System.out.println("... subscribing to topic " + topicName.getValue().trim().toLowerCase() + " ...");
+
+                    // create observation listener
+                    Class<? extends RosJavaGoalListener> clazz = (Class<? extends RosJavaGoalListener>)
+                            Class.forName(delegateClass.getValue().trim());
+                    Constructor<? extends RosJavaGoalListener> c =
+                            clazz.getDeclaredConstructor(RosJavaPlatformProxy.class);
+                    // set visibility of constructor
+                    c.setAccessible(true);
+                    // create instance
+                    RosJavaGoalListener listener = c.newInstance(this);
                     // create subscriber
                     listener.createSubscriber(topicName.getValue().trim(), this.connNode);
                 }
@@ -201,6 +235,15 @@ public class RosJavaPlatformProxy extends PlatformProxy
         catch (Exception ex) {
             throw new PlatformException(ex.getMessage());
         }
+    }
+
+    /**
+     *
+     * @return
+     */
+    protected Log getLogger() {
+        // get logger
+        return this.connNode.getLog();
     }
 
     /**

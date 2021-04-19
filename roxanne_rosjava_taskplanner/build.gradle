@@ -33,6 +33,8 @@ mainClassName = 'org.ros.RosRun'
    version number changes.
 */
 
+version '0.1.2'
+
 dependencies {
 
   implementation 'junit:junit:4.12'

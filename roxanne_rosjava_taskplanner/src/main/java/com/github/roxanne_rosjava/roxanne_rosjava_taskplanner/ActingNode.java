@@ -1,31 +1,40 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner;
 
+import com.github.roxanne_rosjava.roxanne_rosjava_core.control.acting.ActingAgentStatus;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.control.acting.GoalOrientedActingAgent;
-import it.cnr.istc.pst.platinum.control.lang.AgentTaskDescription;
-import it.cnr.istc.pst.platinum.control.lang.Goal;
-import it.cnr.istc.pst.platinum.control.lang.TokenDescription;
+import com.github.roxanne_rosjava.roxanne_rosjava_core.control.acting.ex.ActingAgentInitializationException;
 import org.apache.commons.logging.Log;
-import org.ros.message.MessageListener;
+import org.ros.exception.ServiceException;
 import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;
 import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
-import org.ros.node.topic.Subscriber;
-import java.util.List;
+import org.ros.node.service.ServiceResponseBuilder;
+import roxanne_rosjava_msgs.ActingConfigurationServiceRequest;
+import roxanne_rosjava_msgs.ActingConfigurationServiceResponse;
 
 /**
  *
  */
 public class ActingNode extends AbstractNodeMain
 {
-    private static final String HOME = System.getenv("ROXANNE_HOME") != null ?
-            System.getenv("ROXANNE_HOME") + "/" : "";
+    //private static final String HOME = System.getenv("ROXANNE_HOME") != null ? System.getenv("ROXANNE_HOME") + "/" : "";
+    //private static final String PROPERTY_FILE =  HOME + "etc/agent.properties";
 
-    private static final String PROPERTY_FILE =  HOME + "etc/agent.properties";
-
-    private GoalOrientedActingAgent agent;          // timeline-based acting agent
+    private GoalOrientedActingAgent agent;
 
     private Log log;
+    private ConnectedNode node;
+
+    private String nodeName;
+    private String propertyFilePath;
+
+    /**
+     *
+     */
+    public ActingNode() {
+        this.nodeName = "/roxanne/acting";
+    }
 
     /**
      *
@@ -34,7 +43,7 @@ public class ActingNode extends AbstractNodeMain
     @Override
     public GraphName getDefaultNodeName() {
         // set node name
-        return GraphName.of("/roxanne/acting");
+        return GraphName.of(this.nodeName);
     }
 
     /**
@@ -44,16 +53,85 @@ public class ActingNode extends AbstractNodeMain
     @Override
     public void onStart(ConnectedNode connectedNode)
     {
+        // set node
+        this.node = connectedNode;
         // set logger
         this.log = connectedNode.getLog();
+        // create service handler
+        connectedNode.newServiceServer("/roxanne/acting/configuration",
+                roxanne_rosjava_msgs.ActingConfigurationService._TYPE,
+                new ServiceResponseBuilder<roxanne_rosjava_msgs.ActingConfigurationServiceRequest,
+                        roxanne_rosjava_msgs.ActingConfigurationServiceResponse>() {
+
+                    /**
+                     *
+                     * @param request
+                     * @param response
+                     * @throws ServiceException
+                     */
+                    @Override
+                    public void build(ActingConfigurationServiceRequest request, ActingConfigurationServiceResponse response)
+                            throws ServiceException {
+
+                        // check request parameters
+                        String path = request.getConfigFilePath();
+                        if (path == null || path.equals("")) {
+                            // set result code
+                            response.setCode(0);
+                            // missing parameter data
+                            response.setMessage("Specify a full path to a valid configuration file for a ROXANNE acting node!");
+
+                        } else {
+
+                            // check agent
+                            ActingAgentStatus status = agent == null ? null : agent.getStatus();
+                            // check status
+                            if (status == null || status.equals(ActingAgentStatus.OFFLINE) ||
+                                    status.equals(ActingAgentStatus.RUNNING))  {
+
+                                try {
+
+                                    // initialize agent
+                                    doInitializeAgent(node, path);
+                                    // set result code
+                                    response.setCode(1);
+                                    // set message
+                                    response.setMessage("Acting node successfully initialized");
+                                }
+                                catch (ActingAgentInitializationException ex) {
+                                    // set response
+                                    response.setCode(0);
+                                    response.setMessage("Acting agent initialization error:\n" +
+                                            "- Message= " + ex.getMessage() + "\n");
+                                }
+                            }
+                            else {
+
+                                // not ready for initialization
+                                response.setCode(0);
+                                response.setMessage("Agent in \"" + status.name() + "\" state currently and not ready for initialization.");
+
+                            }
+                        }
+                    }
+                });
+    }
+
+    /**
+     *
+     * @param node
+     * @param path
+     * @throws ActingAgentInitializationException
+     */
+    protected void doInitializeAgent(ConnectedNode node, String path)
+            throws ActingAgentInitializationException
+    {
         try
         {
-	        // creating platform
-	        this.log.info("Setting up platform...");
-	        // creating acting agent
-	        this.log.info("Setting up goal-oriented agent using config file \"" + PROPERTY_FILE + "\"...");
+            // creating acting agent
+            this.log.info("Setting up goal-oriented agent using config file \"" + path + "\"...");
             // create the acting agent
-            this.agent = new GoalOrientedActingAgent(PROPERTY_FILE, connectedNode);
+            this.agent = new GoalOrientedActingAgent(path, node);
             // start the agent
             this.log.info("Starting agent...");
             // start   acting agent
@@ -62,132 +140,12 @@ public class ActingNode extends AbstractNodeMain
             this.agent.initialize();
             // ready to receive messages
             this.log.info("... agent ready to receive goals!");
-
-            // create a subscriber to the goal input topic
-            Subscriber<roxanne_rosjava_msgs.ActingGoal> subscriber = connectedNode.newSubscriber(
-                    "roxanne/acting/goal",
-                    roxanne_rosjava_msgs.ActingGoal._TYPE);
-
-            // synchronous goal management
-            subscriber.addMessageListener(new MessageListener<roxanne_rosjava_msgs.ActingGoal>()
-            {
-                @Override
-                public void onNewMessage(roxanne_rosjava_msgs.ActingGoal message)
-                {
-                    // get goal tokens
-                    List<roxanne_rosjava_msgs.Token> goals = message.getGoals();
-                    // get facts
-                    List<roxanne_rosjava_msgs.Token> facts = message.getFacts();
-
-                    // check message data
-                    if (goals == null || goals.isEmpty()) {
-                        // mandatory parameter missing
-                        log.warn("I have received an invalid task request: \"" + message + "\"\n" +
-                                "No goal has been specified");
-                    }
-                    else {
-                        // received input goal
-                        log.info("I have received a task to plan for: \"" + message + "\"\n");
-
-                        // prepare a task description
-                        AgentTaskDescription task = new AgentTaskDescription();
-
-                        // check if facts exist
-                        if (facts != null && !facts.isEmpty()) {
-                            // set facts
-                            for (roxanne_rosjava_msgs.Token tk : facts)
-                            {
-                                // get component
-                                String component = tk.getComponent();
-                                // get predicate
-                                String predicate = tk.getPredicate();
-                                // get parameters
-                                String[] params = tk.getParameters() != null ? tk.getParameters().toArray(new String[tk.getParameters().size()]) : null;
-                                // get start
-                                long[] start = (((long[]) tk.getStart()) != null && ((long[]) tk.getStart()).length > 0) ? (long[]) tk.getStart() : null;
-                                // get end
-                                long[] end = (((long[]) tk.getEnd()) != null && ((long[]) tk.getEnd()).length > 0) ? (long[]) tk.getEnd() : null;
-                                // get duration
-                                long[] duration = (((long[]) tk.getDuration()) != null && ((long[]) tk.getDuration()).length > 0) ? (long[]) tk.getDuration() : null;
-
-                                log.info("Adding fact:\n" +
-                                        "- id: " + tk.getId() + "\n" +
-                                        "- component: " + component + "\n" +
-                                        "- predicate: " + predicate + "\n" +
-                                        "- start: [" + start[0] + "," + start[1] + "]\n" +
-                                        "- end: [" + end[0] + "," + end[1] +"]\n" +
-                                        "- duration: [" + duration[0] + "," + duration[1] + "]\n");
-
-                                // add fact description from received request
-                                task.addFactDescription(new TokenDescription(
-                                        component,
-                                        predicate,
-                                        params,
-                                        start,
-                                        end,
-                                        duration));
-                            }
-                        }
-
-                        // set goals
-                        for (roxanne_rosjava_msgs.Token tk : goals)
-                        {
-                            // get component
-                            String component = tk.getComponent();
-                            // get predicate
-                            String predicate = tk.getPredicate();
-                            // get parameters
-                            String[] params = tk.getParameters() != null ? tk.getParameters().toArray(new String[tk.getParameters().size()]) : null;
-                            // get start
-                            long[] start = (((long[]) tk.getStart()) != null && ((long[]) tk.getStart()).length > 0) ? (long[]) tk.getStart() : null;
-                            // get end
-                            long[] end = (((long[]) tk.getEnd()) != null && ((long[]) tk.getEnd()).length > 0) ? (long[]) tk.getEnd() : null;
-                            // get duration
-                            long[] duration = (((long[]) tk.getDuration()) != null && ((long[]) tk.getDuration()).length > 0) ? (long[]) tk.getDuration() : null;
-
-                            log.info("Adding goal:\n" +
-                                    "- id: " + tk.getId() + "\n" +
-                                    "- component: " + component + "\n" +
-                                    "- predicate: " + predicate + "\n" +
-                                    "- start: [" + start[0] + "," + start[1] + "]\n" +
-                                    "- end: [" + end[0] + "," + end[1] +"]\n" +
-                                    "- duration: [" + duration[0] + "," + duration[1] + "]\n");
-
-                            // add goal description from received request
-                            task.addGoalDescription(new TokenDescription(
-                                    component,
-                                    predicate,
-                                    params,
-                                    start,
-                                    end,
-                                    duration));
-                        }
-
-                        try
-                        {
-                            // notify goal to the agent
-                            agent.buffer(task);
-                            // wait a response - blocking call
-                            List<Goal> results = agent.getResults();
-                            // print goal information
-                            for (Goal result : results) {
-                                // print some statistics
-                                log.info("Completed task " + result + ":\n" +
-                                        "\t- Planing: " + result.getPlanningAttempts() + " attempts for a total time of " + (result.getTotalContingencyHandlingTime() / 1000) + " seconds\n" +
-                                        "\t- Execution: " + result.getExecutionAttempts() + " attempts for a total time of " + (result.getTotalExecutionTime() / 1000) + " seconds\n" +
-                                        "\t- Contingency handling: " + result.getContingencyHandlingAttempts() + " attempts for a total tiem of " + (result.getTotalContingencyHandlingTime() / 1000) + " seconds");
-                            }
-                        } catch (InterruptedException ex) {
-                            // error
-                            log.error("Interrupted acting process:\n" + ex.getMessage() + "\n");
-                        }
-                    }
-                }
-            });
+            // set current property file path
+            this.propertyFilePath = path;
         }
-        catch (Exception ex) {
-            // error
-            this.log.error("Error while starting acting agent\n" + ex.getMessage() + "\n");
+        catch (InterruptedException ex) {
+            // initialization error
+            throw new ActingAgentInitializationException(ex.getMessage());
         }
     }
 

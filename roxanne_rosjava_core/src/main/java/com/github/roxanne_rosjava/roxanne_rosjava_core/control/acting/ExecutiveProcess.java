@@ -49,7 +49,6 @@ public class ExecutiveProcess implements Runnable
 			{
 				// take a goal to plan for
 				Goal goal = this.agent.waitGoal(GoalStatus.COMMITTED);
-				System.out.println("executing goal ...\n" + goal + "\n");
 				// execute extracted goal
 				boolean success = this.agent.execute(goal);
 				// check executive result
@@ -87,7 +86,7 @@ public class ExecutiveProcess implements Runnable
 		Executive exec = ExecutiveBuilder.createAndSet(this.eClass, 0, plan.getHorizon());
 		// export plan 
 		PlanProtocolDescriptor desc = plan.export();
-		System.out.println("\n\nREADY TO EXECUTE PLAN:\n" + desc + "\n\n");
+		System.out.println("Ready to start (timeline-based) plan execution... ");
 		// set the executive according to the plan being executed
 		exec.initialize(desc);
 		
@@ -99,8 +98,6 @@ public class ExecutiveProcess implements Runnable
 		
 		// run the executive starting at a given tick
 		boolean complete = exec.execute(goal.getExecutionTick(), goal);
-		
-		
 		// stop simulator if any
 		if (this.agent.proxy != null) {
 			// unlink from simulator

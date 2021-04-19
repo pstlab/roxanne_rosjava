@@ -1,5 +1,6 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_core.control.acting;
 
+import com.github.roxanne_rosjava.roxanne_rosjava_core.control.acting.ex.ActingAgentInitializationException;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.RosJavaPlatformProxyBuilder;
 import it.cnr.istc.pst.platinum.ai.deliberative.Planner;
 import it.cnr.istc.pst.platinum.ai.executive.Executive;
@@ -16,12 +17,11 @@ import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.ex.NoSolutionFound
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.ex.SynchronizationCycleException;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.plan.SolutionPlan;
 import it.cnr.istc.pst.platinum.ai.framework.utils.properties.FilePropertyReader;
-import it.cnr.istc.pst.platinum.control.lang.AgentTaskDescription;
-import it.cnr.istc.pst.platinum.control.lang.Goal;
-import it.cnr.istc.pst.platinum.control.lang.GoalStatus;
-import it.cnr.istc.pst.platinum.control.lang.TokenDescription;
+import it.cnr.istc.pst.platinum.control.lang.*;
 import it.cnr.istc.pst.platinum.control.lang.ex.PlatformException;
+import it.cnr.istc.pst.platinum.control.platform.PlatformObserver;
 import it.cnr.istc.pst.platinum.control.platform.PlatformProxy;
+import org.apache.commons.logging.Log;
 import org.ros.node.ConnectedNode;
 
 import java.util.*;
@@ -31,7 +31,7 @@ import java.util.*;
  * @author anacleto
  *
  */
-public class GoalOrientedActingAgent
+public class GoalOrientedActingAgent implements PlatformObserver
 {
 	private final Object lock;								// lock state;
 	private ActingAgentStatus status;						// agent status
@@ -53,15 +53,21 @@ public class GoalOrientedActingAgent
 	protected PlatformProxy proxy;
 	private FilePropertyReader properties;
 
+	private Log log;
+
 	/**
 	 *
 	 * @param propertyFile
-	 * @param cnode
+	 * @param node
+	 * @throws ActingAgentInitializationException
 	 */
-	public GoalOrientedActingAgent(String propertyFile, ConnectedNode cnode)
+	public GoalOrientedActingAgent(String propertyFile, ConnectedNode node)
+			throws ActingAgentInitializationException
 	{
 		try
 		{
+			// set the log
+			this.log = node.getLog();
 			// set lock and status
 			this.lock = new Object();
 			// set status
@@ -86,7 +92,7 @@ public class GoalOrientedActingAgent
 			this.ddl = path.replace("~", System.getenv("HOME"));
 			// check if null
 			if (this.ddl == null || this.ddl.equals("")) {
-				throw new RuntimeException("You need to specify an acting model of the agent in \"etc/agent.properties\"!");
+				throw new ActingAgentInitializationException("You need to specify an acting model of the agent in \"etc/agent.properties\"!");
 			}
 
 			// read the class name of the planner
@@ -104,29 +110,28 @@ public class GoalOrientedActingAgent
 			// read the class of the platform
 			String platformClassName = this.properties.getProperty("platform");
 			// check if a platform is necessary
-			if (platformClassName != null && !platformClassName.equals(""))
-			{
+			if (platformClassName != null && !platformClassName.equals("")) {
 				// get platform configuration file
 				String pCfgPath = this.properties.getProperty("platform_config_file");
 				// set absolute path to file
 				String configFile = pCfgPath.replace("~", System.getenv("HOME"));
 				// check platform configuration file
 				if (configFile == null || configFile.equals("")) {
-					throw new RuntimeException("Specify a configuration file for the platform in \"" + propertyFile + "\"!");
+					throw new ActingAgentInitializationException("Specify a configuration file for the platform in \"" + propertyFile + "\"!");
 				}
 
 				// create platform PROXY
 				Class<? extends PlatformProxy> clazz = (Class<? extends PlatformProxy>)
 						Class.forName(platformClassName);
 				// create PROXY
-				this.proxy = RosJavaPlatformProxyBuilder.build(clazz, cnode, configFile);
+				this.proxy = RosJavaPlatformProxyBuilder.build(clazz, node, configFile);
 			}
 
 			// setup deliberative and executive processes
 			this.setupProcesses();
 		}
-		catch (Exception ex) {
-			throw new RuntimeException(ex.getMessage());
+		catch (PlatformException | ClassNotFoundException ex) {
+			throw new ActingAgentInitializationException(ex.getMessage());
 		}
 	}
 	
@@ -152,7 +157,7 @@ public class GoalOrientedActingAgent
 					{
 						// check buffered goals
 						Goal goal = waitGoal(GoalStatus.BUFFERED);
-						System.out.println("Selecting goal.. \n" + goal + "\n");
+						log.info("Selecting goal.. \n" + goal + "\n");
 						// simply select the extracted goal
 						select(goal);
 					}
@@ -175,6 +180,12 @@ public class GoalOrientedActingAgent
 		// set goal failure handler
 		this.contingencyHandler = new ContingencyHandlerProcess(this);
 		this.processes.add(new Thread(this.contingencyHandler));
+
+		// register agent to the proxy
+		if (this.proxy != null) {
+			// register to platform events
+			this.proxy.register(this);
+		}
 	}
 	
 	
@@ -185,7 +196,35 @@ public class GoalOrientedActingAgent
 	public synchronized ActingAgentStatus getStatus() {
 		return status;
 	}
-	
+
+	/**
+	 *
+	 * @param task
+	 */
+	@Override
+	public void task(AgentTaskDescription task) {
+		// buffer received task request
+		this.buffer(task);
+	}
+
+	/**
+	 *
+	 * @param platformFeedback
+	 */
+	@Override
+	public void feedback(PlatformFeedback platformFeedback) {
+		// nothing to do
+	}
+
+	/**
+	 *
+	 * @param platformObservation
+	 */
+	@Override
+	public void observation(PlatformObservation<?> platformObservation) {
+		// nothing to do
+	}
+
 	/**
 	 * Trigger acting process by buffering a description of a goal to plan and execute for
 	 * 
@@ -194,7 +233,7 @@ public class GoalOrientedActingAgent
 	public void buffer(AgentTaskDescription description) {
 		// protect access to the queue
 		synchronized (this.queue) {
-			System.out.println("receiving task ...\n" + description + "\n");
+			this.log.info("receiving task ...\n" + description + "\n");
 			// create goal 
 			Goal goal = new Goal(description);
 			// set goal status
@@ -398,36 +437,54 @@ public class GoalOrientedActingAgent
 			this.lock.notifyAll();
 		}
 	}
-	
+
 	/**
-	 * 
-	 * @throws InterruptedException
-	 * @throws SynchronizationCycleException
-	 * @throws PlatformException
+	 *
+	 * @throws ActingAgentInitializationException
 	 */
 	public void initialize() 
-			throws InterruptedException, SynchronizationCycleException, PlatformException
+			throws ActingAgentInitializationException
 	{
-		synchronized (this.lock) {
-			while(!this.status.equals(ActingAgentStatus.RUNNING)) {
-				// wait a signal
-				this.lock.wait();
+		// rady flag
+		boolean ready = false;
+		try
+		{
+			synchronized (this.lock) {
+				while (!this.status.equals(ActingAgentStatus.RUNNING)) {
+					// wait a signal
+					this.lock.wait();
+				}
+
+				// change status
+				this.status = ActingAgentStatus.INITIALIZING;
+				// send signal
+				this.lock.notifyAll();
 			}
-			
-			// change status
-			this.status = ActingAgentStatus.INITIALIZING;
-			// send signal 
-			this.lock.notifyAll();
+
+			// set plan database on the given planning domain
+			this.pdb = PlanDataBaseBuilder.createAndSet(this.ddl);
+			// set flag
+			ready = true;
 		}
-		
-		// set plan database on the given planning domain
-		this.pdb = PlanDataBaseBuilder.createAndSet(this.ddl);
-		
-		synchronized (this.lock) {
-			// change status
-			this.status = ActingAgentStatus.READY;
-			// send signal
-			this.lock.notifyAll();
+		catch (InterruptedException | SynchronizationCycleException ex) {
+			throw new ActingAgentInitializationException(ex.getMessage());
+		}
+		finally {
+
+				synchronized (this.lock) {
+
+					// change status
+					if (ready) {
+						this.status = ActingAgentStatus.READY;
+					}
+					else {
+						// simply set as running
+						this.status = ActingAgentStatus.RUNNING;
+					}
+
+					// send signal
+					this.lock.notifyAll();
+				}
 		}
 	}
 	
@@ -614,12 +671,22 @@ public class GoalOrientedActingAgent
 			long now = System.currentTimeMillis();
 			try
 			{
+				// start planning
+				this.log.info("Start planning on goal:\n-" +
+						"" + goal + "\n");
 				// deliberate on the current status of the plan database
 				SolutionPlan plan = this.deliberative.doPlan(this.pdb);
 				// set generated plan
 				goal.setPlan(plan);
+				// solution found
+				this.log.info("Solution found after " + ((System.currentTimeMillis() - now) / 1000) + " seconds:\n" +
+						"- Solution plan:\n" +
+						"" + plan + "\n\n");
 			}
 			catch (NoSolutionFoundException ex) {
+				// no solution found
+				this.log.warn("No solution found on goal:\n" +
+						"" + goal + "\n\n");
 				// failure - no plan can be found
 				success = false;
 				// remove and deactivate facts
@@ -658,7 +725,7 @@ public class GoalOrientedActingAgent
 			}
 			
 			// print an error message
-			System.err.println("Error while propagating intial facts from task description:\n"
+			this.log.error("Error while propagating intial facts from task description:\n"
 					+ "\t- message: " + ex.getMessage() + "\n");
 		}
 		
@@ -709,12 +776,19 @@ public class GoalOrientedActingAgent
 		long now = System.currentTimeMillis();
 		try 
 		{
+			// ready to start execution
+			this.log.info("Ready to execute (timeline-based) plan for goal\n" +
+					"" + goal + "\n");
 			// execute the plan
 			this.executive.doExecute(goal);
+			// successful execution
+			this.log.info("Plan successfully executed...");
 		}
 		catch (Exception ex) {
 			// execution failure
 			complete = false;
+			// successful execution
+			this.log.info("Plan execution failure!");
 		}
 		finally 
 		{
@@ -770,7 +844,7 @@ public class GoalOrientedActingAgent
 		try
 		{
 			// repair plan data
-			System.out.println("\n\nPLAN REPAIR\n");
+			this.log.warn("\n\nPLAN REPAIR\n");
 			
 			// list of kept decisions 
 			List<Decision> kept = new ArrayList<>();
@@ -778,16 +852,16 @@ public class GoalOrientedActingAgent
 			for (DomainComponent comp : this.pdb.getComponents())
 			{
 				// clear component 
-				System.out.println("CLEAR COMPONENT : " + comp.getName() + "\n");
+				this.log.warn("CLEAR COMPONENT : " + comp.getName() + "\n");
 				
 				// remove all pending decisions
-				System.out.println("\nREMOVE ALL PENDING DECISIONS\n");
+				this.log.warn("\nREMOVE ALL PENDING DECISIONS\n");
 				// list of pending decisions
 				List<Decision> pendings = comp.getPendingDecisions();
 				for (Decision pending : pendings) 
 				{
 					// completely remove decision and related relations
-					System.out.println("\nCLEAR DECISION " + pending + " AND RELATED RELATIONS");
+					this.log.warn("\nCLEAR DECISION " + pending + " AND RELATED RELATIONS");
 					comp.deactivate(pending);
 					comp.free(pending);
 				}
@@ -795,13 +869,13 @@ public class GoalOrientedActingAgent
 				// get execution trace 
 				List<ExecutionNode> trace = goal.getExecutionTraceByComponentName(comp.getName());
 				// remove active decisions that have not been executed
-				System.out.println("\nREMOVE ALL ACTIVE DECISIONS THAT HAVE NOT BEEN EXECUTED\n");
+				this.log.warn("\nREMOVE ALL ACTIVE DECISIONS THAT HAVE NOT BEEN EXECUTED\n");
 				// list of active decisions
 				List<Decision> actives = comp.getActiveDecisions();
 				for (Decision active : actives)
 				{
 					// check if the token has been executed
-					System.out.println("\nACTIVE DECISION " + active + "\n");
+					this.log.warn("\nACTIVE DECISION " + active + "\n");
 					boolean executed = false;
 					for (ExecutionNode node : trace) {
 						// check if the temporal interval has been executed
@@ -814,12 +888,12 @@ public class GoalOrientedActingAgent
 					// check flag
 					if (executed) {
 						// keep the decision as active
-						System.out.println("\nKEEP DECISION AS ACTIVE SINCE ALREADY EXECUTED");
+						this.log.warn("\nKEEP DECISION AS ACTIVE SINCE ALREADY EXECUTED");
 						kept.add(active);
 					}
 					else {
 						// clear and remove decision and related relations
-						System.out.println("\nREMOVE DECISION AND RELATED RELATIONS SINCE NOT EXECUTED");
+						this.log.warn("\nREMOVE DECISION AND RELATED RELATIONS SINCE NOT EXECUTED");
 						comp.deactivate(active);
 						comp.free(active);
 					}
@@ -834,7 +908,7 @@ public class GoalOrientedActingAgent
 			{
 				case NODE_DURATION_OVERFLOW : {
 					// keep the decision as active and consider it as executed
-					System.out.println("\nHANDLE DURATION OVERFLOW FAILURE\n");
+					this.log.warn("\nHANDLE DURATION OVERFLOW FAILURE\n");
 					ExecutionNode node = cause.getInterruptionNode();
 					// find the related decision
 					for (DomainComponent comp : this.pdb.getComponents()) {
@@ -844,7 +918,7 @@ public class GoalOrientedActingAgent
 							// check temporal intervals
 							if (node.getInterval().equals(active.getToken().getInterval())) {
 								// keep the decision as active 
-								System.out.println("\nKEEP DECISION " + active + "\n");
+								this.log.warn("\nKEEP DECISION " + active + "\n");
 								kept.add(active);
 							}
 						}
@@ -855,7 +929,7 @@ public class GoalOrientedActingAgent
 				case NODE_EXECUTION_ERROR :
 				case NODE_START_OVERFLOW : {
 					// remove decisions they are going to be re-planned
-					System.out.println("\nHANDLE START OVERFLOW FAILURE / EXECUTION ERRROR FAILURE\n");
+					this.log.warn("\nHANDLE START OVERFLOW FAILURE / EXECUTION ERRROR FAILURE\n");
 					ExecutionNode node = cause.getInterruptionNode();
 					// find the related decision
 					for (DomainComponent comp : this.pdb.getComponents()) {
@@ -865,7 +939,7 @@ public class GoalOrientedActingAgent
 							// check temporal intervals
 							if (node.getInterval().equals(active.getToken().getInterval())) {
 								// keep the decision as active 
-								System.out.println("\nREMOVE DECISION " + active + "\n");
+								this.log.warn("\nREMOVE DECISION " + active + "\n");
 								comp.deactivate(active);
 								comp.free(active);
 							}
@@ -936,7 +1010,7 @@ public class GoalOrientedActingAgent
 						ExecutionNodeStatus.IN_EXECUTION);
 				
 				// add decision to goal list
-				System.out.println("REPAIR GOAL : [" + decision.getId() +"]:" + decision.getComponent().getName() + "." + decision.getValue().getLabel() + " "
+				this.log.warn("REPAIR GOAL : [" + decision.getId() +"]:" + decision.getComponent().getName() + "." + decision.getValue().getLabel() + " "
 						+ "AT [" + decision.getStart()[0]  + ", " + decision.getStart()[1] + "] "
 						+ "[" + decision.getEnd()[0] + ", " + decision.getEnd()[1] + "] "
 						+ "[" + decision.getDuration()[0] + ", " + decision.getDuration()[1] + "]");
@@ -959,7 +1033,7 @@ public class GoalOrientedActingAgent
 			// error while repairing
 			success = false;
 			// error message
-			System.err.println("Error while trying to repair the plan\n"
+			this.log.error("Error while trying to repair the plan\n"
 					+ "\t- message: " + ex.getMessage() + "\n");
 			
 			// completely clear all the plan database

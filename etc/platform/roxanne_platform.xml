@@ -2,6 +2,11 @@
 
 <ros>
 
+    <goal-topic
+        name="/roxanne/acting/goal"
+        msg="roxanne_rosjava_msgs/ActingGoal"
+        delegate="com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneGoalListener" />
+
     <environment-topic
             name="/roxanne/acting/observation"
             msg="roxanne_rosjava_msgs/Observation"

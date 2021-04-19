@@ -3,6 +3,7 @@ package com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.ex.MessageMarshalingException;
 import com.github.roxanne_rosjava.roxanne_rosjava_core.control.platform.ex.CommandPublisherException;
 import it.cnr.istc.pst.platinum.control.lang.PlatformCommand;
+import org.apache.commons.logging.Log;
 import org.ros.internal.message.Message;
 import org.ros.node.ConnectedNode;
 import org.ros.node.topic.Publisher;
@@ -13,6 +14,7 @@ import org.ros.node.topic.Publisher;
  */
 public abstract class RosJavaCommandPublisher<T extends Message> {
 
+    protected Log logger;
     protected RosJavaPlatformProxy proxy;          // set platform proxy
     protected Publisher<T> publisher;              // topic publisher
 
@@ -22,6 +24,7 @@ public abstract class RosJavaCommandPublisher<T extends Message> {
      */
     protected RosJavaCommandPublisher(RosJavaPlatformProxy proxy) {
         this.proxy = proxy;
+        this.logger = this.proxy.getLogger();
     }
 
     /**
