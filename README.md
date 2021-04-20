@@ -109,7 +109,6 @@ export GITHUB_USER=<github-user>
 export GITHUB_TOKEN=<github-personal-access-token>
 ```
 
-
 ### Bulding the Package
 
 At this point install the **roxanne_rosjava package** into the ROSJava workspace by cloning and installing the current repository.
@@ -209,12 +208,10 @@ The file ```etc/platform/roxanne_platform.xml``` specifies the topics used to di
                 delegate="com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneFeedbackListener" />
 
     </command>
-
+</ros>
 ````
 
 This configuration is the default expected when using **ROXANNE**. However, the framework allows users to specify different combinations of topics and messages. In such cases it would be necessary to develop custom Java delegates responsible for "marshaling/umarshaling" the specific message formats
-
-
 
 
 ## Additional resources
