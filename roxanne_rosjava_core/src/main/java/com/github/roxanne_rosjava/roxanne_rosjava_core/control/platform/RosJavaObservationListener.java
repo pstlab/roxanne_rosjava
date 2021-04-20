@@ -15,7 +15,7 @@ import org.ros.node.topic.Subscriber;
  */
 public abstract class RosJavaObservationListener<T extends Message, D extends Object> implements MessageListener<T> {
 
-    protected Log logger;
+    protected Log log;
     protected RosJavaPlatformProxy proxy;           // platform proxy
     protected Subscriber<T> subscriber;             // topic subscriber
 
@@ -25,7 +25,7 @@ public abstract class RosJavaObservationListener<T extends Message, D extends Ob
      */
     protected RosJavaObservationListener(RosJavaPlatformProxy proxy) {
         this.proxy = proxy;
-        this.logger = this.proxy.getLogger();
+        this.log = this.proxy.getLogger();
     }
 
     /**

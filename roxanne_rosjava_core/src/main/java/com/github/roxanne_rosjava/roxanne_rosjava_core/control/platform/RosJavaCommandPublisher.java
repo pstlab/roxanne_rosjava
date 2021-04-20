@@ -14,7 +14,7 @@ import org.ros.node.topic.Publisher;
  */
 public abstract class RosJavaCommandPublisher<T extends Message> {
 
-    protected Log logger;
+    protected Log log;
     protected RosJavaPlatformProxy proxy;          // set platform proxy
     protected Publisher<T> publisher;              // topic publisher
 
@@ -24,7 +24,7 @@ public abstract class RosJavaCommandPublisher<T extends Message> {
      */
     protected RosJavaCommandPublisher(RosJavaPlatformProxy proxy) {
         this.proxy = proxy;
-        this.logger = this.proxy.getLogger();
+        this.log = this.proxy.getLogger();
     }
 
     /**

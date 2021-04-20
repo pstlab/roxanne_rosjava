@@ -18,9 +18,6 @@ import roxanne_rosjava_msgs.ActingConfigurationServiceResponse;
  */
 public class ActingNode extends AbstractNodeMain
 {
-    //private static final String HOME = System.getenv("ROXANNE_HOME") != null ? System.getenv("ROXANNE_HOME") + "/" : "";
-    //private static final String PROPERTY_FILE =  HOME + "etc/agent.properties";
-
     private GoalOrientedActingAgent agent;
 
     private Log log;

@@ -20,10 +20,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 import java.io.FileInputStream;
 import java.lang.reflect.Constructor;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Roxanne ROSJava connector proxy
@@ -36,7 +33,7 @@ public class RosJavaPlatformProxy extends PlatformProxy
     private Map<String, String> command2dispatchTopic;	              // map platform commands to ROS dispatch topics
     private Map<String, RosJavaCommandPublisher> topic2publisher;	  // map ROS topic to publisher
     private Set<String> subscribedTopics;                             // subscribed topics
-
+    private Map<String, Set<String>> component2excluded;             // excluded commands by component
 
     /**
      *
@@ -50,7 +47,7 @@ public class RosJavaPlatformProxy extends PlatformProxy
         this.command2dispatchTopic = new HashMap<>();
         this.topic2publisher = new HashMap<>();
         this.subscribedTopics = new HashSet<>();
-
+        this.component2excluded = new HashMap<>();
     }
 
     /**
@@ -162,7 +159,26 @@ public class RosJavaPlatformProxy extends PlatformProxy
                 // index command name
                 Attr cmdName = (Attr) cmd.getAttributes().getNamedItem("name");
                 Attr compName = (Attr) cmd.getAttributes().getNamedItem("component");
+                Attr exclude = (Attr) cmd.getAttributes().getNamedItem("exclude");
                 System.out.println("... parsing cmd: " + compName.getValue() + "." + cmdName.getValue() + " <<");
+
+                // check if attribute "exclude" has been set
+                if (exclude != null) {
+
+                    // set exclude
+                    if (!this.component2excluded.containsKey(compName.getValue().trim().toLowerCase())) {
+                        this.component2excluded.put(compName.getValue().trim().toLowerCase(), new HashSet<String>());
+                    }
+
+                    // check excluded values - expected a list separated by space
+                    String[] values = exclude.getValue().split(" ");
+                    // add values
+                    for (String val : values) {
+                        // add the value to exclude
+                        this.component2excluded.get(compName.getValue().trim().toLowerCase())
+                                .add(val.trim().toLowerCase());
+                    }
+                }
 
                 // get command dispatch topic info
                 expression = xp.compile("//command[@name= '" + cmdName.getValue() +  "' and @component= '" + compName.getValue() + "']/dispatch-topic");
@@ -440,20 +456,40 @@ public class RosJavaPlatformProxy extends PlatformProxy
         // check component name
         String compName = node.getComponent();
 
-        // check if there is a specific dispatching topic for this node
-        boolean toDispatch = this.command2dispatchTopic.containsKey(
-                compName.trim().toLowerCase() + "." + cmdName.trim().toLowerCase());
+        // to dispatch flag
+        boolean excluded = true;
+        // check first if the value is excluded from dispatch
+        if (this.component2excluded.containsKey(compName.trim().toLowerCase()) ||
+                this.component2excluded.containsKey("*")) {
 
-        // check if there is a default dispatching command for the component
-        if (!toDispatch) {
-            // check component default dispatching command
-            toDispatch = this.command2dispatchTopic.containsKey(compName.trim().toLowerCase() + ".*");
+            // check value
+            excluded = this.component2excluded.containsKey(compName.trim().toLowerCase()) ?
+                    // check component specification
+                    this.component2excluded.get(compName.trim().toLowerCase()).contains(cmdName.trim().toLowerCase()) :
+                    // check global specification
+                    this.component2excluded.get("*").contains(cmdName.trim().toLowerCase());
         }
 
-        // check if there is a default dispatching command
-        if (!toDispatch) {
-            // check default
-            toDispatch = this.command2dispatchTopic.containsKey("*.*");
+        // set dispatch flag
+        boolean toDispatch = false;
+        // check excluded flag
+        if (!excluded) {
+
+            // check if there is a specific dispatching topic for this node
+            toDispatch = this.command2dispatchTopic.containsKey(
+                    compName.trim().toLowerCase() + "." + cmdName.trim().toLowerCase());
+
+            // check if there is a default dispatching command for the component
+            if (!toDispatch) {
+                // check component default dispatching command
+                toDispatch = this.command2dispatchTopic.containsKey(compName.trim().toLowerCase() + ".*");
+            }
+
+            // check if there is a default dispatching command
+            if (!toDispatch) {
+                // check default
+                toDispatch = this.command2dispatchTopic.containsKey("*.*");
+            }
         }
 
         // get flag

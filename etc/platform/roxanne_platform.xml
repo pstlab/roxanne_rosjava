@@ -12,9 +12,9 @@
             msg="roxanne_rosjava_msgs/Observation"
             delegate="com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneObservationListener" />
 
-    <!-- wildcard matching any type of dispatchable token of a plan -->
+    <!-- wildcard matching any type of token to dispatch -->
 
-    <command component="*" name="*">
+    <command component="*" name="*" exclude="idle">
 
         <dispatch-topic
                 name="/roxanne/acting/dispatching"
