@@ -110,7 +110,109 @@ export GITHUB_TOKEN=<github-personal-access-token>
 ```
 
 
+### Bulding the Package
 
+At this point install the **roxanne_rosjava package** into the ROSJava workspace by cloning and installing the current repository.
+
+```
+cd ~/ws/src
+git clone https://github.com/pstlab/roxanne_rosjava.git
+cd ..
+source devel/setup.bash
+catkin_make
+source devel/setup.bash
+```
+
+To finalize the installation just define the environment variable **PLATINUM_HOME** in order to point to the folder containing the installed package. This would tell the underlying reasoning framework where to find the configuration files (see the content of the ```etc``` of the package).
+
+```
+export PLATINUM_HOME=<path-to-the-workspace>/src/roxanne_rosjava
+```
+
+The above line of code can be added to the ```.bashrc``` file to automatically export the environment variable when the terminal is open. 
+
+## Package Usage 
+
+If the the installation and configuration of the **roxanne_rosjava** package has been successfully done then it should be possible to run the ROS node starting the **goal-oriented agent** for continuous planning and execution.
+
+First open a terminal and start core ROS nodes using ```roscore```. 
+
+Then, open a different terminal and launch the acting node as follows:
+
+```
+cd ~/ws
+source devel/setup.bash
+rosrun roxanne_rosjava roxanne_rosjava_taskplanner com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.ActingNode
+```
+
+At this point the acting node is running and can be initialized on a specific timeline-based model using the service ``` roxanne_rosjava_msgs/ActingConfigurationService```. Run the following command in a new terminal.
+
+```
+cd ~/ws
+source devel/setup.bash
+rosservice call /roxanne/acting/configuration "configFilePath: '<abosolute-path>/ws/robotics/roxanne/src/roxanne_rosjava/etc/agent.properties'"
+```
+
+The above command initializes the acting agent using a sample configuration file that can be found under the folder ```etc``` of the package.
+
+If the agent is successfully initialized then send a planning and execution request to the agent by posting a dedicated message on the input topic ```/roxanne/acting/goal```.
+
+```
+rostopic pub --once /roxanne/acting/goal roxanne_rosjava_msgs/ActingGoal "goalId: 0
+goals:
+- id: 0
+  component: 'Goal'
+  predicate: 'DoSomething'
+  parameters: []
+  start: [0, 100]
+  end: [0, 100]
+  duration: [1, 100]
+facts:
+- id: 0
+  component: 'Acting'
+  predicate: 'Idle'
+  parameters: []
+  start: [0, 0]
+  end: [0, 100]
+  duration: [1, 100]"
+```
+
+The terminal of the acting node should display information about the lifecycle of the request within the acting agent. After few seconds it shows a textual description of the synthesized plan and starts its execution.
+
+The file ```etc/platform/roxanne_platform.xml``` specifies the topics used to dispatch commands, receive feedback and the types of messge exchanged over such topics. 
+
+````
+<ros>
+
+    <goal-topic
+        name="/roxanne/acting/goal"
+        msg="roxanne_rosjava_msgs/ActingGoal"
+        delegate="com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneGoalListener" />
+
+    <environment-topic
+            name="/roxanne/acting/observation"
+            msg="roxanne_rosjava_msgs/Observation"
+            delegate="com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneObservationListener" />
+
+    <!-- wildcard matching any type of dispatchable token of a plan -->
+
+    <command component="*" name="*">
+
+        <dispatch-topic
+                name="/roxanne/acting/dispatching"
+                msg="roxanne_rosjava_msgs/TokenExecution"
+                publisher="com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneTokenPublisher" />
+
+        <feedback-topic
+                name="/roxanne/acting/feedback"
+                msg="roxanne_rosjava_msgs/TokenExecutionFeedback"
+                delegate="com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.platform.RoxanneFeedbackListener" />
+
+    </command>
+
+````
+
+This configuration is the default expected when using **ROXANNE**. However, the framework allows users to specify different combinations of topics and messages. In such cases it would be necessary to develop custom Java delegates responsible for "marshaling/umarshaling" the specific message formats
 
 
 
