@@ -153,7 +153,7 @@ At this point the acting node is running and can be initialized on a specific ti
 ```
 cd ~/ws
 source devel/setup.bash
-rosservice call /roxanne/acting/configuration "configFilePath: '<abosolute-path>/ws/robotics/roxanne/src/roxanne_rosjava/etc/agent.properties'"
+rosservice call /roxanne/acting/configuration "configFilePath: '<abosolute-path-to-the-workspace>/src/roxanne_rosjava/etc/agent.properties'"
 ```
 
 The above command initializes the acting agent using a sample configuration file that can be found under the folder ```etc``` of the package.
