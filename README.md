@@ -17,7 +17,15 @@ ROXANNE has received funding from the European Union’s Horizon 2020 research a
 - Define an interoperability communication protocol characterizing events and information exchanged within the life-cycle of a dynamic task planning system. Such a protocol defines services and dependencies that are necessary for the effective integration of the task planner with robot controllers and realize an autonomous robot architecture.
 - Enable and **facilitate the use of timeline-based control techniques** in real-world production contexts by leveraging a standard platform like ROS and an existing timeline-based framework called [**PLATINUm**](https://github.com/pstlab/PLATINUm)
 
-## Installation
+## Docker Installation
+
+A public Docker image is available on [Docker Hub](https://hub.docker.com/r/pstlab/roxanne). The docker image consists of a **ROS Melodic** distribution, an configured **ROSJava workspace** and an installed and ready-to-use **ROXANNE ROSJava** package. You may refer to the section **Package Usage** for some instructions about how to run and interact with a ROXANNE Acting Node.
+
+In order to update the docker with the latest versions of the package set your GitHub credentials into the file ```gradle.properties``` of the package (see section **Gradle Configuration**).
+
+_Note that it could be necessary to explicitly start the **mongod service** on the docker. Run the script under ```/root/bin/start_mongo``` if necessary_ 
+
+## ROS Installation
 
 The package has been developed and tested for **ROS Melodic** distribution on **Ubunut 18.04**. It requires a ROSJava workspace for correct execution and generation of the Java artifacts needed for custom messages and installed Java software.
 
@@ -52,6 +60,7 @@ Note that one of the dependecies of **rosjava_messages** package is [world_canva
 ```
 <build_depend>world_canvas_msgs</build_depend>
 ```
+Note that the installation of rosjava could install the latest version of openjdk. In such a case use the command ```sudo update-alternatives --config java``` to enforce the use of **opnejdk-8-jdk** (or other versions of java 8) which is recommended for the correct use of **ROXANNE**.
 
 ### Package preparation
 
