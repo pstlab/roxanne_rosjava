@@ -2,12 +2,12 @@
 
 **ROXANNE** (ROs fleXible ActiNg coNtrollEr) is an **FTP ROSIN project** developing **ROS** packages that facilitate the integration of Artificial Intelligence planning and execution capabilities with robotic platforms. ROXANNE specifically supports the development of timeline-based goal-oriented architectures in ROS. The project aim at integrating of timeline-based planning and execution technologies with “standard” robot control techniques to enhance robustness and flexibility of robot behaviors when dealing with uncontrollable dynamics of an environment or other “external” and concurrent agents like e.g., human operators in Human-Robot Collaboration (HRC) scenarios.
 
-## Fundings
+### Fundings
 
 ROXANNE has received funding from the European Union’s Horizon 2020 research and innovation programme under the project ROSIN with the gran agreement No 732287.
 
 
-## Objectives
+### Objectives
 
 **ROXANNE** aims at creating a ROS compliatn framework facilitating the use of timeline-based planning and execution capabilities in industrial settings. Target users are either researchers and manufacturing companies that want to evaluate flexible task-level controllers to better support production processes. The objectives of the project are thus the following:
 
