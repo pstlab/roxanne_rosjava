@@ -81,7 +81,7 @@ It is possible to verify the successful built of the package by checking ROS ser
 ```
 cd ~/ws
 source devel/setup.bash
-rossrv show rossrv show roxanne_rosjava_msgs/DeliberativeService
+rossrv show roxanne_rosjava_msgs/DeliberativeService
 ```
 should give the following output which describes the request and response defined for the service **DeliberativeService**
 
