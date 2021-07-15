@@ -8,6 +8,7 @@ import it.cnr.istc.pst.platinum.control.lang.TokenDescription;
 import roxanne_rosjava_msgs.ActingGoal;
 import roxanne_rosjava_msgs.Token;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -85,6 +86,7 @@ public class RoxanneGoalListener extends RosJavaGoalListener<roxanne_rosjava_msg
                         "- id: " + tk.getId() + "\n" +
                         "- component: " + component + "\n" +
                         "- predicate: " + predicate + "\n" +
+                        "- parameters: " + Arrays.toString(params) + "\n" +
                         "- start: [" + start[0] + "," + start[1] + "]\n" +
                         "- end: [" + end[0] + "," + end[1] +"]\n" +
                         "- duration: [" + duration[0] + "," + duration[1] + "]\n");
@@ -119,6 +121,7 @@ public class RoxanneGoalListener extends RosJavaGoalListener<roxanne_rosjava_msg
                         "- id: " + tk.getId() + "\n" +
                         "- component: " + component + "\n" +
                         "- predicate: " + predicate + "\n" +
+                        "- parameters: " + Arrays.toString(params) + "\n" +
                         "- start: [" + start[0] + "," + start[1] + "]\n" +
                         "- end: [" + end[0] + "," + end[1] +"]\n" +
                         "- duration: [" + duration[0] + "," + duration[1] + "]\n");
