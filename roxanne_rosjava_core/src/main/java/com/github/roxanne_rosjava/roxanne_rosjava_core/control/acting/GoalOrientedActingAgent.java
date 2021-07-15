@@ -13,9 +13,14 @@ import it.cnr.istc.pst.platinum.ai.framework.domain.component.Decision;
 import it.cnr.istc.pst.platinum.ai.framework.domain.component.DomainComponent;
 import it.cnr.istc.pst.platinum.ai.framework.domain.component.PlanDataBase;
 import it.cnr.istc.pst.platinum.ai.framework.domain.component.ex.DecisionPropagationException;
+import it.cnr.istc.pst.platinum.ai.framework.domain.component.ex.RelationPropagationException;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.ex.NoSolutionFoundException;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.ex.SynchronizationCycleException;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.plan.SolutionPlan;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.relations.Relation;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.relations.RelationType;
+import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.relations.parameter.BindParameterRelation;
+import it.cnr.istc.pst.platinum.ai.framework.parameter.lang.constraints.BindParameterConstraint;
 import it.cnr.istc.pst.platinum.ai.framework.utils.properties.FilePropertyReader;
 import it.cnr.istc.pst.platinum.control.lang.*;
 import it.cnr.istc.pst.platinum.control.lang.ex.PlatformException;
@@ -554,10 +559,14 @@ public class GoalOrientedActingAgent implements PlatformObserver
 		List<Decision> goals = new ArrayList<>();
 		// list of fact decisions
 		List<Decision> facts = new ArrayList<>();
+		// list of created (and activated) relations
+		List<Relation> activatedRelations = new ArrayList<>();
 		try
 		{
 			// get task description
 			AgentTaskDescription task = goal.getTaskDescription();
+			// fact ID
+			int factId = 0;
 			// set known information concerning components
 			for (TokenDescription f : task.getFacts())
 			{
@@ -591,28 +600,60 @@ public class GoalOrientedActingAgent implements PlatformObserver
 						value.getDurationUpperBound()
 					};
 				}
-				
-				// check labels
-				String[] labels = f.getLabels();
-				if (labels == null) {
-					labels = new String[] {};
+
+				// set labels
+				String[] labels = new String[] {};
+				// get parameters
+				String[] params = f.getLabels();
+				if (params != null && params.length > 0) {
+					// set parameter labels
+					labels = new String[params.length];
+					for (int i = 0; i < params.length; i++) {
+						// create parameter label
+						labels[i] = "?f" + factId + "l" + i;
+					}
 				}
-				
+
 				// create fact decision
 				Decision decision = component.create(
-						value, 
+						value,
 						labels,
 						start,
 						end,
-						duration
-						);
-				
+						duration);
+
 				// also activate fact decision
 				component.activate(decision);
+
+				// bind parameter labels
+				for (int i = 0; i < params.length; i++) {
+
+					// get parameter label
+					String pLabel = labels[i];
+					// get parameter value
+					String pValue = params[i];
+
+					// create BIND parameter relation
+					BindParameterRelation pRel = component.create(RelationType.BIND_PARAMETER, decision, decision);
+					// set relation data
+					pRel.setReferenceParameterLabel(pLabel);
+					pRel.setValue(pValue);
+
+					// activate relation
+					component.activate(pRel);
+					// add activated relation
+					activatedRelations.add(pRel);
+				}
+
+
 				// add decision to fact list
 				facts.add(decision);
+				// increment fact ID
+				factId++;
 			}
-			
+
+			// goal ID counter
+			int goalId = 0;
 			// set planning goals 
 			for (TokenDescription g : task.getGoals()) 
 			{
@@ -646,24 +687,53 @@ public class GoalOrientedActingAgent implements PlatformObserver
 						value.getDurationUpperBound()
 					};
 				}
-				
-				// check labels
-				String[] labels = g.getLabels();
-				if (labels == null) {
-					labels = new String[] {};
+
+
+				// set labels
+				String[] labels = new String[] {};
+				// get parameters
+				String[] params = g.getLabels();
+				if (params != null && params.length > 0) {
+					// set parameter labels
+					labels = new String[params.length];
+					for (int i = 0; i < params.length; i++) {
+						// create parameter label
+						labels[i] = "?g" + goalId + "l" + i;
+					}
 				}
-				
+
 				// create goal decision
 				Decision decision = component.create(
 						value, 
 						labels,
 						start,
 						end,
-						duration
-						);
+						duration);
+
+				// bind parameter labels
+				for (int i = 0; i < params.length; i++) {
+
+					// get parameter label
+					String pLabel = labels[i];
+					// get parameter value
+					String pValue = params[i];
+
+					// create BIND parameter relation
+					BindParameterRelation pRel = component.create(RelationType.BIND_PARAMETER, decision, decision);
+					// set relation data
+					pRel.setReferenceParameterLabel(pLabel);
+					pRel.setValue(pValue);
+
+					// activate relation
+					component.activate(pRel);
+					// add activated relation
+					activatedRelations.add(pRel);
+				}
 				
 				// add decision to goal list
 				goals.add(decision);
+				// increment goal ID
+				goalId++;
 			}
 			
 			
@@ -709,9 +779,21 @@ public class GoalOrientedActingAgent implements PlatformObserver
 				goal.addPlanningAttempt(time);
 			}
 		}
-		catch (DecisionPropagationException ex) {
+		catch (DecisionPropagationException | RelationPropagationException ex) {
+
 			// problem setup error 
 			success = false;
+
+			// deactivate and remove relations
+			for (Relation rel : activatedRelations) {
+
+				DomainComponent comp = rel.getReference().getComponent();
+				// deactivate relation
+				comp.deactivate(rel);
+				// remove relation
+				comp.delete(rel);
+			}
+
 			// remove and deactivate facts
 			for (Decision f : facts) {
 				f.getComponent().deactivate(f);
@@ -725,7 +807,7 @@ public class GoalOrientedActingAgent implements PlatformObserver
 			}
 			
 			// print an error message
-			this.log.error("Error while propagating intial facts from task description:\n"
+			this.log.error("Error while propagating initial facts from task description:\n"
 					+ "\t- message: " + ex.getMessage() + "\n");
 		}
 		

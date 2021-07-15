@@ -16,9 +16,9 @@ import sun.security.pkcs.PKCS8Key
  * the License.
  */
 
-version '0.1.2'
+version '0.1.3'
 
-/* 
+/*
  Dependencies can be on external maven artifacts (such as rosjava_core
  here) or on sibling subprojects. Fpr external maven artifact dependencies
  it's convenient to use an open ranged dependency, but restrict it to
