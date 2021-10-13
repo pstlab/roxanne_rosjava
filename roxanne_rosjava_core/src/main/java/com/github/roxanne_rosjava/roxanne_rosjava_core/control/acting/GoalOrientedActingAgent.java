@@ -1011,7 +1011,7 @@ public class GoalOrientedActingAgent implements PlatformObserver
 				case NODE_EXECUTION_ERROR :
 				case NODE_START_OVERFLOW : {
 					// remove decisions they are going to be re-planned
-					this.log.warn("\nHANDLE START OVERFLOW FAILURE / EXECUTION ERRROR FAILURE\n");
+					this.log.warn("\nHANDLE START OVERFLOW FAILURE / EXECUTION ERROR FAILURE\n");
 					ExecutionNode node = cause.getInterruptionNode();
 					// find the related decision
 					for (DomainComponent comp : this.pdb.getComponents()) {

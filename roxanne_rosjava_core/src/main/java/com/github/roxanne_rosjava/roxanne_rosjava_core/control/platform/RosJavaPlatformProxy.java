@@ -57,8 +57,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
      */
     @Override
     public void initialize(String cfgFile)
-            throws PlatformException
-    {
+            throws PlatformException {
+
         // set observation counter
         obsIdCounter.set(0);
         cmdIdCounter.set(0);
@@ -269,8 +269,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
      */
     @Override
     public PlatformCommand executeNode(ExecutionNode node)
-            throws PlatformException
-    {
+            throws PlatformException {
+
         // get command id
         int id = cmdIdCounter.getAndIncrement();
         // extract command information
@@ -331,8 +331,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
      */
     @Override
     public PlatformCommand startNode(ExecutionNode node)
-            throws PlatformException
-    {
+            throws PlatformException {
+
         // get command id
         int id = cmdIdCounter.getAndIncrement();
         // extract command information
@@ -390,8 +390,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
      */
     @Override
     public void stopNode(ExecutionNode node)
-            throws PlatformException
-    {
+            throws PlatformException {
+
         // get command id
         int id = cmdIdCounter.getAndIncrement();
         // extract command information
@@ -449,8 +449,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
      * @return
      */
     @Override
-    public boolean isPlatformCommand(ExecutionNode node)
-    {
+    public boolean isPlatformCommand(ExecutionNode node) {
+
         // check token name
         String cmdName = this.extractCommandName(node);
         // check component name
