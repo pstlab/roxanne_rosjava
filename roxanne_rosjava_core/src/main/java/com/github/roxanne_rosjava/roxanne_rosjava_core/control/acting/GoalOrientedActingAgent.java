@@ -466,6 +466,7 @@ public class GoalOrientedActingAgent implements PlatformObserver
 				this.lock.notifyAll();
 			}
 
+			log.info("DDL FILE\n" + this.ddl + "\n");
 			// set plan database on the given planning domain
 			this.pdb = PlanDataBaseBuilder.createAndSet(this.ddl);
 			// set flag
