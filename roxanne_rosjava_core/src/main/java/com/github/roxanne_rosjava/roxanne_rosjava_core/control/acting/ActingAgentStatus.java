@@ -51,6 +51,11 @@ public enum ActingAgentStatus
 	 * 
 	 */
 	EXECUTING,
+
+	/**
+	 *
+	 */
+	SUSPENDING,
 	
 	/**
 	 * 
