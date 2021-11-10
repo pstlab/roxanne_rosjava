@@ -106,6 +106,7 @@ public class ExecutiveProcess implements Runnable {
 		
 		// run the executive starting at a given tick
 		boolean complete = exec.execute(goal.getExecutionTick(), goal);
+
 		// stop simulator if necessary
 		if (this.agent.proxy != null) {
 			// unlink from simulator

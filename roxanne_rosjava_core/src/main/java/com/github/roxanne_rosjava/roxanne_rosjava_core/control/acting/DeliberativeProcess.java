@@ -36,11 +36,13 @@ public class DeliberativeProcess implements Runnable
 	 */
 	@Override
 	public void run() {
+
+		// running flag
 		boolean running = true;
-		while(running)
-		{
-			try
-			{
+		while(running) {
+
+			try {
+
 				// take a goal to plan for
 				Goal goal = this.agent.waitGoal(GoalStatus.SELECTED);
 				System.out.println("... deliberating on goal\n" + goal + "\n"); 
@@ -50,16 +52,15 @@ public class DeliberativeProcess implements Runnable
 				if (success) {
 					// commit planned goal
 					this.agent.commit(goal);
-				}
-				else {
+
+				} else {
+
 					// deliberative failure abort goal
 					this.agent.abort(goal);
 				}
-			}
-			catch (InterruptedException ex) {
+			} catch (InterruptedException ex) {
 				running = false;
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				// print an error message
 				System.err.println(ex.getMessage());
 			}
@@ -72,8 +73,8 @@ public class DeliberativeProcess implements Runnable
 	 * @throws NoSolutionFoundException
 	 */
 	protected SolutionPlan doPlan(PlanDataBase pdb)
-			throws NoSolutionFoundException
-	{
+			throws NoSolutionFoundException {
+
 		// setup planner on the current status of the plan database
 		Planner planner = PlannerBuilder.createAndSet(this.pClass, pdb);
 		// start planning 

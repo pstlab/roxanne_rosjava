@@ -360,11 +360,6 @@ public class GoalOrientedActingAgent implements PlatformObserver
 			this.queue.get(goal.getStatus()).add(goal);
 			// send signal
 			this.queue.notifyAll();
-			
-			// clear plan data-base structure
-			this.log.info("Clear plan database structure after execution finished successfully ...");
-			// clear internal components
-			this.pdb.clear();
 		}
 	}
 	
@@ -482,16 +477,17 @@ public class GoalOrientedActingAgent implements PlatformObserver
 				this.lock.notifyAll();
 			}
 
-			log.info("Timeline-based specification \n" + this.ddl + "\n");
-			// set plan database on the given planning domain
-			this.pdb = PlanDataBaseBuilder.createAndSet(this.ddl);
+			/**
+			 * TODO : do initialization steps
+			 */
+
 			// set flag
 			ready = true;
-		}
-		catch (InterruptedException | SynchronizationCycleException ex) {
+
+		} catch (InterruptedException ex) {
 			throw new ActingAgentInitializationException(ex.getMessage());
-		}
-		finally {
+
+		} finally {
 
 				synchronized (this.lock) {
 
@@ -548,6 +544,190 @@ public class GoalOrientedActingAgent implements PlatformObserver
  	}
 
 	/**
+	 *
+	 * @param task
+	 * @param goals
+	 * @param facts
+	 * @param activatedRelations
+	 * @throws DecisionPropagationException
+	 * @throws RelationPropagationException
+	 */
+	 private void propagate(AgentTaskDescription task, List<Decision> goals, List<Decision> facts, List<Relation> activatedRelations)
+			 throws DecisionPropagationException, RelationPropagationException {
+
+		 // fact ID
+		 int factId = 0;
+		 // set known information concerning components
+		 for (TokenDescription f : task.getFacts()) {
+
+			 // get domain component
+			 DomainComponent component = this.pdb.getComponentByName(f.getComponent());
+			 // get goal referred value
+			 ComponentValue value = component.getValueByName(f.getValue());
+			 // check start time bound
+			 long[] start = f.getStart();
+			 if (start == null) {
+				 start = new long[] {
+						 this.pdb.getOrigin(),
+						 this.pdb.getHorizon()
+				 };
+			 }
+
+			 // check end time bound
+			 long[] end = f.getEnd();
+			 if (end == null) {
+				 end = new long[] {
+						 this.pdb.getOrigin(),
+						 this.pdb.getHorizon()
+				 };
+			 }
+
+			 // check duration bound
+			 long[] duration = f.getDuration();
+			 if (duration == null) {
+				 duration = new long[] {
+						 value.getDurationLowerBound(),
+						 value.getDurationUpperBound()
+				 };
+			 }
+
+			 // set labels
+			 String[] labels = new String[] {};
+			 // get parameters
+			 String[] params = f.getLabels();
+			 if (params != null && params.length > 0) {
+				 // set parameter labels
+				 labels = new String[params.length];
+				 for (int i = 0; i < params.length; i++) {
+					 // create parameter label
+					 labels[i] = "?f" + factId + "l" + i;
+				 }
+			 }
+
+			 // create fact decision
+			 Decision decision = component.create(
+					 value,
+					 labels,
+					 start,
+					 end,
+					 duration);
+
+			 // also activate fact decision
+			 component.activate(decision);
+
+			 // bind parameter labels
+			 for (int i = 0; i < params.length; i++) {
+
+				 // get parameter label
+				 String pLabel = labels[i];
+				 // get parameter value
+				 String pValue = params[i];
+
+				 // create BIND parameter relation
+				 BindParameterRelation pRel = component.create(RelationType.BIND_PARAMETER, decision, decision);
+				 // set relation data
+				 pRel.setReferenceParameterLabel(pLabel);
+				 pRel.setValue(pValue);
+
+				 // activate relation
+				 component.activate(pRel);
+				 // add activated relation
+				 activatedRelations.add(pRel);
+			 }
+
+
+			 // add decision to fact list
+			 facts.add(decision);
+			 // increment fact ID
+			 factId++;
+		 }
+
+		 // goal ID counter
+		 int goalId = 0;
+		 // set planning goals
+		 for (TokenDescription g : task.getGoals())
+		 {
+			 // get domain component
+			 DomainComponent component = this.pdb.getComponentByName(g.getComponent());
+			 // get goal referred value
+			 ComponentValue value = component.getValueByName(g.getValue());
+			 // check start time bound
+			 long[] start = g.getStart();
+			 if (start == null) {
+				 start = new long[] {
+						 this.pdb.getOrigin(),
+						 this.pdb.getHorizon()
+				 };
+			 }
+
+			 // check end time bound
+			 long[] end = g.getEnd();
+			 if (end == null) {
+				 end = new long[] {
+						 this.pdb.getOrigin(),
+						 this.pdb.getHorizon()
+				 };
+			 }
+
+			 // check duration bound
+			 long[] duration = g.getDuration();
+			 if (duration == null) {
+				 duration = new long[] {
+						 value.getDurationLowerBound(),
+						 value.getDurationUpperBound()
+				 };
+			 }
+
+
+			 // set labels
+			 String[] labels = new String[] {};
+			 // get parameters
+			 String[] params = g.getLabels();
+			 if (params != null && params.length > 0) {
+				 // set parameter labels
+				 labels = new String[params.length];
+				 for (int i = 0; i < params.length; i++) {
+					 // create parameter label
+					 labels[i] = "?g" + goalId + "l" + i;
+				 }
+			 }
+
+			 // create goal decision
+			 Decision decision = component.create(
+					 value,
+					 labels,
+					 start,
+					 end,
+					 duration);
+
+			 // bind parameter labels
+			 for (int i = 0; i < params.length; i++) {
+
+				 // get parameter label
+				 String pLabel = labels[i];
+				 // get parameter value
+				 String pValue = params[i];
+
+				 // create BIND parameter relation
+				 BindParameterRelation pRel = component.create(RelationType.BIND_PARAMETER, decision, decision);
+				 // set relation data
+				 pRel.setReferenceParameterLabel(pLabel);
+				 pRel.setValue(pValue);
+
+				 // activate relation
+				 component.activate(pRel);
+				 // add activated relation
+				 activatedRelations.add(pRel);
+			 }
+
+			 // add decision to goal list
+			 goals.add(decision);
+			 // increment goal ID
+			 goalId++;
+		 }
+	 }
+
+	/**
 	 * 
 	 * @return
 	 * @throws InterruptedException
@@ -571,234 +751,46 @@ public class GoalOrientedActingAgent implements PlatformObserver
 		
 		// planning process result
 		boolean success = true;
-		
+
 		// list of goal decisions
 		List<Decision> goals = new ArrayList<>();
 		// list of fact decisions
 		List<Decision> facts = new ArrayList<>();
 		// list of created (and activated) relations
 		List<Relation> activatedRelations = new ArrayList<>();
+		// start planning time
+		long now = System.currentTimeMillis();
 		try {
+
+			// first create a clear data structure
+			this.log.info("Setup timeline-based specification \n" + this.ddl + "\n");
+			// set plan database on the given planning domain
+			this.pdb = PlanDataBaseBuilder.createAndSet(this.ddl);
 
 			// get task description
 			AgentTaskDescription task = goal.getTaskDescription();
-			// fact ID
-			int factId = 0;
-			// set known information concerning components
-			for (TokenDescription f : task.getFacts()) {
+			// propagate task description state
+			this.propagate(task, goals, facts, activatedRelations);
 
-				// get domain component
-				DomainComponent component = this.pdb.getComponentByName(f.getComponent());
-				// get goal referred value
-				ComponentValue value = component.getValueByName(f.getValue());
-				// check start time bound
-				long[] start = f.getStart();
-				if (start == null) {
-					start = new long[] {
-						this.pdb.getOrigin(),
-						this.pdb.getHorizon()
-					};
-				}
-				
-				// check end time bound
-				long[] end = f.getEnd();
-				if (end == null) {
-					end = new long[] {
-						this.pdb.getOrigin(),
-						this.pdb.getHorizon()
-					};
-				}
-				
-				// check duration bound
-				long[] duration = f.getDuration();
-				if (duration == null) {
-					duration = new long[] {
-						value.getDurationLowerBound(),
-						value.getDurationUpperBound()
-					};
-				}
-
-				// set labels
-				String[] labels = new String[] {};
-				// get parameters
-				String[] params = f.getLabels();
-				if (params != null && params.length > 0) {
-					// set parameter labels
-					labels = new String[params.length];
-					for (int i = 0; i < params.length; i++) {
-						// create parameter label
-						labels[i] = "?f" + factId + "l" + i;
-					}
-				}
-
-				// create fact decision
-				Decision decision = component.create(
-						value,
-						labels,
-						start,
-						end,
-						duration);
-
-				// also activate fact decision
-				component.activate(decision);
-
-				// bind parameter labels
-				for (int i = 0; i < params.length; i++) {
-
-					// get parameter label
-					String pLabel = labels[i];
-					// get parameter value
-					String pValue = params[i];
-
-					// create BIND parameter relation
-					BindParameterRelation pRel = component.create(RelationType.BIND_PARAMETER, decision, decision);
-					// set relation data
-					pRel.setReferenceParameterLabel(pLabel);
-					pRel.setValue(pValue);
-
-					// activate relation
-					component.activate(pRel);
-					// add activated relation
-					activatedRelations.add(pRel);
-				}
-
-
-				// add decision to fact list
-				facts.add(decision);
-				// increment fact ID
-				factId++;
-			}
-
-			// goal ID counter
-			int goalId = 0;
-			// set planning goals 
-			for (TokenDescription g : task.getGoals()) 
-			{
-				// get domain component
-				DomainComponent component = this.pdb.getComponentByName(g.getComponent());
-				// get goal referred value
-				ComponentValue value = component.getValueByName(g.getValue());
-				// check start time bound
-				long[] start = g.getStart();
-				if (start == null) {
-					start = new long[] {
-						this.pdb.getOrigin(),
-						this.pdb.getHorizon()
-					};
-				}
-				
-				// check end time bound
-				long[] end = g.getEnd();
-				if (end == null) {
-					end = new long[] {
-						this.pdb.getOrigin(),
-						this.pdb.getHorizon()
-					};
-				}
-				
-				// check duration bound
-				long[] duration = g.getDuration();
-				if (duration == null) {
-					duration = new long[] {
-						value.getDurationLowerBound(),
-						value.getDurationUpperBound()
-					};
-				}
-
-
-				// set labels
-				String[] labels = new String[] {};
-				// get parameters
-				String[] params = g.getLabels();
-				if (params != null && params.length > 0) {
-					// set parameter labels
-					labels = new String[params.length];
-					for (int i = 0; i < params.length; i++) {
-						// create parameter label
-						labels[i] = "?g" + goalId + "l" + i;
-					}
-				}
-
-				// create goal decision
-				Decision decision = component.create(
-						value, 
-						labels,
-						start,
-						end,
-						duration);
-
-				// bind parameter labels
-				for (int i = 0; i < params.length; i++) {
-
-					// get parameter label
-					String pLabel = labels[i];
-					// get parameter value
-					String pValue = params[i];
-
-					// create BIND parameter relation
-					BindParameterRelation pRel = component.create(RelationType.BIND_PARAMETER, decision, decision);
-					// set relation data
-					pRel.setReferenceParameterLabel(pLabel);
-					pRel.setValue(pValue);
-
-					// activate relation
-					component.activate(pRel);
-					// add activated relation
-					activatedRelations.add(pRel);
-				}
-				
-				// add decision to goal list
-				goals.add(decision);
-				// increment goal ID
-				goalId++;
-			}
-			
-			
 			// start planning time
-			long now = System.currentTimeMillis();
-			try {
+			now = System.currentTimeMillis();
 
-				// start planning
-				this.log.info("Start planning on goal:\n-" +
-						"" + goal + "\n");
-				// deliberate on the current status of the plan database
-				SolutionPlan plan = this.deliberative.doPlan(this.pdb);
-				// set generated plan
-				goal.setPlan(plan);
-				// solution found
-				this.log.info("Solution found after " + ((System.currentTimeMillis() - now) / 1000) + " seconds:\n" +
-						"- Solution plan:\n" +
-						"" + plan + "\n\n");
+			// start planning
+			this.log.info("Start planning on goal:\n-" +
+					"" + goal + "\n");
 
-			} catch (NoSolutionFoundException ex) {
+			// deliberate on the current status of the plan database
+			SolutionPlan plan = this.deliberative.doPlan(this.pdb);
+			// set generated plan
+			goal.setPlan(plan);
+			// solution found
+			this.log.info("Solution found after " + ((System.currentTimeMillis() - now) / 1000) + " seconds:\n" +
+					"- Solution plan:\n" +
+					"" + plan + "\n\n");
 
-				// no solution found
-				this.log.warn("No solution found on goal:\n" +
-						"" + goal + "\n\n");
-				// failure - no plan can be found
-				success = false;
-				// remove and deactivate facts
-				for (Decision f : facts) {
-					f.getComponent().deactivate(f);
-					f.getComponent().free(f);
-				}
-				
-				// remove and deactivate goals
-				for (Decision g : goals) {
-					g.getComponent().deactivate(g);
-					g.getComponent().free(g);
-				}
+		} catch (SynchronizationCycleException | DecisionPropagationException | RelationPropagationException ex) {
 
-			} finally {
-
-				// compute actual planning time
-				long time = System.currentTimeMillis() - now;
-				// add planning time attempt to the goal
-				goal.addPlanningAttempt(time);
-			}
-		} catch (DecisionPropagationException | RelationPropagationException ex) {
-
-			// problem setup error 
+			// problem setup error
 			success = false;
 
 			// deactivate and remove relations
@@ -816,18 +808,44 @@ public class GoalOrientedActingAgent implements PlatformObserver
 				f.getComponent().deactivate(f);
 				f.getComponent().free(f);
 			}
-			
+
 			// remove and deactivate goals
 			for (Decision g : goals) {
 				g.getComponent().deactivate(g);
 				g.getComponent().free(g);
 			}
-			
+
 			// print an error message
 			this.log.error("Error while propagating initial facts from task description:\n"
 					+ "\t- message: " + ex.getMessage() + "\n");
+
+
+		} catch (NoSolutionFoundException ex) {
+
+			// no solution found
+			this.log.warn("No solution found on goal:\n" +
+					"" + goal + "\n\n");
+			// failure - no plan can be found
+			success = false;
+			// remove and deactivate facts
+			for (Decision f : facts) {
+				f.getComponent().deactivate(f);
+				f.getComponent().free(f);
+			}
+
+			// remove and deactivate goals
+			for (Decision g : goals) {
+				g.getComponent().deactivate(g);
+				g.getComponent().free(g);
+			}
+		} finally {
+
+			// compute actual planning time
+			long time = System.currentTimeMillis() - now;
+			// add planning time attempt to the goal
+			goal.addPlanningAttempt(time);
 		}
-		
+
 		
 		// update agent status
 		synchronized (this.lock) {
@@ -883,6 +901,7 @@ public class GoalOrientedActingAgent implements PlatformObserver
 
 			// execute the plan
 			this.executive.doExecute(goal);
+
 			// successful execution
 			this.log.info("Plan successfully executed...");
 
