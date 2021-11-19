@@ -16,7 +16,7 @@ import sun.security.pkcs.PKCS8Key
  * the License.
  */
 
-version '0.1.5'
+version '0.1.6'
 
 /*
  Dependencies can be on external maven artifacts (such as rosjava_core

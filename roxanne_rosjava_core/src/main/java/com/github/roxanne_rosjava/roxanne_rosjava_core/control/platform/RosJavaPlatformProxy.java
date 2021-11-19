@@ -151,8 +151,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
             // get platform commands
             expression = xp.compile("//command");
             elements = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
-            for (int i = 0; i < elements.getLength(); i++)
-            {
+            for (int i = 0; i < elements.getLength(); i++) {
+
                 // get command element
                 Node cmd = elements.item(i);
 
@@ -196,8 +196,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
                         dispatchTopicName.getValue().trim().toLowerCase());
 
                 // create publisher if necessary
-                if (!this.topic2publisher.containsKey(dispatchTopicName.getValue().trim().toLowerCase()))
-                {
+                if (!this.topic2publisher.containsKey(dispatchTopicName.getValue().trim().toLowerCase())) {
+                    
                     // create publisher instance
                     Class<? extends RosJavaCommandPublisher> clazz = (Class<? extends RosJavaCommandPublisher>)
                             Class.forName(publisherClass.getValue().trim());
@@ -215,40 +215,41 @@ public class RosJavaPlatformProxy extends PlatformProxy
                     System.out.println("... creating publisher to topic " + dispatchTopicName.getValue().trim().toLowerCase() + " ...");
                 }
 
-
                 // get command feedback topic info
                 expression = xp.compile("//command[@name= '" + cmdName.getValue() +  "' and @component= '" + compName.getValue() + "']/feedback-topic");
                 list = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
-                // get feedback topic
-                Node feedbackTopic = list.item(0);
-                // get feedback topic name
-                Attr feedbackTopicName = (Attr) feedbackTopic.getAttributes().getNamedItem("name");
-                // get delegate class
-                Attr delegateClass = (Attr) feedbackTopic.getAttributes().getNamedItem("delegate");
+                // check feedback tag
+                if (list != null && list.item(0) != null) {
 
-                // subscribe to topic if necessary
-                if (!this.subscribedTopics.contains(feedbackTopicName.getValue().trim().toLowerCase()))
-                {
-                    // index topic
-                    this.subscribedTopics.add(feedbackTopicName.getValue().trim().toLowerCase());
-                    System.out.println("... subscribing to topic " + feedbackTopicName.getValue().trim().toLowerCase() + " ...");
+                    // get feedback topic
+                    Node feedbackTopic = list.item(0);
+                    // get feedback topic name
+                    Attr feedbackTopicName = (Attr) feedbackTopic.getAttributes().getNamedItem("name");
+                    // get delegate class
+                    Attr delegateClass = (Attr) feedbackTopic.getAttributes().getNamedItem("delegate");
 
+                    // subscribe to topic if necessary
+                    if (!this.subscribedTopics.contains(feedbackTopicName.getValue().trim().toLowerCase())) {
+                        // index topic
+                        this.subscribedTopics.add(feedbackTopicName.getValue().trim().toLowerCase());
+                        System.out.println("... subscribing to topic " + feedbackTopicName.getValue().trim().toLowerCase() + " ...");
 
-                    // create feedback listener
-                    Class<? extends RosJavaFeedbackListener> clazz = (Class<? extends RosJavaFeedbackListener>)
-                            Class.forName(delegateClass.getValue().trim());
-                    Constructor<? extends RosJavaFeedbackListener> c =
-                            clazz.getDeclaredConstructor(RosJavaPlatformProxy.class);
-                    // set constructor visible
-                    c.setAccessible(true);
-                    // create instance
-                    RosJavaFeedbackListener listener = c.newInstance(this);
-                    // create subscriber
-                    listener.createSubscriber(feedbackTopicName.getValue().trim(), this.connNode);
+                        // create feedback listener
+                        Class<? extends RosJavaFeedbackListener> clazz = (Class<? extends RosJavaFeedbackListener>)
+                                Class.forName(delegateClass.getValue().trim());
+                        Constructor<? extends RosJavaFeedbackListener> c =
+                                clazz.getDeclaredConstructor(RosJavaPlatformProxy.class);
+                        // set constructor visible
+                        c.setAccessible(true);
+                        // create instance
+                        RosJavaFeedbackListener listener = c.newInstance(this);
+                        // create subscriber
+                        listener.createSubscriber(feedbackTopicName.getValue().trim(), this.connNode);
+                    }
                 }
             }
-        }
-        catch (Exception ex) {
+
+        } catch (Exception ex) {
             throw new PlatformException(ex.getMessage());
         }
     }
