@@ -32,12 +32,10 @@ import org.ros.node.ConnectedNode;
 import java.util.*;
 
 /**
- * 
- * @author anacleto
  *
  */
-public class GoalOrientedActingAgent implements PlatformObserver
-{
+public class GoalOrientedActingAgent implements PlatformObserver {
+
 	private final Object lock;								// lock state;
 	private ActingAgentStatus status;						// agent status
 
@@ -81,7 +79,7 @@ public class GoalOrientedActingAgent implements PlatformObserver
 			this.queue = new HashMap<>();
 			// set goal queue
 			for (GoalStatus s : GoalStatus.values()) {
-				this.queue.put(s, new LinkedList<Goal>());
+				this.queue.put(s, new ArrayList<Goal>());
 			}
 
 			// set internal plan database representation
@@ -162,7 +160,6 @@ public class GoalOrientedActingAgent implements PlatformObserver
 
 						// check buffered goals
 						Goal goal = waitGoal(GoalStatus.BUFFERED);
-						log.info("Selecting goal.. \n" + goal + "\n");
 						// simply select the extracted goal
 						select(goal);
 
@@ -219,6 +216,8 @@ public class GoalOrientedActingAgent implements PlatformObserver
 	@Override
 	public void feedback(PlatformFeedback platformFeedback) {
 		// nothing to do
+
+
 	}
 
 	/**
@@ -240,13 +239,17 @@ public class GoalOrientedActingAgent implements PlatformObserver
 		// protect access to the queue
 		synchronized (this.queue) {
 
-			this.log.info("Receiving task ...\n" + description + "\n");
 			// create goal 
 			Goal goal = new Goal(description);
 			// set goal status
 			goal.setStatus(GoalStatus.BUFFERED);
 			// add a goal to the queue
 			this.queue.get(goal.getStatus()).add(goal);
+			this.log.info("[GoalOrientedActingAgent] Received task request:\n" +
+					"- Request-ID: " + description.getId() + "\n" +
+					"- Number of buffered requests: " + this.queue.get(GoalStatus.BUFFERED).size() + "\n");
+
+
 			// send signal
 			this.queue.notifyAll();
 		}
@@ -295,12 +298,15 @@ public class GoalOrientedActingAgent implements PlatformObserver
 		// protect access to the queue
 		synchronized (this.queue) {
 
-			// remove goal form the current queue
-			this.queue.get(goal.getStatus()).remove(goal);
 			// set goal status
 			goal.setStatus(GoalStatus.SELECTED);
 			// add goal to the queue
 			this.queue.get(goal.getStatus()).add(goal);
+			log.info("[GoalOrientedActingAgent] Selecting goal from input buffer:\n" +
+					"- Selected Request-ID: " + goal.getTaskDescription().getId() +  "\n" +
+					"- Number of buffered requests: " + this.queue.get(GoalStatus.BUFFERED).size() + "\n" +
+					"- Number of selected goals: " + this.queue.get(GoalStatus.SELECTED).size() + "\n");
+
 			// send signal
 			this.queue.notifyAll();
 		}
@@ -314,8 +320,6 @@ public class GoalOrientedActingAgent implements PlatformObserver
 		// protect access to the queue
 		synchronized (this.queue) {
 
-			// remove goal form the current queue
-			this.queue.get(goal.getStatus()).remove(goal);
 			// set goal status
 			goal.setStatus(GoalStatus.COMMITTED);
 			// add goal to the queue
@@ -333,8 +337,6 @@ public class GoalOrientedActingAgent implements PlatformObserver
 		// protect access to the queue
 		synchronized (this.queue) {
 
-			// remove goal form the current queue
-			this.queue.get(goal.getStatus()).remove(goal);
 			// set goal status
 			goal.setStatus(GoalStatus.SUSPENDED);
 			// add goal to the queue
@@ -352,8 +354,6 @@ public class GoalOrientedActingAgent implements PlatformObserver
 		// protect access to the queue
 		synchronized (this.queue) {
 
-			// remove goal form the current queue
-			this.queue.get(goal.getStatus()).remove(goal);
 			// set goal status
 			goal.setStatus(GoalStatus.FINISHED);
 			// add goal to the queue
@@ -371,8 +371,6 @@ public class GoalOrientedActingAgent implements PlatformObserver
 		// protect access to the queue
 		synchronized (this.queue) {
 
-			// remove goal form the current queue
-			this.queue.get(goal.getStatus()).remove(goal);
 			// set goal status
 			goal.setStatus(GoalStatus.ABORTED);
 			// add goal to the queue
@@ -852,7 +850,7 @@ public class GoalOrientedActingAgent implements PlatformObserver
 
 			// update status according to the result of the planning process
 			if (success) {
-				this.status = ActingAgentStatus.READY;
+				this.status = ActingAgentStatus.PREPARING_EXECUTION;
 
 			} else {
 
@@ -878,7 +876,7 @@ public class GoalOrientedActingAgent implements PlatformObserver
 			throws InterruptedException {
 
 		synchronized (this.lock) {
-			while (!this.status.equals(ActingAgentStatus.READY)) {
+			while (!this.status.equals(ActingAgentStatus.PREPARING_EXECUTION)) {
 				// wait
 				this.lock.wait();
 			}
@@ -953,7 +951,7 @@ public class GoalOrientedActingAgent implements PlatformObserver
 			throws InterruptedException {
 
 		synchronized (this.lock) {
-			while (!this.status.equals(ActingAgentStatus.SUSPENDED)) {
+			while (!this.status.equals(ActingAgentStatus.SUSPENDING)) {
 				// wait
 				this.lock.wait();
 			}
@@ -963,7 +961,8 @@ public class GoalOrientedActingAgent implements PlatformObserver
 			// send signal
 			this.lock.notifyAll();
  		}
-		
+
+		 /*
 		// repairing result
 		boolean success = true;
 		// start contingency handling time
@@ -1123,9 +1122,9 @@ public class GoalOrientedActingAgent implements PlatformObserver
 					labels = new String[] {};
 				}
 				
-				/*
-				 * TODO : check parameter relations
-				 */
+
+				// TODO : check parameter relations
+
 				
 				// create goal decision
 				Decision decision = component.create(
@@ -1191,17 +1190,14 @@ public class GoalOrientedActingAgent implements PlatformObserver
 			goal.addContingencyHandlingAttempt(time);
 			goal.addPlanningAttempt(time);
 		}
-		
-		
+		*/
+
+		// force abort without a recovery strategy
+		boolean success = false;
 		synchronized (this.lock) {
 			// update status according to the execution results
-			if (success) {
-				this.status = ActingAgentStatus.READY;
-			}
-			else {
-				this.status = ActingAgentStatus.FAILURE;
-			}
-			
+
+			this.status = ActingAgentStatus.READY;
 			// send signal
 			this.lock.notifyAll();
 		}
@@ -1209,10 +1205,6 @@ public class GoalOrientedActingAgent implements PlatformObserver
 		// return execution result
 		return success;
 	}
-	
-	
-	
-	
 	
 	/**
 	 * 
@@ -1232,6 +1224,11 @@ public class GoalOrientedActingAgent implements PlatformObserver
 				// wait a selected goal
 				this.queue.wait();
 			}
+
+			// print the number of committed goals
+			this.log.info("[GoalOrientedActingAgent] Checking available goals to be processed\n" +
+					"- Goal status: " + status + "\n" +
+ 					"- Number of queued goals: " + this.queue.get(status).size() + "\n");
 			
 			// remove the first selected goal from the queue
 			goal = this.queue.get(status).remove(0);
