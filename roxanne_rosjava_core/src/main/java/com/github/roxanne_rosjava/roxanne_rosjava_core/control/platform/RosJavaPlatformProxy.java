@@ -26,8 +26,8 @@ import java.util.*;
  * Roxanne ROSJava connector proxy
  *
  */
-public class RosJavaPlatformProxy extends PlatformProxy
-{
+public class RosJavaPlatformProxy extends PlatformProxy {
+
     private ConnectedNode connNode;
 
     private Map<String, String> command2dispatchTopic;	              // map platform commands to ROS dispatch topics
@@ -41,8 +41,10 @@ public class RosJavaPlatformProxy extends PlatformProxy
      */
     protected RosJavaPlatformProxy(ConnectedNode node) {
         super();
+
         // set connected node
         this.connNode = node;
+
         // initialize data structures
         this.command2dispatchTopic = new HashMap<>();
         this.topic2publisher = new HashMap<>();
@@ -69,8 +71,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
         this.dispatchedIndex.clear();
         this.subscribedTopics.clear();
 
-        try
-        {
+        try {
+
             // parse platform configuration from file
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -84,8 +86,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
             // get environment topics
             XPathExpression expression = xp.compile("//environment-topic");
             NodeList elements = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
-            for (int i = 0; i < elements.getLength(); i++)
-            {
+            for (int i = 0; i < elements.getLength(); i++) {
+
                 // get node element
                 Node topic = elements.item(i);
                 // get topic name
@@ -94,8 +96,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
                 Attr delegateClass = (Attr) topic.getAttributes().getNamedItem("delegate");
 
                 // subscribe to topic if necessary
-                if (!this.subscribedTopics.contains(topicName.getValue().trim().toLowerCase()))
-                {
+                if (!this.subscribedTopics.contains(topicName.getValue().trim().toLowerCase())) {
+
                     // index topic
                     this.subscribedTopics.add(topicName.getValue().trim().toLowerCase());
                     System.out.println("... subscribing to topic " + topicName.getValue().trim().toLowerCase() + " ...");
@@ -117,8 +119,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
             // get (input) goal topic(s)
             expression = xp.compile("//goal-topic");
             elements = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
-            for (int i = 0; i < elements.getLength(); i++)
-            {
+            for (int i = 0; i < elements.getLength(); i++) {
+
                 // get node element
                 Node topic = elements.item(i);
                 // get topic name
@@ -127,8 +129,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
                 Attr delegateClass = (Attr) topic.getAttributes().getNamedItem("delegate");
 
                 // subscribe to topic if necessary
-                if (!this.subscribedTopics.contains(topicName.getValue().trim().toLowerCase()))
-                {
+                if (!this.subscribedTopics.contains(topicName.getValue().trim().toLowerCase())) {
+
                     // index topic
                     this.subscribedTopics.add(topicName.getValue().trim().toLowerCase());
                     System.out.println("... subscribing to topic " + topicName.getValue().trim().toLowerCase() + " ...");
@@ -313,8 +315,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
             publisher.publish(this.connNode, cmd);
             // add command to dispatched index
             this.dispatchedIndex.put(cmd.getId(), cmd);
-        }
-        catch (CommandPublisherException ex) {
+
+        } catch (CommandPublisherException ex) {
             // throw platform exception
             throw new PlatformException(ex.getMessage());
         }
@@ -376,8 +378,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
             publisher.publish(this.connNode, cmd);
             // add command to dispatched index
             this.dispatchedIndex.put(cmd.getId(), cmd);
-        }
-        catch (CommandPublisherException ex) {
+
+        } catch (CommandPublisherException ex) {
             throw new PlatformException(ex.getMessage());
         }
 
@@ -434,8 +436,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
             publisher.publish(this.connNode, cmd);
             // add command to dispatched index
             this.dispatchedIndex.put(cmd.getId(), cmd);
-        }
-        catch (CommandPublisherException ex) {
+
+        } catch (CommandPublisherException ex) {
             throw new PlatformException(ex.getMessage());
         }
     }

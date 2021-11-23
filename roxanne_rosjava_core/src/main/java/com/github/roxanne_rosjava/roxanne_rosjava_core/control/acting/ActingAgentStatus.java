@@ -50,6 +50,11 @@ public enum ActingAgentStatus
 	/**
 	 *
 	 */
+	REPAIRING,
+
+	/**
+	 *
+	 */
 	PREPARING_EXECUTION,
 	
 	/**

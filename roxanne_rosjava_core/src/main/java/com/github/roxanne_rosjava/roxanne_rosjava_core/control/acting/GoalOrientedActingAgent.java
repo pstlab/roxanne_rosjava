@@ -957,7 +957,7 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 			}
 			
 			// update status
-			this.status = ActingAgentStatus.DELIBERATING;
+			this.status = ActingAgentStatus.REPAIRING;
 			// send signal
 			this.lock.notifyAll();
  		}

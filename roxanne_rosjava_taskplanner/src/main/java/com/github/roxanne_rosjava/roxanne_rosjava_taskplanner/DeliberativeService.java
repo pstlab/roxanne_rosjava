@@ -25,8 +25,8 @@ import java.util.List;
 /**
  *
  */
-public class DeliberativeService extends AbstractNodeMain
-{
+public class DeliberativeService extends AbstractNodeMain {
+
     Log log;                // logger
 
     /**
@@ -44,8 +44,8 @@ public class DeliberativeService extends AbstractNodeMain
      * @param connectedNode
      */
     @Override
-    public void onStart(final ConnectedNode connectedNode)
-    {
+    public void onStart(final ConnectedNode connectedNode) {
+
         // set logger
         this.log = connectedNode.getLog();
         // start waiting for requests
@@ -68,8 +68,8 @@ public class DeliberativeService extends AbstractNodeMain
                                 "- DDL: \"" + ddl + "\"\n" +
                                 "- PDL: \"" + pdl + "\"\n");
 
-                        try
-                        {
+                        try {
+
                             // build the plan database
                             PlanDataBase pdb = PlanDataBaseBuilder.createAndSet(ddl, pdl);
                             // set a planning instance of the plan database
