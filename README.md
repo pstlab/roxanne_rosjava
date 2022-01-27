@@ -208,7 +208,7 @@ The file ```etc/platform/roxanne_platform.xml``` specifies the topics used to di
 
     <!-- wildcard matching any type of dispatchable token of a plan -->
 
-    <command component="*" name="*">
+    <command component="*" name="*" exclude="idle">
 
         <dispatch-topic
                 name="/roxanne/acting/dispatching"

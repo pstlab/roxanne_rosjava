@@ -16,8 +16,8 @@ import roxanne_rosjava_msgs.ActingConfigurationServiceResponse;
 /**
  *
  */
-public class ActingNode extends AbstractNodeMain
-{
+public class ActingNode extends AbstractNodeMain {
+
     private GoalOrientedActingAgent agent;
 
     private Log log;
@@ -48,8 +48,8 @@ public class ActingNode extends AbstractNodeMain
      * @param connectedNode
      */
     @Override
-    public void onStart(ConnectedNode connectedNode)
-    {
+    public void onStart(ConnectedNode connectedNode) {
+
         // set node
         this.node = connectedNode;
         // set logger
@@ -121,10 +121,10 @@ public class ActingNode extends AbstractNodeMain
      * @throws ActingAgentInitializationException
      */
     protected void doInitializeAgent(ConnectedNode node, String path)
-            throws ActingAgentInitializationException
-    {
-        try
-        {
+            throws ActingAgentInitializationException {
+
+        try {
+
             // creating acting agent
             this.log.info("Setting up goal-oriented agent using config file \"" + path + "\"...");
             // create the acting agent
@@ -139,8 +139,8 @@ public class ActingNode extends AbstractNodeMain
             this.log.info("... agent ready to receive goals!");
             // set current property file path
             this.propertyFilePath = path;
-        }
-        catch (InterruptedException ex) {
+
+        } catch (InterruptedException ex) {
             // initialization error
             throw new ActingAgentInitializationException(ex.getMessage());
         }
@@ -153,19 +153,19 @@ public class ActingNode extends AbstractNodeMain
     @Override
     public void onShutdownComplete(Node node) {
         // stop acting agent if necessary
-        if (this.agent != null)
-        {
-            try
-            {
+        if (this.agent != null) {
+
+            try {
+
                 // stop acting agent
                 this.agent.stop();
                 // clear internal data structures
                 this.agent.clear();
-            }
-            catch (Exception ex) {
+
+            } catch (Exception ex) {
                 this.log.error("Error while stopping acting agent:\n" + ex.getMessage() + "\n");
-            }
-            finally {
+
+            } finally {
                 // clear variable
                 this.agent = null;
             }

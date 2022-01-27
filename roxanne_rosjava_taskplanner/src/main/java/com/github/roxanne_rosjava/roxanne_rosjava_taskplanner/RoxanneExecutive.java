@@ -10,8 +10,6 @@ import it.cnr.istc.pst.platinum.ai.framework.utils.log.FrameworkLoggingLevel;
 
 
 /**
- * 
- * @author anacleto
  *
  */
 @FrameworkLoggerConfiguration(

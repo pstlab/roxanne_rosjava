@@ -26,8 +26,8 @@ import java.util.*;
  * Roxanne ROSJava connector proxy
  *
  */
-public class RosJavaPlatformProxy extends PlatformProxy
-{
+public class RosJavaPlatformProxy extends PlatformProxy {
+
     private ConnectedNode connNode;
 
     private Map<String, String> command2dispatchTopic;	              // map platform commands to ROS dispatch topics
@@ -41,8 +41,10 @@ public class RosJavaPlatformProxy extends PlatformProxy
      */
     protected RosJavaPlatformProxy(ConnectedNode node) {
         super();
+
         // set connected node
         this.connNode = node;
+
         // initialize data structures
         this.command2dispatchTopic = new HashMap<>();
         this.topic2publisher = new HashMap<>();
@@ -57,8 +59,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
      */
     @Override
     public void initialize(String cfgFile)
-            throws PlatformException
-    {
+            throws PlatformException {
+
         // set observation counter
         obsIdCounter.set(0);
         cmdIdCounter.set(0);
@@ -69,8 +71,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
         this.dispatchedIndex.clear();
         this.subscribedTopics.clear();
 
-        try
-        {
+        try {
+
             // parse platform configuration from file
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -84,8 +86,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
             // get environment topics
             XPathExpression expression = xp.compile("//environment-topic");
             NodeList elements = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
-            for (int i = 0; i < elements.getLength(); i++)
-            {
+            for (int i = 0; i < elements.getLength(); i++) {
+
                 // get node element
                 Node topic = elements.item(i);
                 // get topic name
@@ -94,8 +96,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
                 Attr delegateClass = (Attr) topic.getAttributes().getNamedItem("delegate");
 
                 // subscribe to topic if necessary
-                if (!this.subscribedTopics.contains(topicName.getValue().trim().toLowerCase()))
-                {
+                if (!this.subscribedTopics.contains(topicName.getValue().trim().toLowerCase())) {
+
                     // index topic
                     this.subscribedTopics.add(topicName.getValue().trim().toLowerCase());
                     System.out.println("... subscribing to topic " + topicName.getValue().trim().toLowerCase() + " ...");
@@ -117,8 +119,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
             // get (input) goal topic(s)
             expression = xp.compile("//goal-topic");
             elements = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
-            for (int i = 0; i < elements.getLength(); i++)
-            {
+            for (int i = 0; i < elements.getLength(); i++) {
+
                 // get node element
                 Node topic = elements.item(i);
                 // get topic name
@@ -127,8 +129,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
                 Attr delegateClass = (Attr) topic.getAttributes().getNamedItem("delegate");
 
                 // subscribe to topic if necessary
-                if (!this.subscribedTopics.contains(topicName.getValue().trim().toLowerCase()))
-                {
+                if (!this.subscribedTopics.contains(topicName.getValue().trim().toLowerCase())) {
+
                     // index topic
                     this.subscribedTopics.add(topicName.getValue().trim().toLowerCase());
                     System.out.println("... subscribing to topic " + topicName.getValue().trim().toLowerCase() + " ...");
@@ -151,8 +153,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
             // get platform commands
             expression = xp.compile("//command");
             elements = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
-            for (int i = 0; i < elements.getLength(); i++)
-            {
+            for (int i = 0; i < elements.getLength(); i++) {
+
                 // get command element
                 Node cmd = elements.item(i);
 
@@ -196,8 +198,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
                         dispatchTopicName.getValue().trim().toLowerCase());
 
                 // create publisher if necessary
-                if (!this.topic2publisher.containsKey(dispatchTopicName.getValue().trim().toLowerCase()))
-                {
+                if (!this.topic2publisher.containsKey(dispatchTopicName.getValue().trim().toLowerCase())) {
+                    
                     // create publisher instance
                     Class<? extends RosJavaCommandPublisher> clazz = (Class<? extends RosJavaCommandPublisher>)
                             Class.forName(publisherClass.getValue().trim());
@@ -215,40 +217,41 @@ public class RosJavaPlatformProxy extends PlatformProxy
                     System.out.println("... creating publisher to topic " + dispatchTopicName.getValue().trim().toLowerCase() + " ...");
                 }
 
-
                 // get command feedback topic info
                 expression = xp.compile("//command[@name= '" + cmdName.getValue() +  "' and @component= '" + compName.getValue() + "']/feedback-topic");
                 list = (NodeList) expression.evaluate(document, XPathConstants.NODESET);
-                // get feedback topic
-                Node feedbackTopic = list.item(0);
-                // get feedback topic name
-                Attr feedbackTopicName = (Attr) feedbackTopic.getAttributes().getNamedItem("name");
-                // get delegate class
-                Attr delegateClass = (Attr) feedbackTopic.getAttributes().getNamedItem("delegate");
+                // check feedback tag
+                if (list != null && list.item(0) != null) {
 
-                // subscribe to topic if necessary
-                if (!this.subscribedTopics.contains(feedbackTopicName.getValue().trim().toLowerCase()))
-                {
-                    // index topic
-                    this.subscribedTopics.add(feedbackTopicName.getValue().trim().toLowerCase());
-                    System.out.println("... subscribing to topic " + feedbackTopicName.getValue().trim().toLowerCase() + " ...");
+                    // get feedback topic
+                    Node feedbackTopic = list.item(0);
+                    // get feedback topic name
+                    Attr feedbackTopicName = (Attr) feedbackTopic.getAttributes().getNamedItem("name");
+                    // get delegate class
+                    Attr delegateClass = (Attr) feedbackTopic.getAttributes().getNamedItem("delegate");
 
+                    // subscribe to topic if necessary
+                    if (!this.subscribedTopics.contains(feedbackTopicName.getValue().trim().toLowerCase())) {
+                        // index topic
+                        this.subscribedTopics.add(feedbackTopicName.getValue().trim().toLowerCase());
+                        System.out.println("... subscribing to topic " + feedbackTopicName.getValue().trim().toLowerCase() + " ...");
 
-                    // create feedback listener
-                    Class<? extends RosJavaFeedbackListener> clazz = (Class<? extends RosJavaFeedbackListener>)
-                            Class.forName(delegateClass.getValue().trim());
-                    Constructor<? extends RosJavaFeedbackListener> c =
-                            clazz.getDeclaredConstructor(RosJavaPlatformProxy.class);
-                    // set constructor visible
-                    c.setAccessible(true);
-                    // create instance
-                    RosJavaFeedbackListener listener = c.newInstance(this);
-                    // create subscriber
-                    listener.createSubscriber(feedbackTopicName.getValue().trim(), this.connNode);
+                        // create feedback listener
+                        Class<? extends RosJavaFeedbackListener> clazz = (Class<? extends RosJavaFeedbackListener>)
+                                Class.forName(delegateClass.getValue().trim());
+                        Constructor<? extends RosJavaFeedbackListener> c =
+                                clazz.getDeclaredConstructor(RosJavaPlatformProxy.class);
+                        // set constructor visible
+                        c.setAccessible(true);
+                        // create instance
+                        RosJavaFeedbackListener listener = c.newInstance(this);
+                        // create subscriber
+                        listener.createSubscriber(feedbackTopicName.getValue().trim(), this.connNode);
+                    }
                 }
             }
-        }
-        catch (Exception ex) {
+
+        } catch (Exception ex) {
             throw new PlatformException(ex.getMessage());
         }
     }
@@ -269,8 +272,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
      */
     @Override
     public PlatformCommand executeNode(ExecutionNode node)
-            throws PlatformException
-    {
+            throws PlatformException {
+
         // get command id
         int id = cmdIdCounter.getAndIncrement();
         // extract command information
@@ -312,8 +315,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
             publisher.publish(this.connNode, cmd);
             // add command to dispatched index
             this.dispatchedIndex.put(cmd.getId(), cmd);
-        }
-        catch (CommandPublisherException ex) {
+
+        } catch (CommandPublisherException ex) {
             // throw platform exception
             throw new PlatformException(ex.getMessage());
         }
@@ -331,8 +334,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
      */
     @Override
     public PlatformCommand startNode(ExecutionNode node)
-            throws PlatformException
-    {
+            throws PlatformException {
+
         // get command id
         int id = cmdIdCounter.getAndIncrement();
         // extract command information
@@ -375,8 +378,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
             publisher.publish(this.connNode, cmd);
             // add command to dispatched index
             this.dispatchedIndex.put(cmd.getId(), cmd);
-        }
-        catch (CommandPublisherException ex) {
+
+        } catch (CommandPublisherException ex) {
             throw new PlatformException(ex.getMessage());
         }
 
@@ -390,8 +393,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
      */
     @Override
     public void stopNode(ExecutionNode node)
-            throws PlatformException
-    {
+            throws PlatformException {
+
         // get command id
         int id = cmdIdCounter.getAndIncrement();
         // extract command information
@@ -433,8 +436,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
             publisher.publish(this.connNode, cmd);
             // add command to dispatched index
             this.dispatchedIndex.put(cmd.getId(), cmd);
-        }
-        catch (CommandPublisherException ex) {
+
+        } catch (CommandPublisherException ex) {
             throw new PlatformException(ex.getMessage());
         }
     }
@@ -449,8 +452,8 @@ public class RosJavaPlatformProxy extends PlatformProxy
      * @return
      */
     @Override
-    public boolean isPlatformCommand(ExecutionNode node)
-    {
+    public boolean isPlatformCommand(ExecutionNode node) {
+
         // check token name
         String cmdName = this.extractCommandName(node);
         // check component name

@@ -46,16 +46,26 @@ public enum ActingAgentStatus
 	 * 
 	 */
 	DELIBERATING,
+
+	/**
+	 *
+	 */
+	REPAIRING,
+
+	/**
+	 *
+	 */
+	PREPARING_EXECUTION,
 	
 	/**
 	 * 
 	 */
 	EXECUTING,
-	
+
 	/**
-	 * 
+	 *
 	 */
-	SUSPENDED,
+	SUSPENDING,
 	
 	/**
 	 * 

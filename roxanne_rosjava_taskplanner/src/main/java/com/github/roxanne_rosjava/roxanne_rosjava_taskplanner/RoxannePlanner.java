@@ -5,10 +5,9 @@ import it.cnr.istc.pst.platinum.ai.framework.microkernel.annotation.cfg.Framewor
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.annotation.cfg.deliberative.FlawSelectionHeuristicsConfiguration;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.annotation.cfg.deliberative.PlannerSolverConfiguration;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.annotation.cfg.deliberative.SearchStrategyConfiguration;
+import it.cnr.istc.pst.platinum.ai.framework.utils.log.FrameworkLoggingLevel;
 
 /**
- * 
- * @author anacleto
  *
  */
 @PlannerSolverConfiguration(
@@ -16,7 +15,9 @@ import it.cnr.istc.pst.platinum.ai.framework.microkernel.annotation.cfg.delibera
 )
 @FlawSelectionHeuristicsConfiguration
 @SearchStrategyConfiguration
-@FrameworkLoggerConfiguration
+@FrameworkLoggerConfiguration(
+		level = FrameworkLoggingLevel.INFO
+)
 public class RoxannePlanner extends Planner
 {
 	/**

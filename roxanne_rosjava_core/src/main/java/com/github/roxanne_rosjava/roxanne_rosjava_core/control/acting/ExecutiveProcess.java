@@ -12,29 +12,30 @@ import it.cnr.istc.pst.platinum.control.lang.Goal;
 import it.cnr.istc.pst.platinum.control.lang.GoalStatus;
 import it.cnr.istc.pst.platinum.control.lang.TokenDescription;
 import it.cnr.istc.pst.platinum.control.lang.ex.PlatformException;
+import org.apache.commons.logging.Log;
 
 import java.util.HashSet;
 import java.util.Set;
 
-
 /**
- * 
- * @author anacleto
  *
  */
-public class ExecutiveProcess implements Runnable 
-{
+public class ExecutiveProcess implements Runnable {
+
 	private GoalOrientedActingAgent agent;
 	private Class<? extends Executive> eClass;
-	
+	private Log log;
+
 	/**
-	 * 
+	 *
 	 * @param eClass
 	 * @param agent
+	 * @param log
 	 */
-	protected ExecutiveProcess(Class<? extends Executive> eClass, GoalOrientedActingAgent agent) {
+	protected ExecutiveProcess(Class<? extends Executive> eClass, GoalOrientedActingAgent agent, Log log) {
 		this.agent = agent;
 		this.eClass = eClass;
+		this.log = log;
 	}
 	
 	/**
@@ -43,29 +44,36 @@ public class ExecutiveProcess implements Runnable
 	@Override
 	public void run() {
 		boolean running = true;
-		while(running)
-		{
-			try
-			{
+		while(running) {
+
+			try {
+
+				this.log.info("Start waiting for a plan to execute...");
 				// take a goal to plan for
 				Goal goal = this.agent.waitGoal(GoalStatus.COMMITTED);
+				this.log.info("Start execution for goal:\n" +
+						"- task description: " + goal.getTaskDescription() + "\n");
 				// execute extracted goal
 				boolean success = this.agent.execute(goal);
 				// check executive result
 				if (success) {
+
 					// goal execution successfully complete
+					this.log.info("Plan successfully executed... ");
 					this.agent.finish(goal);
-				}
-				else {
+
+				} else {
+
 					// goal execution suspended due to some errors
+					this.log.info("Plan execution error, SUSPEND agent");
 					this.agent.suspend(goal);
 				}
-			}
-			catch (InterruptedException ex) {
+			} catch (InterruptedException ex) {
+
 				running = false;
-			}
-			catch (Exception ex) {
-				System.err.println(ex.getMessage());
+			} catch (Exception ex) {
+				this.log.error("Executive process error:\n" +
+						"- message: " + ex.getMessage() + "\n");
 			}
 		}
 	}
@@ -78,15 +86,15 @@ public class ExecutiveProcess implements Runnable
 	 * @throws Exception
 	 */
 	protected void doExecute(Goal goal) 
-			throws InterruptedException, ExecutionException, Exception
-	{
+			throws InterruptedException, ExecutionException, Exception {
+
 		// get solution plan 
 		SolutionPlan plan = goal.getPlan();
 		// build executive
 		Executive exec = ExecutiveBuilder.createAndSet(this.eClass, 0, plan.getHorizon());
 		// export plan 
 		PlanProtocolDescriptor desc = plan.export();
-		System.out.println("Ready to start (timeline-based) plan execution... ");
+		this.log.info("Ready to start (timeline-based) plan execution... ");
 		// set the executive according to the plan being executed
 		exec.initialize(desc);
 		
@@ -98,15 +106,16 @@ public class ExecutiveProcess implements Runnable
 		
 		// run the executive starting at a given tick
 		boolean complete = exec.execute(goal.getExecutionTick(), goal);
-		// stop simulator if any
+
+		// stop simulator if necessary
 		if (this.agent.proxy != null) {
 			// unlink from simulator
 			exec.unlink();
 		}
 		
 		// check execution result 
-		if (!complete) 
-		{
+		if (!complete) {
+
 			// get failure cause
 			ExecutionFailureCause cause = exec.getFailureCause();
 			// set failure cause
@@ -121,7 +130,7 @@ public class ExecutiveProcess implements Runnable
 				goal.addNodeToExecutionTrace(node);
 			}
 			
-			// get the name of of goal components
+			// get the name of goal components
 			Set<String> components = new HashSet<>();
 			for (TokenDescription t : goal.getTaskDescription().getGoals()) {
 				components.add(t.getComponent());
