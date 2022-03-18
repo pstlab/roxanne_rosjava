@@ -962,7 +962,6 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 			this.lock.notifyAll();
  		}
 
-		 /*
 		// repairing result
 		boolean success = true;
 		// start contingency handling time
@@ -1190,10 +1189,8 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 			goal.addContingencyHandlingAttempt(time);
 			goal.addPlanningAttempt(time);
 		}
-		*/
 
-		// force abort without a recovery strategy
-		boolean success = false;
+
 		synchronized (this.lock) {
 			// update status according to the execution results
 
