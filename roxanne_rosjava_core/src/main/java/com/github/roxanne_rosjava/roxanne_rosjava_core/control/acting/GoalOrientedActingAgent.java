@@ -1192,9 +1192,17 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 
 
 		synchronized (this.lock) {
-			// update status according to the execution results
 
-			this.status = ActingAgentStatus.READY;
+			// update status according to the execution results
+			if (success) {
+				this.status = ActingAgentStatus.PREPARING_EXECUTION;
+
+			} else {
+
+				// failure
+				this.status = ActingAgentStatus.FAILURE;
+			}
+
 			// send signal
 			this.lock.notifyAll();
 		}

@@ -42,7 +42,6 @@ public class ContingencyHandlerProcess implements Runnable
 				boolean success = this.agent.repair(goal);
 				// check executive result
 				if (success) {
-
 					// goal repaired try to execute it again
 					this.agent.commit(goal);
 
