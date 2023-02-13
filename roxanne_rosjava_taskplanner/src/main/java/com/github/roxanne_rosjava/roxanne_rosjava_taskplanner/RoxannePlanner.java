@@ -6,16 +6,25 @@ import it.cnr.istc.pst.platinum.ai.framework.microkernel.annotation.cfg.delibera
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.annotation.cfg.deliberative.PlannerSolverConfiguration;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.annotation.cfg.deliberative.SearchStrategyConfiguration;
 import it.cnr.istc.pst.platinum.ai.framework.utils.log.FrameworkLoggingLevel;
+import it.cnr.istc.pst.platinum.ai.deliberative.heuristic.HierarchicalFlawSelectionHeuristic;
+import it.cnr.istc.pst.platinum.ai.deliberative.solver.PseudoControllabilityAwareSolver;
+import it.cnr.istc.pst.platinum.ai.deliberative.strategy.DepthFirstSearchStrategy;
+
 
 /**
  *
  */
 @PlannerSolverConfiguration(
-		timeout = 180000
+		solver = PseudoControllabilityAwareSolver.class
 )
-@FlawSelectionHeuristicsConfiguration
-@SearchStrategyConfiguration
-@FrameworkLoggerConfiguration(
+@FlawSelectionHeuristicsConfiguration(
+		heuristics = HierarchicalFlawSelectionHeuristic.class
+)
+@SearchStrategyConfiguration(
+		strategy = DepthFirstSearchStrategy.class
+)
+@FrameworkLoggerConfiguration(		
+		// set logging level
 		level = FrameworkLoggingLevel.INFO
 )
 public class RoxannePlanner extends Planner

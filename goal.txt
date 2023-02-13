@@ -1,0 +1,18 @@
+rostopic pub --once /roxanne/acting/goal roxanne_rosjava_msgs/ActingGoal "goalId: 0
+goals:
+- id: 0
+  component: 'RobotService'
+  predicate: 'DeliverDrug'
+  parameters: ['room1', 'room1_hri', 'room1_user']
+  start: [0, 1000]
+  end: [0, 1000]
+  duration: [1, 1000]
+facts:
+- id: 0
+  component: 'RobotBase'
+  predicate: 'At'
+  parameters: ['home']
+  start: [0, 0]
+  end: [0, 1000]
+  duration: [0, 1000]" 
+
