@@ -180,8 +180,8 @@ DOMAIN HOSPITAL_IROS23_MAP1
 
 
 	COMPONENT RobotBase {FLEXIBLE positions(primitive)} : RobotBaseType;
-	COMPONENT RobotMotionController {FLEXIBLE motions(functional)} : RobotMotionControllerType;
-	COMPONENT RobotSkill {FLEXIBLE actions(primitive)} : RobotSkillType;
+	COMPONENT RobotMotionController {FLEXIBLE motions(primitive)} : RobotMotionControllerType;
+	COMPONENT RobotSkill {FLEXIBLE actions(functional)} : RobotSkillType;
 	COMPONENT RobotService {FLEXIBLE goals(functional)} : RobotServiceType;
 
 	SYNCHRONIZE RobotService.goals {

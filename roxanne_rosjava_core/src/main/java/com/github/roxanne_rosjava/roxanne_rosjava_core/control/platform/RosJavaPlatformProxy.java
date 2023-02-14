@@ -454,33 +454,22 @@ public class RosJavaPlatformProxy extends PlatformProxy {
     @Override
     public boolean isPlatformCommand(ExecutionNode node) {
 
+        // set dispatch flag
+        boolean toDispatch = false;
         // check token name
         String cmdName = this.extractCommandName(node);
         // check component name
         String compName = node.getComponent();
 
-        // to dispatch flag
-        boolean excluded = true;
-        // check first if the value is excluded from dispatch
-        if (this.component2excluded.containsKey(compName.trim().toLowerCase()) ||
-                this.component2excluded.containsKey("*")) {
+        // check if excluded
+        boolean excluded = this.component2excluded.containsKey(compName.trim().toLowerCase()) &&
+                this.component2excluded.get(compName.trim().toLowerCase()).contains(cmdName.trim().toLowerCase());
 
-            // check value
-            excluded = this.component2excluded.containsKey(compName.trim().toLowerCase()) ?
-                    // check component specification
-                    this.component2excluded.get(compName.trim().toLowerCase()).contains(cmdName.trim().toLowerCase()) :
-                    // check global specification
-                    this.component2excluded.get("*").contains(cmdName.trim().toLowerCase());
-        }
-
-        // set dispatch flag
-        boolean toDispatch = false;
         // check excluded flag
         if (!excluded) {
 
             // check if there is a specific dispatching topic for this node
-            toDispatch = this.command2dispatchTopic.containsKey(
-                    compName.trim().toLowerCase() + "." + cmdName.trim().toLowerCase());
+            toDispatch = this.command2dispatchTopic.containsKey(compName.trim().toLowerCase() + "." + cmdName.trim().toLowerCase());
 
             // check if there is a default dispatching command for the component
             if (!toDispatch) {
