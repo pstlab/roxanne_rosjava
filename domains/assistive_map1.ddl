@@ -26,7 +26,7 @@ DOMAIN HOSPITAL_IROS23_MAP1
 			_MoveTo(?destination, ?task, ?user);
 		}
 		
-		VALUE _MoveTo(?goal, ?task, ?user) [1, 10]
+		VALUE _MoveTo(?goal, ?task, ?user) [1, 50]
 		MEETS {
 			At(?location);
 			?location = ?goal;
@@ -190,7 +190,7 @@ DOMAIN HOSPITAL_IROS23_MAP1
 		
 			d0 <!> RobotSkill.actions.PickDrug(?room0, ?hri0, ?user0);
 			d1 <!> RobotSkill.actions.DeliverDrug(?room1, ?hri1, ?user1);
-			d2 RobotSkill.actions.GoHome();
+			d2 <!> RobotSkill.actions.GoHome();
 			
 			CONTAINS [0, +INF] [0, +INF] d0;
 			CONTAINS [0, +INF] [0, +INF] d1;
@@ -206,10 +206,108 @@ DOMAIN HOSPITAL_IROS23_MAP1
 			?hri1 = ?hri;
 			?user1 = ?user; 
 		}
+
+		VALUE Patroling(?room, ?hri, ?user) {
+
+            d0 <!> RobotSkill.actions.MonitorPatient(?room0, ?hri0, ?user0);
+            d1 <!> RobotSkill.actions.GoHome();
+
+            CONTAINS [0, +INF] [0, +INF] d0;
+            CONTAINS [0, +INF] [0, +INF] d1;
+
+            d0 BEFORE [0, +INF] d1;
+
+            ?room0 = ?room;
+            ?hri0 = ?hri;
+            ?user0 = ?user;
+        }
+
+        VALUE Emergency(?room, ?hri, ?user) {
+
+            d0 <!> RobotSkill.actions.HelpPatient(?room0, ?hri0, ?user0);
+            d1 <!> RobotSkill.actions.GoHome();
+
+            CONTAINS [0, +INF] [0, +INF] d0;
+            CONTAINS [0, +INF] [0, +INF] d1;
+
+            d0 BEFORE [0, +INF] d1;
+
+            ?room0 = ?room;
+            ?hri0 = ?hri;
+            ?user0 = ?user;
+        }
 	}
 
 
 	SYNCHRONIZE RobotSkill.actions {
+
+	    VALUE MonitorPatient(?room, ?hri, ?user) {
+
+	        d0 <!> RobotMotionController.motions.NavigateTo(?room0, ?task0, ?user0);
+	        d1 <!> RobotMotionController.motions.Enter(?hri1, ?task1, ?user1);
+	        d2 <!> RobotMotionController.motions.Monitor(?hri2, ?hri_user2, ?task2, ?user2);
+	        d3 <!> RobotMotionController.motions.Leave(?room3, ?task3, ?user3);
+
+	        CONTAINS [0, +INF] [0, +INF] d0;
+	        CONTAINS [0, +INF] [0, +INF] d1;
+	        CONTAINS [0, +INF] [0, +INF] d2;
+	        CONTAINS [0, +INF] [0, +INF] d3;
+
+	        d0 BEFORE [0, +INF] d1;
+	        d1 BEFORE [0, +INF] d2;
+	        d2 BEFORE [0, +INF] d3;
+
+	        ?room0 = ?room;
+	        ?task0 = social;
+	        ?user0 = average;
+
+	        ?hri1 = ?hri;
+	        ?task1 = social;
+	        ?user1 = fragile;
+
+	        ?hri2 = ?hri;
+	        ?hri_user2 = ?user;
+	        ?task2 = interaction;
+	        ?user2 = fragile;
+
+	        ?room3 = ?room;
+            ?task3 = social;
+            ?user3 = fragile;
+	    }
+
+	    VALUE HelpPatient(?room, ?hri, ?user) {
+
+            d0 <!> RobotMotionController.motions.NavigateTo(?room0, ?task0, ?user0);
+            d1 <!> RobotMotionController.motions.Enter(?hri1, ?task1, ?user1);
+            d2 <!> RobotMotionController.motions.Approach(?hri2, ?hri_user2, ?task2, ?user2);
+            d3 <!> RobotMotionController.motions.Leave(?room3, ?task3, ?user3);
+
+            CONTAINS [0, +INF] [0, +INF] d0;
+            CONTAINS [0, +INF] [0, +INF] d1;
+            CONTAINS [0, +INF] [0, +INF] d2;
+            CONTAINS [0, +INF] [0, +INF] d3;
+
+            d0 BEFORE [0, +INF] d1;
+            d1 BEFORE [0, +INF] d2;
+            d2 BEFORE [0, +INF] d3;
+
+            ?room0 = ?room;
+            ?task0 = technical;
+            ?user0 = reliable;
+
+            ?hri1 = ?hri;
+            ?task1 = interaction;
+            ?user1 = average;
+
+            ?hri2 = ?hri;
+            ?hri_user2 = ?user;
+            ?task2 = interaction;
+            ?user2 = fragile;
+
+            ?room3 = ?room;
+            ?task3 = interaction;
+            ?user3 = fragile;
+        }
 	
 		VALUE PickDrug(?room, ?hri, ?user) {
 		
@@ -230,7 +328,7 @@ DOMAIN HOSPITAL_IROS23_MAP1
 			
 			?room0 = ?room;
 			?task0 = social;
-			?user0 = reliable;
+			?user0 = average;
 			
 			?hri1 = ?hri;
 			?task1 = technical;
@@ -251,7 +349,7 @@ DOMAIN HOSPITAL_IROS23_MAP1
 			d0 <!> RobotMotionController.motions.NavigateTo(?room0, ?task0, ?user0);
 			d1 <!> RobotMotionController.motions.Enter(?hri1, ?task1, ?user1);
 			d2 <!> RobotMotionController.motions.Approach(?hri2, ?hri_user2, ?task2, ?user2);
-			d3 RobotMotionController.motions.Leave(?room3, ?task3, ?user3);
+			d3 <!> RobotMotionController.motions.Leave(?room3, ?task3, ?user3);
 			
 			
 			CONTAINS [0, +INF] [0, +INF] d0;
@@ -263,8 +361,8 @@ DOMAIN HOSPITAL_IROS23_MAP1
 			d2 BEFORE [0, +INF] d3;
 			
 			?room0 = ?room;
-			?task0 = technical;
-			?user0 = reliable;
+			?task0 = social;
+			?user0 = average;
 			
 			?hri1 = ?hri;
 			?task1 = social;
@@ -373,6 +471,17 @@ DOMAIN HOSPITAL_IROS23_MAP1
 			?task0 = ?task;
 			?user0 = ?user;
 		}
-	
+
+
+		VALUE NavigateTo(?location, ?task, ?user) {
+
+		    d0 <!> RobotBase.positions._MoveTo(?l0, ?t0, ?u0);
+
+		    CONTAINS [0, +INF] [0, +INF] d0;
+
+		    ?l0 = ?location;
+		    ?t0 = ?task;
+		    ?u0 = ?user;
+		}
 	}
 }
