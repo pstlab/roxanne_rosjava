@@ -14,20 +14,20 @@ Before starting configure the correct version of ROXANNE as follows:
 - Step 1. Run the roxanne node
 
 ```
-$ rosrun roxanne_rosjava roxanne_rosjava_taskplanner com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.ActingNode
+rosrun roxanne_rosjava roxanne_rosjava_taskplanner com.github.roxanne_rosjava.roxanne_rosjava_taskplanner.ActingNode
 ```
 
 - Step 2. Call the configuration service of ROXANNE passing the agent configuration file under the folder "roxanne_rosjava/etc"
 
 ```
-$ rosservice call /roxanne/acting/configuration "configFilePath: '<path-to-rosjava-workspace>/src/roxanne_rosjava/etc/agent.properties'"
+rosservice call /roxanne/acting/configuration "configFilePath: '<path-to-rosjava-workspace>/src/roxanne_rosjava/etc/agent.properties'"
 ```
 
 - Step 3. Send a planning request on the goal topic "/roxanne/acting/goal". The request shoul
 d include the planning goal and some initial facts as follows
 
 ```
-$ rostopic pub --once /roxanne/acting/goal roxanne_rosjava_msgs/ActingGoal "goalId: 0
+rostopic pub --once /roxanne/acting/goal roxanne_rosjava_msgs/ActingGoal "goalId: 0
 goals:
 - id: 0
   component: 'RobotService'
@@ -48,6 +48,20 @@ facts:
   component: 'RobotMotionController'
   predicate: 'Still'
   parameters: ['home']
+  start: [0, 0]
+  end: [0, 1000]
+  duration: [1, 1000]
+- id: 2
+  component: 'RobotSkill'
+  predicate: 'Idle'
+  parameters: []
+  start: [0, 0]
+  end: [0, 1000]
+  duration: [1, 1000]
+- id: 3
+  component: 'RobotService'
+  predicate: 'Idle'
+  parameters: []
   start: [0, 0]
   end: [0, 1000]
   duration: [1, 1000]" 
