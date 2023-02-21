@@ -72,7 +72,7 @@ The task planner should synthesize a plan and start executing the tokens of the 
 Dispatched toknes can be observed listening to the dispatching topic of roxanne 
 
 ```
-$ rostopic echo /roxanne/acting/dispatching
+rostopic echo /roxanne/acting/dispatching
 ```
 
 
