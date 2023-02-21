@@ -348,7 +348,7 @@ DOMAIN HOSPITAL_IROS23_MAP1
 		
 			d0 <!> RobotMotionController.motions.NavigateTo(?room0, ?task0, ?user0);
 			d1 <!> RobotMotionController.motions.Enter(?hri1, ?task1, ?user1);
-			d2 <!> RobotMotionController.motions.Approach(?hri2, ?hri_user2, ?task2, ?user2);
+			d2 <!> RobotMotionController.motions.Deliver(?hri2, ?hri_user2, ?task2, ?user2);
 			d3 <!> RobotMotionController.motions.Leave(?room3, ?task3, ?user3);
 			
 			

@@ -15,7 +15,7 @@ plan {
 			token 10  { Still-room2 [17,987] [1, 971] }
 			token 11  { Enter-room2_hri-social-fragile [18,988] [1, 971] }
 			token 12  { Inside-room2_hri [19,989] [1, 971] }
-			token 13  { Approach-room2_hri-room2_user-interaction-fragile [26,996] [7, 977] }
+			token 13  { Deliver-room2_hri-room2_user-interaction-fragile [26,996] [7, 977] }
 			token 14  { Inside-room2_hri [27,997] [1, 971] }
 			token 15  { Leave-room2-social-fragile [28,998] [1, 971] }
 			token 16  { Still-room2 [29,999] [1, 971] }
