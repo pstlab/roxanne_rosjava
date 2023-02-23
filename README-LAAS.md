@@ -64,7 +64,7 @@ facts:
   parameters: []
   start: [0, 0]
   end: [0, 1000]
-  duration: [1, 1000]" 
+  duration: [1, 1000]"
 ```
 
 The task planner should synthesize a plan and start executing the tokens of the RobotBase (see the DDL domain "path-to-rosjava-workspace>/roxanne_rosjava/domains/assistive_map1.ddl").

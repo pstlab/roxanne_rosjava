@@ -17,16 +17,20 @@ DOMAIN HOSPITAL_IROS23_MAP1
 	PAR_TYPE EnumerationParameterType task = {
 		technical, interaction, social 
 	};
+
+	PAR_TYPE EnumerationParameterType orientation = {
+	    free, in, out
+	};
 	
 	COMP_TYPE SingletonStateVariable RobotBaseType(
-		At(location), _MoveTo(location, task, user)) {
+		At(location), _MoveTo(location, task, user, orientation)) {
 		
 		VALUE At(?source) [1, +INF]
 		MEETS {
-			_MoveTo(?destination, ?task, ?user);
+			_MoveTo(?destination, ?task, ?user, ?orientation);
 		}
 		
-		VALUE _MoveTo(?goal, ?task, ?user) [1, 50]
+		VALUE _MoveTo(?goal, ?task, ?user, ?orientation) [1, 50]
 		MEETS {
 			At(?location);
 			?location = ?goal;
@@ -395,93 +399,75 @@ DOMAIN HOSPITAL_IROS23_MAP1
 	
 		VALUE Enter(?location, ?task, ?user) {
 		
-			d0 <!> RobotBase.positions._MoveTo(?location0, ?task0, ?user0);
+			d0 <!> RobotBase.positions._MoveTo(?location0, ?task0, ?user0, ?or0);
 			
 			CONTAINS [0, +INF] [0, +INF] d0;
 			
 			?location0 = ?location;
 			?task0 = ?task;
 			?user0 = ?user;
+			?or0 = in;
 		}
 		
 		VALUE Approach(?hri, ?user_location, ?task, ?user) {
 		
-			d0 <!> RobotBase.positions._MoveTo(?location0, ?task0, ?user0);
-			d1 <!> RobotBase.positions._MoveTo(?location1, ?task1, ?user1);
-			
+			d0 <!> RobotBase.positions._MoveTo(?location0, ?task0, ?user0, ?or0);
+
 			CONTAINS [0, +INF] [0, +INF] d0;
-			CONTAINS [0, +INF] [0, +INF] d1;
-			
-			d0 BEFORE [5, +INF] d1;
 			
 			?location0 = ?user_location;
 			?task0 = ?task;
 			?user0 = ?user;
-			
-			?location1 = ?hri;
-			?task1 = ?task;
-			?user1 = ?user;
+			?or0 = free;
 		}
 		
 		VALUE Monitor(?hri, ?user_location, ?task, ?user) {
 		
-			d0 <!> RobotBase.positions._MoveTo(?location0, ?task0, ?user0);
-			d1 <!> RobotBase.positions._MoveTo(?location1, ?task1, ?user1);
+			d0 <!> RobotBase.positions._MoveTo(?location0, ?task0, ?user0, ?or0);
 			
 			CONTAINS [0, +INF] [0, +INF] d0;
-			CONTAINS [0, +INF] [0, +INF] d1;
-			
-			d0 BEFORE [5, +INF] d1;
 			
 			?location0 = ?user_location;
 			?task0 = ?task;
 			?user0 = ?user;
-			
-			?location1 = ?hri;
-			?task1 = ?task;
-			?user1 = ?user;
+			?or0 = free;
 		}
 		
 		VALUE Deliver(?hri, ?user_location, ?task, ?user) {
 		
-			d0 <!> RobotBase.positions._MoveTo(?location0, ?task0, ?user0);
-			d1 <!> RobotBase.positions._MoveTo(?location1, ?task1, ?user1);
+			d0 <!> RobotBase.positions._MoveTo(?location0, ?task0, ?user0, ?or0);
 			
 			CONTAINS [0, +INF] [0, +INF] d0;
-			CONTAINS [0, +INF] [0, +INF] d1;
-			
-			d0 BEFORE [5, +INF] d1;
 			
 			?location0 = ?user_location;
 			?task0 = ?task;
 			?user0 = ?user;
-			
-			?location1 = ?hri;
-			?task1 = ?task;
-			?user1 = ?user;
+			?or0 = free;
 		}
 		
 		VALUE Leave(?room, ?task, ?user) {
 		
-			d0 <!> RobotBase.positions._MoveTo(?location0, ?task0, ?user0);
+			d0 <!> RobotBase.positions._MoveTo(?location0, ?task0, ?user0, ?or0);
 			
 			CONTAINS [0, +INF] [0, +INF] d0;
 			
 			?location0 = ?room;
 			?task0 = ?task;
 			?user0 = ?user;
+			?or0 = out;
 		}
 
 
 		VALUE NavigateTo(?location, ?task, ?user) {
 
-		    d0 <!> RobotBase.positions._MoveTo(?l0, ?t0, ?u0);
+		    d0 <!> RobotBase.positions._MoveTo(?l0, ?t0, ?u0, ?o0);
 
 		    CONTAINS [0, +INF] [0, +INF] d0;
 
 		    ?l0 = ?location;
 		    ?t0 = ?task;
 		    ?u0 = ?user;
+		    ?o0 = free;
 		}
 	}
 }
