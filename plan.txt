@@ -2,123 +2,80 @@ horizon = 1000
 plan {
 	timelines {
 		RobotMotionController {
-			token 0  { Still-home [1,983] [1, 983] }
-			token 1  { NavigateTo-farmacy-social-average [2,984] [1, 983] }
-			token 2  { Still-farmacy [3,985] [1, 983] }
-			token 3  { Enter-farmacy_hri-technical-reliable [4,986] [1, 983] }
-			token 4  { Inside-farmacy_hri [5,987] [1, 983] }
-			token 5  { Approach-farmacy_hri-farmacy_user-interaction-reliable [6,988] [1, 983] }
-			token 6  { Inside-farmacy_hri [7,989] [1, 983] }
-			token 7  { Leave-farmacy-technical-reliable [8,990] [1, 983] }
-			token 8  { Still-farmacy [9,991] [1, 983] }
-			token 9  { NavigateTo-room2-social-average [10,992] [1, 983] }
-			token 10  { Still-room2 [11,993] [1, 983] }
-			token 11  { Enter-room2_hri-social-fragile [12,994] [1, 983] }
-			token 12  { Inside-room2_hri [13,995] [1, 983] }
-			token 13  { Deliver-room2_hri-room2_user-interaction-fragile [14,996] [1, 983] }
-			token 14  { Inside-room2_hri [15,997] [1, 983] }
-			token 15  { Leave-room2-social-fragile [16,998] [1, 983] }
-			token 16  { Still-room2 [17,999] [1, 983] }
-			token 17  { NavigateTo-home-social-average [18,1000] [1, 983] }
+			token 0  { Still-home [1,991] [1, 991] }
+			token 1  { NavigateTo-room2-social-average [2,992] [1, 991] }
+			token 2  { Still-room2 [3,993] [1, 991] }
+			token 3  { Enter-room2_hri-social-fragile [4,994] [1, 991] }
+			token 4  { Inside-room2_hri [5,995] [1, 991] }
+			token 5  { Monitor-room2_user-interaction-fragile [6,996] [1, 991] }
+			token 6  { Inside-home [7,997] [1, 991] }
+			token 7  { Leave-room2-social-fragile [8,998] [1, 991] }
+			token 8  { Still-room2 [9,999] [1, 991] }
+			token 9  { NavigateTo-home-social-fragile [10,1000] [1, 991] }
 		}
 		RobotBase {
-			token 18  { At-home [1,983] [1, 983] }
-			token 19 uncontrollable { _MoveTo-farmacy-social-average-free [2,984] [1, 50] }
-			token 20  { At-farmacy [3,985] [1, 983] }
-			token 21 uncontrollable { _MoveTo-farmacy_hri-technical-reliable-in [4,986] [1, 50] }
-			token 22  { At-farmacy_hri [5,987] [1, 983] }
-			token 23 uncontrollable { _MoveTo-farmacy_user-interaction-reliable-free [6,988] [1, 50] }
-			token 24  { At-farmacy_user [7,989] [1, 983] }
-			token 25 uncontrollable { _MoveTo-farmacy-technical-reliable-out [8,990] [1, 50] }
-			token 26  { At-farmacy [9,991] [1, 983] }
-			token 27 uncontrollable { _MoveTo-room2-social-average-free [10,992] [1, 50] }
-			token 28  { At-room2 [11,993] [1, 983] }
-			token 29 uncontrollable { _MoveTo-room2_hri-social-fragile-in [12,994] [1, 50] }
-			token 30  { At-room2_hri [13,995] [1, 983] }
-			token 31 uncontrollable { _MoveTo-room2_user-interaction-fragile-free [14,996] [1, 50] }
-			token 32  { At-room2_user [15,997] [1, 983] }
-			token 33 uncontrollable { _MoveTo-room2-social-fragile-out [16,998] [1, 50] }
-			token 34  { At-room2 [17,999] [1, 983] }
-			token 35 uncontrollable { _MoveTo-home-social-average-free [18,1000] [1, 50] }
+			token 10  { At-home [1,991] [1, 991] }
+			token 11 uncontrollable { _MoveTo-room2-social-average-free [2,992] [1, 50] }
+			token 12  { At-room2 [3,993] [1, 991] }
+			token 13 uncontrollable { _MoveTo-room2_hri-social-fragile-in [4,994] [1, 50] }
+			token 14  { At-room2_hri [5,995] [1, 991] }
+			token 15 uncontrollable { _MoveTo-room2_user-interaction-fragile-free [6,996] [1, 50] }
+			token 16  { At-room2_user [7,997] [1, 991] }
+			token 17 uncontrollable { _MoveTo-room2-social-fragile-out [8,998] [1, 50] }
+			token 18  { At-room2 [9,999] [1, 991] }
+			token 19 uncontrollable { _MoveTo-home-social-fragile-free [10,1000] [1, 50] }
 		}
 		RobotService {
-			token 36  { Idle [1,1000] [1, 1000] }
-			token 37  { DeliverDrug-room2-room2_hri-room2_user [14,1000] [13, 1000] }
+			token 20  { Idle [1,1000] [1, 1000] }
+			token 21  { Patroling-room2-room2_hri-room2_user [8,1000] [7, 1000] }
 		}
 		RobotSkill {
-			token 38  { Idle [1,1000] [1, 1000] }
-			token 39  { PickDrug-farmacy-farmacy_hri-farmacy_user [8,991] [7, 991] }
-			token 40  { DeliverDrug-room2-room2_hri-room2_user [14,999] [5, 991] }
-			token 41  { GoHome [18,1000] [1, 986] }
+			token 22  { Idle [1,1000] [1, 1000] }
+			token 23  { MonitorPatient-room2-room2_hri-room2_user [8,999] [7, 999] }
+			token 24  { GoHome [10,1000] [1, 992] }
 		}
 	}
 	relations {
-		RobotMotionController 9 meets RobotMotionController 10
-		RobotMotionController 10 meets RobotMotionController 11
-		RobotMotionController 11 meets RobotMotionController 12
-		RobotMotionController 12 meets RobotMotionController 13
+		RobotMotionController 6 meets RobotMotionController 7
+		RobotMotionController 0 meets RobotMotionController 1
 		RobotMotionController 3 meets RobotMotionController 4
 		RobotMotionController 4 meets RobotMotionController 5
-		RobotMotionController 5 meets RobotMotionController 6
-		RobotSkill 39 before [0,1000] RobotSkill 40
-		RobotMotionController 6 meets RobotMotionController 7
-		RobotSkill 40 before [0,1000] RobotSkill 41
-		RobotBase 18 before [0,1000] RobotBase 19
-		RobotService 37 contains [0,1000]  [0,1000] RobotSkill 39
-		RobotService 37 contains [0,1000]  [0,1000] RobotSkill 40
-		RobotSkill 40 contains [0,1000]  [0,1000] RobotMotionController 9
-		RobotSkill 40 contains [0,1000]  [0,1000] RobotMotionController 11
-		RobotSkill 40 contains [0,1000]  [0,1000] RobotMotionController 13
-		RobotMotionController 9 before [0,1000] RobotMotionController 11
-		RobotMotionController 11 before [0,1000] RobotMotionController 13
-		RobotMotionController 13 before [0,1000] RobotMotionController 15
-		RobotSkill 41 contains [0,1000]  [0,1000] RobotMotionController 17
+		RobotBase 10 before [0,1000] RobotBase 19
+		RobotBase 10 before [0,1000] RobotBase 13
+		RobotBase 10 before [0,1000] RobotBase 11
+		RobotBase 17 meets RobotBase 18
 		RobotBase 18 meets RobotBase 19
-		RobotSkill 39 contains [0,1000]  [0,1000] RobotMotionController 1
-		RobotSkill 39 contains [0,1000]  [0,1000] RobotMotionController 3
-		RobotSkill 39 contains [0,1000]  [0,1000] RobotMotionController 5
-		RobotSkill 39 contains [0,1000]  [0,1000] RobotMotionController 7
+		RobotService 21 contains [0,1000]  [0,1000] RobotSkill 23
+		RobotSkill 23 before [0,1000] RobotSkill 24
+		RobotBase 11 meets RobotBase 12
+		RobotSkill 24 contains [0,1000]  [0,1000] RobotMotionController 9
+		RobotBase 12 meets RobotBase 13
+		RobotSkill 23 contains [0,1000]  [0,1000] RobotMotionController 1
+		RobotSkill 23 contains [0,1000]  [0,1000] RobotMotionController 3
+		RobotSkill 23 contains [0,1000]  [0,1000] RobotMotionController 5
+		RobotSkill 23 contains [0,1000]  [0,1000] RobotMotionController 7
+		RobotBase 10 meets RobotBase 11
 		RobotMotionController 1 before [0,1000] RobotMotionController 3
 		RobotMotionController 3 before [0,1000] RobotMotionController 5
+		RobotBase 15 meets RobotBase 16
 		RobotMotionController 5 before [0,1000] RobotMotionController 7
-		RobotMotionController 13 contains [0,1000]  [0,1000] RobotBase 31
-		RobotBase 23 meets RobotBase 24
-		RobotMotionController 0 before [0,1000] RobotMotionController 13
-		RobotBase 24 meets RobotBase 25
-		RobotMotionController 5 contains [0,1000]  [0,1000] RobotBase 23
+		RobotBase 16 meets RobotBase 17
+		RobotBase 13 meets RobotBase 14
+		RobotMotionController 7 contains [0,1000]  [0,1000] RobotBase 17
+		RobotBase 14 meets RobotBase 15
+		RobotMotionController 0 before [0,1000] RobotMotionController 7
+		RobotMotionController 9 contains [0,1000]  [0,1000] RobotBase 19
+		RobotMotionController 5 contains [0,1000]  [0,1000] RobotBase 15
 		RobotMotionController 0 before [0,1000] RobotMotionController 5
-		RobotMotionController 11 contains [0,1000]  [0,1000] RobotBase 29
-		RobotMotionController 3 contains [0,1000]  [0,1000] RobotBase 21
-		RobotMotionController 0 before [0,1000] RobotMotionController 3
-		RobotMotionController 9 contains [0,1000]  [0,1000] RobotBase 27
-		RobotBase 19 meets RobotBase 20
-		RobotMotionController 15 contains [0,1000]  [0,1000] RobotBase 33
-		RobotBase 20 meets RobotBase 21
-		RobotMotionController 7 contains [0,1000]  [0,1000] RobotBase 25
-		RobotMotionController 1 contains [0,1000]  [0,1000] RobotBase 19
+		RobotMotionController 1 contains [0,1000]  [0,1000] RobotBase 11
 		RobotMotionController 0 before [0,1000] RobotMotionController 1
-		RobotMotionController 17 contains [0,1000]  [0,1000] RobotBase 35
-		RobotBase 27 meets RobotBase 28
-		RobotMotionController 15 before [0,1000] RobotMotionController 17
-		RobotBase 28 meets RobotBase 29
-		RobotBase 21 meets RobotBase 22
-		RobotBase 22 meets RobotBase 23
-		RobotMotionController 0 meets RobotMotionController 1
-		RobotBase 31 meets RobotBase 32
-		RobotBase 32 meets RobotBase 33
-		RobotBase 33 meets RobotBase 34
-		RobotBase 34 meets RobotBase 35
-		RobotMotionController 13 meets RobotMotionController 14
-		RobotMotionController 14 meets RobotMotionController 15
-		RobotBase 29 meets RobotBase 30
-		RobotBase 30 meets RobotBase 31
-		RobotBase 25 meets RobotBase 26
-		RobotBase 26 meets RobotBase 27
-		RobotMotionController 15 meets RobotMotionController 16
-		RobotMotionController 16 meets RobotMotionController 17
+		RobotMotionController 1 before [0,1000] RobotMotionController 7
+		RobotMotionController 1 before [0,1000] RobotMotionController 5
+		RobotMotionController 3 contains [0,1000]  [0,1000] RobotBase 13
 		RobotMotionController 1 meets RobotMotionController 2
 		RobotMotionController 2 meets RobotMotionController 3
 		RobotMotionController 7 meets RobotMotionController 8
 		RobotMotionController 8 meets RobotMotionController 9
+		RobotMotionController 5 meets RobotMotionController 6
 	}
 }
