@@ -154,14 +154,14 @@ DOMAIN HOSPITAL_IROS23_MAP1
 	COMP_TYPE SingletonStateVariable RobotServiceType(
 		Idle(),
 		DeliverDrug(location, location, location),
-		Patroling(location, location, location),
+		Patroling(),
 		Emergency(location, location, location))  {
 
 		VALUE Idle() [1, +INF]
 		MEETS {
 
 			DeliverDrug(?room, ?room_hri, ?room_user);
-			Patroling(?room, ?room_hri, ?room_user);
+			Patroling();
 			Emergency(?room, ?room_hri, ?room_user);
 		}
 
@@ -170,7 +170,7 @@ DOMAIN HOSPITAL_IROS23_MAP1
 			Idle();
 		}
 
-		VALUE Patroling(?room, ?hri, ?user) [1, +INF]
+		VALUE Patroling() [1, +INF]
 		MEETS {
 			Idle();
 		}
@@ -181,9 +181,8 @@ DOMAIN HOSPITAL_IROS23_MAP1
 		}
 	}
 
-
 	COMPONENT RobotBase {FLEXIBLE positions(primitive)} : RobotBaseType;
-	COMPONENT RobotMotionController {FLEXIBLE motions(primitive)} : RobotMotionControllerType;
+	COMPONENT RobotMotionController {FLEXIBLE motions(functional)} : RobotMotionControllerType;
 	COMPONENT RobotSkill {FLEXIBLE actions(functional)} : RobotSkillType;
 	COMPONENT RobotService {FLEXIBLE goals(functional)} : RobotServiceType;
 
@@ -193,10 +192,11 @@ DOMAIN HOSPITAL_IROS23_MAP1
 
 			d0 <!> RobotSkill.actions.PickDrug(?room0, ?hri0, ?user0);
 			d1 <!> RobotSkill.actions.DeliverDrug(?room1, ?hri1, ?user1);
-			d2 RobotSkill.actions.GoHome();
+			d2 <!> RobotSkill.actions.GoHome();
 
 			CONTAINS [0, +INF] [0, +INF] d0;
 			CONTAINS [0, +INF] [0, +INF] d1;
+			CONTAINS [0, +INF] [0, +INF] d2;
 
 			d0 BEFORE [0, +INF] d1;
 			d1 BEFORE [0, +INF] d2;
@@ -210,26 +210,42 @@ DOMAIN HOSPITAL_IROS23_MAP1
 			?user1 = ?user;
 		}
 
-		VALUE Patroling(?room, ?hri, ?user) {
+		VALUE Patroling() {
 
             d0 <!> RobotSkill.actions.MonitorPatient(?room0, ?hri0, ?user0);
-            d1 RobotSkill.actions.GoHome();
+            d1 <!>RobotSkill.actions.MonitorPatient(?room1, ?hri1, ?user1);
+            d2 <!>RobotSkill.actions.MonitorPatient(?room2, ?hri2, ?user2);
+            d3 <!> RobotSkill.actions.GoHome();
 
             CONTAINS [0, +INF] [0, +INF] d0;
+            CONTAINS [0, +INF] [0, +INF] d1;
+            CONTAINS [0, +INF] [0, +INF] d2;
+            CONTAINS [0, +INF] [0, +INF] d3;
 
             d0 BEFORE [0, +INF] d1;
+            d1 BEFORE [0, +INF] d2;
+            d2 BEFORE [0, +INF] d3;
 
-            ?room0 = ?room;
-            ?hri0 = ?hri;
-            ?user0 = ?user;
+            ?room0 = room3;
+            ?hri0 = room3_hri;
+            ?user0 = room3_user;
+
+            ?room1 = room2;
+            ?hri1 = room2_hri;
+            ?user1 = room2_user;
+
+            ?room2 = room1;
+            ?hri2 = room1_hri;
+            ?user2 = room1_user;
         }
 
         VALUE Emergency(?room, ?hri, ?user) {
 
             d0 <!> RobotSkill.actions.HelpPatient(?room0, ?hri0, ?user0);
-            d1 RobotSkill.actions.GoHome();
+            d1 <!> RobotSkill.actions.GoHome();
 
             CONTAINS [0, +INF] [0, +INF] d0;
+            CONTAINS [0, +INF] [0, +INF] d1;
 
             d0 BEFORE [0, +INF] d1;
 
