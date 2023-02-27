@@ -198,8 +198,8 @@ DOMAIN HOSPITAL_IROS23_MAP1
 			CONTAINS [0, +INF] [0, +INF] d1;
 			CONTAINS [0, +INF] [0, +INF] d2;
 
-			d0 BEFORE [0, +INF] d1;
-			d1 BEFORE [0, +INF] d2;
+			d0 BEFORE [1, +INF] d1;
+			d1 BEFORE [1, +INF] d2;
 
 			?room0 = farmacy;
 			?hri0 = farmacy_hri;
@@ -213,8 +213,8 @@ DOMAIN HOSPITAL_IROS23_MAP1
 		VALUE Patroling() {
 
             d0 <!> RobotSkill.actions.MonitorPatient(?room0, ?hri0, ?user0);
-            d1 <!>RobotSkill.actions.MonitorPatient(?room1, ?hri1, ?user1);
-            d2 <!>RobotSkill.actions.MonitorPatient(?room2, ?hri2, ?user2);
+            d1 <!> RobotSkill.actions.MonitorPatient(?room1, ?hri1, ?user1);
+            d2 <!> RobotSkill.actions.MonitorPatient(?room2, ?hri2, ?user2);
             d3 <!> RobotSkill.actions.GoHome();
 
             CONTAINS [0, +INF] [0, +INF] d0;
@@ -222,9 +222,9 @@ DOMAIN HOSPITAL_IROS23_MAP1
             CONTAINS [0, +INF] [0, +INF] d2;
             CONTAINS [0, +INF] [0, +INF] d3;
 
-            d0 BEFORE [0, +INF] d1;
-            d1 BEFORE [0, +INF] d2;
-            d2 BEFORE [0, +INF] d3;
+            d0 BEFORE [1, +INF] d1;
+            d1 BEFORE [1, +INF] d2;
+            d2 BEFORE [1, +INF] d3;
 
             ?room0 = room3;
             ?hri0 = room3_hri;
@@ -247,7 +247,7 @@ DOMAIN HOSPITAL_IROS23_MAP1
             CONTAINS [0, +INF] [0, +INF] d0;
             CONTAINS [0, +INF] [0, +INF] d1;
 
-            d0 BEFORE [0, +INF] d1;
+            d0 BEFORE [1, +INF] d1;
 
             ?room0 = ?room;
             ?hri0 = ?hri;
@@ -270,9 +270,9 @@ DOMAIN HOSPITAL_IROS23_MAP1
 	        CONTAINS [0, +INF] [0, +INF] d2;
 	        CONTAINS [0, +INF] [0, +INF] d3;
 
-	        d0 BEFORE [0, +INF] d1;
-	        d1 BEFORE [0, +INF] d2;
-	        d2 BEFORE [0, +INF] d3;
+	        d0 BEFORE [1, +INF] d1;
+	        d1 BEFORE [1, +INF] d2;
+	        d2 BEFORE [1, +INF] d3;
 
 	        ?room0 = ?room;
 	        ?task0 = social;
@@ -303,9 +303,9 @@ DOMAIN HOSPITAL_IROS23_MAP1
             CONTAINS [0, +INF] [0, +INF] d2;
             CONTAINS [0, +INF] [0, +INF] d3;
 
-            d0 BEFORE [0, +INF] d1;
-            d1 BEFORE [0, +INF] d2;
-            d2 BEFORE [0, +INF] d3;
+            d0 BEFORE [1, +INF] d1;
+            d1 BEFORE [1, +INF] d2;
+            d2 BEFORE [1, +INF] d3;
 
             ?room0 = ?room;
             ?task0 = technical;
@@ -337,9 +337,9 @@ DOMAIN HOSPITAL_IROS23_MAP1
 			CONTAINS [0, +INF] [0, +INF] d2;
 			CONTAINS [0, +INF] [0, +INF] d3;
 
-			d0 BEFORE [0, +INF] d1;
-			d1 BEFORE [0, +INF] d2;
-			d2 BEFORE [0, +INF] d3;
+			d0 BEFORE [1, +INF] d1;
+			d1 BEFORE [1, +INF] d2;
+			d2 BEFORE [1, +INF] d3;
 
 			?room0 = ?room;
 			?task0 = social;
@@ -370,9 +370,9 @@ DOMAIN HOSPITAL_IROS23_MAP1
 			CONTAINS [0, +INF] [0, +INF] d1;
 			CONTAINS [0, +INF] [0, +INF] d2;
 
-			d0 BEFORE [0, +INF] d1;
-			d1 BEFORE [0, +INF] d2;
-			d2 BEFORE [0, +INF] d3;
+			d0 BEFORE [1, +INF] d1;
+			d1 BEFORE [1, +INF] d2;
+			d2 BEFORE [1, +INF] d3;
 
 			?room0 = ?room;
 			?task0 = technical;

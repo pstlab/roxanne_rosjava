@@ -5,14 +5,14 @@ PROBLEM HOSPITAL_IROS23_MAP1_PROB (DOMAIN HOSPITAL_IROS23_MAP1)
 	f2 <fact> RobotSkill.actions.Idle() AT [0, 0] [1, +INF] [1, +INF];
 	f3 <fact> RobotService.goals.Idle() AT [0, 0] [1, +INF] [1, +INF];
 
-	//g0 <goal> RobotService.goals.DeliverDrug(?l1, ?l2, ?l3) AT [0, +INF] [0, +INF] [0, +INF];
-	g0 <goal> RobotService.goals.Patroling() AT [0, +INF] [0, +INF] [0, +INF];
+	g0 <goal> RobotService.goals.DeliverDrug(?l1, ?l2, ?l3) AT [0, +INF] [0, +INF] [0, +INF];
+	//g0 <goal> RobotService.goals.Patroling() AT [0, +INF] [0, +INF] [0, +INF];
 	//g0 <goal> RobotService.goals.Emergency(?l1, ?l2, ?l3) AT [0, +INF] [0, +INF] [0, +INF];
 
 	?home = home;
 	?location = home;
 
-    //?l1 = room2;
-    //?l2 = room2_hri;
-    //?l3 = room2_user;
+    ?l1 = room2;
+    ?l2 = room2_hri;
+    ?l3 = room2_user;
 }
