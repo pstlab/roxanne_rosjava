@@ -275,20 +275,20 @@ DOMAIN HOSPITAL_IROS23_MAP1
 	        d2 BEFORE [1, +INF] d3;
 
 	        ?room0 = ?room;
-	        ?task0 = social;
+	        ?task0 = technical;
 	        ?user0 = average;
 
 	        ?hri1 = ?hri;
 	        ?task1 = social;
-	        ?user1 = fragile;
+	        ?user1 = average;
 
 	        ?hri_user2 = ?user;
-	        ?task2 = interaction;
+	        ?task2 = social;
 	        ?user2 = fragile;
 
 	        ?room3 = ?room;
             ?task3 = social;
-            ?user3 = fragile;
+            ?user3 = average;
 	    }
 
 	    VALUE HelpPatient(?room, ?hri, ?user) {
@@ -312,11 +312,11 @@ DOMAIN HOSPITAL_IROS23_MAP1
             ?user0 = reliable;
 
             ?hri1 = ?hri;
-            ?task1 = interaction;
+            ?task1 = technical;
             ?user1 = average;
 
             ?hri_user2 = ?user;
-            ?task2 = interaction;
+            ?task2 = technical;
             ?user2 = fragile;
 
             ?room3 = ?room;
@@ -342,20 +342,20 @@ DOMAIN HOSPITAL_IROS23_MAP1
 			d2 BEFORE [1, +INF] d3;
 
 			?room0 = ?room;
-			?task0 = social;
+			?task0 = technical;
 			?user0 = average;
 
 			?hri1 = ?hri;
-			?task1 = technical;
-			?user1 = reliable;
+			?task1 = interaction;
+			?user1 = average;
 
 			?hri_user2 = ?user;
 			?task2 = interaction;
 			?user2 = reliable;
 
 			?room3 = ?room;
-			?task3 = technical;
-			?user3 = reliable;
+			?task3 = interaction;
+			?user3 = average;
 		}
 
 		VALUE DeliverDrug(?room, ?hri, ?user) {
@@ -369,6 +369,7 @@ DOMAIN HOSPITAL_IROS23_MAP1
 			CONTAINS [0, +INF] [0, +INF] d0;
 			CONTAINS [0, +INF] [0, +INF] d1;
 			CONTAINS [0, +INF] [0, +INF] d2;
+			CONTAINS [0, +INF] [0, +INF] d3;
 
 			d0 BEFORE [1, +INF] d1;
 			d1 BEFORE [1, +INF] d2;
@@ -376,11 +377,11 @@ DOMAIN HOSPITAL_IROS23_MAP1
 
 			?room0 = ?room;
 			?task0 = technical;
-			?user0 = reliable;
+			?user0 = average;
 
 			?hri1 = ?hri;
 			?task1 = social;
-			?user1 = fragile;
+			?user1 = average;
 
 			?hri_user2 = ?user;
 			?task2 = interaction;
@@ -388,7 +389,7 @@ DOMAIN HOSPITAL_IROS23_MAP1
 
 			?room3 = ?room;
 			?task3 = social;
-			?user3 = fragile;
+			?user3 = average;
 		}
 
 		VALUE GoHome() {
@@ -398,8 +399,8 @@ DOMAIN HOSPITAL_IROS23_MAP1
 			CONTAINS [0, +INF] [0, +INF] d0;
 
 			?room0 = home;
-			?task0 = social;
-			?user0 = fragile;
+			?task0 = technical;
+			?user0 = average;
 		}
 	}
 

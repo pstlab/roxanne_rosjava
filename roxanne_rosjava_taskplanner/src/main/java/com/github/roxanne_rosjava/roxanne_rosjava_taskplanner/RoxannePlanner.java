@@ -1,6 +1,7 @@
 package com.github.roxanne_rosjava.roxanne_rosjava_taskplanner;
 
 import it.cnr.istc.pst.platinum.ai.deliberative.Planner;
+import it.cnr.istc.pst.platinum.ai.deliberative.strategy.StandardDeviationMinimizationSearchStrategy;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.annotation.cfg.FrameworkLoggerConfiguration;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.annotation.cfg.deliberative.FlawSelectionHeuristicsConfiguration;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.annotation.cfg.deliberative.PlannerSolverConfiguration;
@@ -21,7 +22,7 @@ import it.cnr.istc.pst.platinum.ai.deliberative.strategy.DepthFirstSearchStrateg
 		heuristics = HierarchicalFlawSelectionHeuristic.class
 )
 @SearchStrategyConfiguration(
-		strategy = DepthFirstSearchStrategy.class
+		strategy = StandardDeviationMinimizationSearchStrategy.class// DepthFirstSearchStrategy.class
 )
 @FrameworkLoggerConfiguration(		
 		// set logging level
