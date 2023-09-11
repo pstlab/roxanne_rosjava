@@ -30,7 +30,7 @@ DOMAIN HOSPITAL_IROS23_MAP1
 			_MoveTo(?destination, ?task, ?user, ?orientation);
 		}
 
-		VALUE _MoveTo(?goal, ?task, ?user, ?orientation) [1, 50]
+		VALUE _MoveTo(?goal, ?task, ?user, ?orientation) [1, 30]
 		MEETS {
 			At(?location);
 			?location = ?goal;
