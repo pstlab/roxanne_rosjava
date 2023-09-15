@@ -1099,19 +1099,21 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 
 					// stop execution
 					proceed = false;
-
+					// clear platform
+					this.proxy.clearDispatchedIndex();
 
 					// protect access to the queue
 					synchronized (this.buffered) {
 
 						// set goal status
 						goal.setStatus(GoalStatus.BUFFERED);
+						goal.setExecutionTick(0);
+
 						// add a goal to the queue
 						this.buffered.get(goal.getStatus()).add(goal);
 						// send signal
 						this.buffered.notifyAll();
 					}
-
 				}
 				break;
 
@@ -1243,7 +1245,7 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 
 			} else {
 
-				// stop execution
+				// stop execution and make the agent ready to plan again
 				this.status = ActingAgentStatus.READY;
 			}
 
