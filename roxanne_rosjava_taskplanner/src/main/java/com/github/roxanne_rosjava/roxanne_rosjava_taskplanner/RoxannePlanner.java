@@ -22,8 +22,8 @@ import it.cnr.istc.pst.platinum.ai.deliberative.strategy.DepthFirstSearchStrateg
 		heuristics = HierarchicalFlawSelectionHeuristic.class
 )
 @SearchStrategyConfiguration(
-		//strategy = StandardDeviationMinimizationSearchStrategy.class // DepthFirstSearchStrategy.class
-		strategy = MakespanOptimization.class
+		strategy = StandardDeviationMinimizationSearchStrategy.class // DepthFirstSearchStrategy.class
+		//strategy = MakespanOptimization.class
 )
 @FrameworkLoggerConfiguration(		
 		// set logging level
