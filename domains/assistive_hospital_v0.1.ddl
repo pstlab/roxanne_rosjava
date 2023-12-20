@@ -192,14 +192,13 @@ DOMAIN HOSPITAL_IROS23_MAP1
 
 			d0 <!> RobotSkill.actions.PickDrug(?room0, ?hri0, ?user0);
 			d1 <!> RobotSkill.actions.DeliverDrug(?room1, ?hri1, ?user1);
-			d2 <!> RobotSkill.actions.GoHome();
+			d2 RobotSkill.actions.GoHome();
 
 			CONTAINS [0, +INF] [0, +INF] d0;
 			CONTAINS [0, +INF] [0, +INF] d1;
-			CONTAINS [0, +INF] [0, +INF] d2;
+			BEFORE [0, +INF] d2;
 
 			d0 BEFORE [1, +INF] d1;
-			d1 BEFORE [1, +INF] d2;
 
 			?room0 = farmacy;
 			?hri0 = farmacy_hri;
