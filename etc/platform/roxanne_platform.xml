@@ -14,7 +14,7 @@
 
     <!-- wildcard matching any type of token to dispatch -->
 
-    <command component="*" name="*" exclude="idle">
+    <command component="RobotBase" name="moveto" exclude="*">
 
         <dispatch-topic
                 name="/roxanne/acting/dispatching"

@@ -1,0 +1,18 @@
+PROBLEM COFEE_PROBLEM (DOMAIN COFFEE_DOMAIN_DDL)
+{
+	// initial robot state
+	f0 <fact> RobotBase.positions.At(?loc0) AT [0, 0] [1, +INF] [1, +INF];
+	f1 <fact> RobotVoice.utterrances.Idle() AT [0, 0] [1, +INF] [1, +INF];
+	f2 <fact> Robot.skills.Idle() AT [0, 0] [1, +INF] [1, +INF];
+	
+	g0 <goal> Service.goals.Serve(?loc11, ?obj, ?pos11, ?loc12, ?pos12) AT [0, +INF] [1, +INF] [1, +INF];
+	
+	?loc0 = desk_2_nord;
+	
+	?loc11 = table_1_nord;
+	?loc12 = table_2_sud;
+	?obj = lattina_1;
+	?pos11 = table_1_nord;
+	?pos12 = table_2_sud;
+	
+}

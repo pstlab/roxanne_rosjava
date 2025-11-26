@@ -20,7 +20,6 @@ import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.plan.SolutionPlan;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.relations.Relation;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.relations.RelationType;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.relations.parameter.BindParameterRelation;
-import it.cnr.istc.pst.platinum.ai.framework.parameter.lang.constraints.BindParameterConstraint;
 import it.cnr.istc.pst.platinum.ai.framework.utils.properties.FilePropertyReader;
 import it.cnr.istc.pst.platinum.control.lang.*;
 import it.cnr.istc.pst.platinum.control.lang.ex.PlatformException;
@@ -39,7 +38,7 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 	private final Object lock;								// lock state;
 	private ActingAgentStatus status;						// agent status
 
-	private final Map<GoalStatus, List<Goal>> queue;		// goal queue
+	private final Map<GoalStatus, List<Goal>> buffered;		// goal queue
 	
 	private String ddl;										// path to the domain specification file
 	private PlanDataBase pdb;								// internal plan database representation
@@ -55,6 +54,8 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 	
 	protected PlatformProxy proxy;
 	private FilePropertyReader properties;
+
+	private Queue<Goal> goals;
 
 	private Log log;
 
@@ -76,10 +77,13 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 			// set status
 			this.status = ActingAgentStatus.OFFLINE;
 			// set goal buffer
-			this.queue = new HashMap<>();
+			this.buffered = new HashMap<>();
+			// prepare list of goals
+			this.goals = new PriorityQueue<>();
+
 			// set goal queue
 			for (GoalStatus s : GoalStatus.values()) {
-				this.queue.put(s, new ArrayList<Goal>());
+				this.buffered.put(s, new ArrayList<Goal>());
 			}
 
 			// set internal plan database representation
@@ -217,7 +221,6 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 	public void feedback(PlatformFeedback platformFeedback) {
 		// nothing to do
 
-
 	}
 
 	/**
@@ -237,21 +240,21 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 	public void buffer(AgentTaskDescription description) {
 
 		// protect access to the queue
-		synchronized (this.queue) {
+		synchronized (this.buffered) {
 
 			// create goal 
 			Goal goal = new Goal(description);
 			// set goal status
 			goal.setStatus(GoalStatus.BUFFERED);
 			// add a goal to the queue
-			this.queue.get(goal.getStatus()).add(goal);
+			this.buffered.get(goal.getStatus()).add(goal);
 			this.log.info("[GoalOrientedActingAgent] Received task request:\n" +
 					"- Request-ID: " + description.getId() + "\n" +
-					"- Number of buffered requests: " + this.queue.get(GoalStatus.BUFFERED).size() + "\n");
+					"- Number of buffered requests: " + this.buffered.get(GoalStatus.BUFFERED).size() + "\n");
 
 
 			// send signal
-			this.queue.notifyAll();
+			this.buffered.notifyAll();
 		}
 	}
 	
@@ -266,24 +269,24 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 
 		// wait some finished or aborted goal
 		List<Goal> goals = new ArrayList<>();
-		synchronized (this.queue) {
-			while (this.queue.get(GoalStatus.ABORTED).isEmpty() && 
-					this.queue.get(GoalStatus.FINISHED).isEmpty()) {
+		synchronized (this.buffered) {
+			while (this.buffered.get(GoalStatus.ABORTED).isEmpty() &&
+					this.buffered.get(GoalStatus.FINISHED).isEmpty()) {
 				// wait
-				this.queue.wait();
+				this.buffered.wait();
 			}
 			
 			// take aborted goals
-			goals.addAll(this.queue.get(GoalStatus.ABORTED));
+			goals.addAll(this.buffered.get(GoalStatus.ABORTED));
 			// clear queue
-			this.queue.get(GoalStatus.ABORTED).clear();
+			this.buffered.get(GoalStatus.ABORTED).clear();
 			// take finished goals
-			goals.addAll(this.queue.get(GoalStatus.FINISHED));
+			goals.addAll(this.buffered.get(GoalStatus.FINISHED));
 			// clear queue
-			this.queue.get(GoalStatus.FINISHED).clear();
+			this.buffered.get(GoalStatus.FINISHED).clear();
 			
 			// send signal
-			this.queue.notifyAll();
+			this.buffered.notifyAll();
 		}
 		
 		// get finished and aborted goals
@@ -296,19 +299,19 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 	protected void select(Goal goal) {
 
 		// protect access to the queue
-		synchronized (this.queue) {
+		synchronized (this.buffered) {
 
 			// set goal status
 			goal.setStatus(GoalStatus.SELECTED);
 			// add goal to the queue
-			this.queue.get(goal.getStatus()).add(goal);
+			this.buffered.get(goal.getStatus()).add(goal);
 			log.info("[GoalOrientedActingAgent] Selecting goal from input buffer:\n" +
 					"- Selected Request-ID: " + goal.getTaskDescription().getId() +  "\n" +
-					"- Number of buffered requests: " + this.queue.get(GoalStatus.BUFFERED).size() + "\n" +
-					"- Number of selected goals: " + this.queue.get(GoalStatus.SELECTED).size() + "\n");
+					"- Number of buffered requests: " + this.buffered.get(GoalStatus.BUFFERED).size() + "\n" +
+					"- Number of selected goals: " + this.buffered.get(GoalStatus.SELECTED).size() + "\n");
 
 			// send signal
-			this.queue.notifyAll();
+			this.buffered.notifyAll();
 		}
 	}
 	
@@ -318,14 +321,14 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 	protected void commit(Goal goal) {
 
 		// protect access to the queue
-		synchronized (this.queue) {
+		synchronized (this.buffered) {
 
 			// set goal status
 			goal.setStatus(GoalStatus.COMMITTED);
 			// add goal to the queue
-			this.queue.get(goal.getStatus()).add(goal);
+			this.buffered.get(goal.getStatus()).add(goal);
 			// send signal
-			this.queue.notifyAll();
+			this.buffered.notifyAll();
 		}
 	}
 	
@@ -335,14 +338,14 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 	protected void suspend(Goal goal) {
 
 		// protect access to the queue
-		synchronized (this.queue) {
+		synchronized (this.buffered) {
 
 			// set goal status
 			goal.setStatus(GoalStatus.SUSPENDED);
 			// add goal to the queue
-			this.queue.get(goal.getStatus()).add(goal);
+			this.buffered.get(goal.getStatus()).add(goal);
 			// send signal
-			this.queue.notifyAll();
+			this.buffered.notifyAll();
 		}
 	}
 
@@ -352,14 +355,14 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 	protected void finish(Goal goal) {
 
 		// protect access to the queue
-		synchronized (this.queue) {
+		synchronized (this.buffered) {
 
 			// set goal status
 			goal.setStatus(GoalStatus.FINISHED);
 			// add goal to the queue
-			this.queue.get(goal.getStatus()).add(goal);
+			this.buffered.get(goal.getStatus()).add(goal);
 			// send signal
-			this.queue.notifyAll();
+			this.buffered.notifyAll();
 		}
 	}
 	
@@ -369,14 +372,14 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 	protected void abort(Goal goal) {
 
 		// protect access to the queue
-		synchronized (this.queue) {
+		synchronized (this.buffered) {
 
 			// set goal status
 			goal.setStatus(GoalStatus.ABORTED);
 			// add goal to the queue
-			this.queue.get(goal.getStatus()).add(goal);
+			this.buffered.get(goal.getStatus()).add(goal);
 			// send signal
-			this.queue.notifyAll();
+			this.buffered.notifyAll();
 		}		
 	}
 	
@@ -525,7 +528,7 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 		}
 		
 		// clear queue
-		this.queue.clear();
+		this.buffered.clear();
 		// clear domain file specification
 		this.ddl = null;
 		// clear plan database 
@@ -962,15 +965,15 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 			this.lock.notifyAll();
  		}
 
-		// repairing result
-		boolean success = true;
+		// check if execution continues and re-planning is actually necessary
+		boolean proceed = true;
 		// start contingency handling time
 		long now = System.currentTimeMillis();
 		try {
 
 			// repair plan data
-			this.log.warn("Clearing plan structure before re-planning");
-			
+			this.log.info("Clearing plan structure before re-planning");
+
 			// list of kept decisions 
 			List<Decision> kept = new ArrayList<>();
 			// clear domain components
@@ -987,7 +990,7 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 					comp.deactivate(pending);
 					comp.free(pending);
 				}
-				
+
 				// get execution trace 
 				List<ExecutionNode> trace = goal.getExecutionTraceByComponentName(comp.getName());
 				// remove active decisions that have not been executed
@@ -999,20 +1002,19 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 					boolean executed = false;
 					for (ExecutionNode node : trace) {
 						// check if the temporal interval has been executed
-						if (node.getInterval().equals(active.getToken().getInterval())){
+						if (node.getInterval().equals(active.getToken().getInterval())) {
 							executed = true;
 							break;
 						}
 					}
-					
+
 					// check flag
 					if (executed) {
 
 						// keep the decision as active
 						this.log.info("\tKeep ACTIVE decision \"" + active + "\" since completely executed ... ");
 						kept.add(active);
-					}
-					else {
+					} else {
 
 						// clear and remove decision and related relations
 						this.log.info("\tClear ACTIVE decision \"" + active + "\" and related relations since not executed yet");
@@ -1021,15 +1023,14 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 					}
 				}
 			}
-			
-			
+
+
 			// check execution failure cause
 			ExecutionFailureCause cause = goal.getFailureCause();
 			this.log.info("Check cause of execution failure");
 			// check type
-			switch (cause.getType())
-			{
-				case NODE_DURATION_OVERFLOW : {
+			switch (cause.getType()) {
+				case NODE_DURATION_OVERFLOW: {
 
 					// keep the decision as active and consider it as executed
 					this.log.info("Handle DURATION OVERFLOW failure ...");
@@ -1047,14 +1048,16 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 							}
 						}
 					}
+
+					// proceed with execution
+					proceed = true;
 				}
 				break;
-				
-				case NODE_EXECUTION_ERROR :
-				case NODE_START_OVERFLOW : {
 
-					// remove decisions they are going to be re-planned
-					this.log.warn("Handle START OVERFLOW or TOKEN EXECUTION ERROR failures ...\n");
+				case NODE_START_OVERFLOW: {
+
+					// remove decisions that would be re-planned
+					this.log.info("Handle START OVERFLOW or TOKEN EXECUTION ERROR failures ...\n");
 					ExecutionNode node = cause.getInterruptionNode();
 					// find the related decision
 					for (DomainComponent comp : this.pdb.getComponents()) {
@@ -1070,93 +1073,135 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 							}
 						}
 					}
+
+					// proceed with execution
+					proceed = true;
 				}
 				break;
-				
+
+				case NODE_EXECUTION_ERROR: {
+
+					// remove decisions that would be re-planned
+					this.log.info("Handle NODE EXECUTION ERROR failure ...");
+					ExecutionNode node = cause.getInterruptionNode();
+					// find the related decision
+					for (DomainComponent comp : this.pdb.getComponents()) {
+						// check active decisions
+						for (Decision active : comp.getActiveDecisions()) {
+							// check temporal intervals
+							if (node.getInterval().equals(active.getToken().getInterval())) {
+								// keep the decision as active
+								this.log.debug("\tClear (failed) active decision \"" + active + "\"");
+								comp.deactivate(active);
+							}
+						}
+					}
+
+					// stop execution
+					proceed = false;
+					// clear platform
+					this.proxy.clearDispatchedIndex();
+
+					// protect access to the queue
+					synchronized (this.buffered) {
+
+						// set goal status
+						goal.setStatus(GoalStatus.BUFFERED);
+						goal.setExecutionTick(0);
+
+						// add a goal to the queue
+						this.buffered.get(goal.getStatus()).add(goal);
+						// send signal
+						this.buffered.notifyAll();
+					}
+				}
+				break;
+
 				default:
 					throw new RuntimeException("Unknown Execution Failure Cause \"" + cause.getType() + "\"");
 			}
-			
-			
-			
-			// get task description
-			AgentTaskDescription task = goal.getTaskDescription();
-			// set planning goals 
-			for (TokenDescription g : task.getGoals()) {
 
-				// get domain component
-				DomainComponent component = this.pdb.getComponentByName(g.getComponent());
-				// get goal referred value
-				ComponentValue value = component.getValueByName(g.getValue());
-				// check start time bound
-				long[] start = g.getStart();
-				if (start == null) {
-					start = new long[] {
-						this.pdb.getOrigin(),
-						this.pdb.getHorizon()
-					};
-				}
-				
-				// check end time bound
-				long[] end = g.getEnd();
-				if (end == null) {
-					end = new long[] {
-						this.pdb.getOrigin(),
-						this.pdb.getHorizon()
-					};
-				}
-				
-				// check duration bound
-				long[] duration = g.getDuration();
-				if (duration == null) {
-					duration = new long[] {
-						value.getDurationLowerBound(),
-						value.getDurationUpperBound()
-					};
-				}
-				
-				// check labels
-				String[] labels = g.getLabels();
-				if (labels == null) {
-					labels = new String[] {};
-				}
-				
+			// check proceed flag
+			if (proceed) {
 
-				// TODO : check parameter relations
+				// get task description
+				AgentTaskDescription task = goal.getTaskDescription();
+				// set planning goals
+				for (TokenDescription g : task.getGoals()) {
 
-				
-				// create goal decision
-				Decision decision = component.create(
-						value, 
-						labels,
-						start,
-						end,
-						duration,
-						ExecutionNodeStatus.IN_EXECUTION);
-				
-				// add decision to goal list
-				this.log.info("Start re-planning for goal : [" + decision.getId() +"]:" + decision.getComponent().getName() + "." + decision.getValue().getLabel() + " "
-						+ "AT [" + decision.getStart()[0]  + ", " + decision.getStart()[1] + "] "
-						+ "[" + decision.getEnd()[0] + ", " + decision.getEnd()[1] + "] "
-						+ "[" + decision.getDuration()[0] + ", " + decision.getDuration()[1] + "]");
+					// get domain component
+					DomainComponent component = this.pdb.getComponentByName(g.getComponent());
+					// get goal referred value
+					ComponentValue value = component.getValueByName(g.getValue());
+					// check start time bound
+					long[] start = g.getStart();
+					if (start == null) {
+						start = new long[]{
+								this.pdb.getOrigin(),
+								this.pdb.getHorizon()
+						};
+					}
+
+					// check end time bound
+					long[] end = g.getEnd();
+					if (end == null) {
+						end = new long[]{
+								this.pdb.getOrigin(),
+								this.pdb.getHorizon()
+						};
+					}
+
+					// check duration bound
+					long[] duration = g.getDuration();
+					if (duration == null) {
+						duration = new long[]{
+								value.getDurationLowerBound(),
+								value.getDurationUpperBound()
+						};
+					}
+
+					// check labels
+					String[] labels = g.getLabels();
+					if (labels == null) {
+						labels = new String[]{};
+					}
+
+
+					// TODO : check parameter relations
+
+					// create goal decision
+					Decision decision = component.create(
+							value,
+							labels,
+							start,
+							end,
+							duration,
+							ExecutionNodeStatus.IN_EXECUTION);
+
+					// add decision to goal list
+					this.log.info("Start re-planning for goal : [" + decision.getId() + "]:" + decision.getComponent().getName() + "." + decision.getValue().getLabel() + " "
+							+ "AT [" + decision.getStart()[0] + ", " + decision.getStart()[1] + "] "
+							+ "[" + decision.getEnd()[0] + ", " + decision.getEnd()[1] + "] "
+							+ "[" + decision.getDuration()[0] + ", " + decision.getDuration()[1] + "]");
+				}
+
+
+				// deliberate on the current status of the plan database
+				SolutionPlan plan = this.contingencyHandler.doHandle(this.pClass, this.pdb);
+				// set repaired plan
+				goal.setPlan(plan);
+				// set goal as repaired
+				goal.setRepaired(true);
+				// set the tick the execution will start
+				goal.setExecutionTick(goal.getFailureCause().getInterruptionTick());
+				// clear execution trace
+				goal.clearExecutionTrace();
 			}
-			
-			
-			// deliberate on the current status of the plan database
-			SolutionPlan plan = this.contingencyHandler.doHandle(this.pClass, this.pdb);
-			// set repaired plan
-			goal.setPlan(plan);
-			// set goal as repaired
-			goal.setRepaired(true);
-			// set the tick the execution will start
-			goal.setExecutionTick(goal.getFailureCause().getInterruptionTick());
-			// clear execution trace
-			goal.clearExecutionTrace();
 
 		} catch (Exception ex) {
 
 			// error while repairing
-			success = false;
+			proceed = false;
 			// error message
 			this.log.error("Error while trying to repair the plan\n"
 					+ "\t- message: " + ex.getMessage() + "\n");
@@ -1194,13 +1239,14 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 		synchronized (this.lock) {
 
 			// update status according to the execution results
-			if (success) {
+			if (proceed) {
+				// re-plan and proceed execution
 				this.status = ActingAgentStatus.PREPARING_EXECUTION;
 
 			} else {
 
-				// failure
-				this.status = ActingAgentStatus.FAILURE;
+				// stop execution and make the agent ready to plan again
+				this.status = ActingAgentStatus.READY;
 			}
 
 			// send signal
@@ -1208,7 +1254,7 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 		}
 		
 		// return execution result
-		return success;
+		return proceed;
 	}
 	
 	/**
@@ -1222,23 +1268,28 @@ public class GoalOrientedActingAgent implements PlatformObserver {
 		// goal 
 		Goal goal = null;
 		// wait a selected goal
-		synchronized (this.queue) {
+		synchronized (this.buffered) {
 
 			// check selected buffer
-			while (this.queue.get(status).isEmpty()) {
+			while (this.buffered.get(status).isEmpty() && this.goals.isEmpty()) {
 				// wait a selected goal
-				this.queue.wait();
+				this.buffered.wait();
 			}
 
 			// print the number of committed goals
 			this.log.info("[GoalOrientedActingAgent] Checking available goals to be processed\n" +
 					"- Goal status: " + status + "\n" +
- 					"- Number of queued goals: " + this.queue.get(status).size() + "\n");
-			
-			// remove the first selected goal from the queue
-			goal = this.queue.get(status).remove(0);
+ 					"- Number of buffered goals: " + this.buffered.get(status).size() + ";\n" +
+					"- Number of charged goals: " + this.goals.size() + ";\n");
+
+			// add buffered to the local queue
+			this.goals.addAll(this.buffered.get(status));
+			// clear buffered queue
+			this.buffered.get(status).clear();
+			// remove the first selected goal from charged queue
+			goal = this.goals.poll();
 			// send signal
-			this.queue.notifyAll();
+			this.buffered.notifyAll();
 		}
 		
 		// get extracted goal

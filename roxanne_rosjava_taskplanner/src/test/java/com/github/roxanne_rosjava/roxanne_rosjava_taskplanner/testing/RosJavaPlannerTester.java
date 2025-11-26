@@ -21,8 +21,8 @@ import java.io.FileWriter;
  */
 public class RosJavaPlannerTester
 {
-	private static final String DDL = "domains/satellite.ddl";
-	private static final String PDL = "domains/satellite.pdl";
+	private static final String DDL = "domains/assistive_hospital_v0.1.ddl";
+	private static final String PDL = "domains/assistive_hospital.pdl";
 
 	private static final String OUT = System.getenv("ROXANNE_HOME") != null ? System.getenv("ROXANNE_HOME") : "plans";
 	

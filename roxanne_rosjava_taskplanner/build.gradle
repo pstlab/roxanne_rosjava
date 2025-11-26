@@ -33,14 +33,14 @@ mainClassName = 'org.ros.RosRun'
    version number changes.
 */
 
-version '0.1.18'
+version '0.1.23'
 
 dependencies {
 
   implementation 'junit:junit:4.12'
   compile 'org.mongodb:mongo-java-driver:[3.12.7,)'
   compile 'org.ros.rosjava_core:rosjava:[0.3,0.4)'
-  compile 'org.ros.rosjava_messages:roxanne_rosjava_msgs:[0.1.0,)'
+  compile 'org.ros.rosjava_messages:roxanne_rosjava_msgs:[0.1.1,)'
   compile 'org.json:json:[20210307,)'
   /* Example of a local subproject dependency */
   compile project(':roxanne_rosjava_core')

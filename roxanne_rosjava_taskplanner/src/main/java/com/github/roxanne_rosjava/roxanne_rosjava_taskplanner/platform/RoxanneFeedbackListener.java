@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- *
+ * 
  */
 public class RoxanneFeedbackListener extends RosJavaFeedbackListener<TokenExecutionFeedback> {
 
@@ -21,9 +21,11 @@ public class RoxanneFeedbackListener extends RosJavaFeedbackListener<TokenExecut
 
     private static final PlatformFeedbackType[] RESULT = new PlatformFeedbackType[] {
 
-            PlatformFeedbackType.SUCCESS,           // index/code 0 - successful execution
+            PlatformFeedbackType.SUCCESS,               // message code: 0 - action execution successfully completed
 
-            PlatformFeedbackType.FAILURE            // index/code 1 - execution failure
+            PlatformFeedbackType.FAILURE,               // message code: 1 - action execution failure
+
+            PlatformFeedbackType.INTERRUPTED            // message code: 2 - action execution interrupted
     };
 
     /**
@@ -69,7 +71,6 @@ public class RoxanneFeedbackListener extends RosJavaFeedbackListener<TokenExecut
                 feedbackIdCounter.getAndIncrement(),
                 cmd,
                 RESULT[message.getCode()]);
-
 
         this.log.info("[RoxanneFeedbackListener] Received feedback about dispatched command:\n" +
                 "- Command ID: " + cmd.getId() + "\n" +

@@ -4,6 +4,7 @@ import it.cnr.istc.pst.platinum.ai.executive.Executive;
 import it.cnr.istc.pst.platinum.ai.executive.ExecutiveBuilder;
 import it.cnr.istc.pst.platinum.ai.executive.lang.ex.ExecutionException;
 import it.cnr.istc.pst.platinum.ai.executive.lang.failure.ExecutionFailureCause;
+import it.cnr.istc.pst.platinum.ai.executive.lang.failure.ExecutionFailureCauseType;
 import it.cnr.istc.pst.platinum.ai.executive.pdb.ExecutionNode;
 import it.cnr.istc.pst.platinum.ai.executive.pdb.ExecutionNodeStatus;
 import it.cnr.istc.pst.platinum.ai.framework.microkernel.lang.plan.SolutionPlan;
@@ -86,7 +87,7 @@ public class ExecutiveProcess implements Runnable {
 	 * @throws Exception
 	 */
 	protected void doExecute(Goal goal) 
-			throws InterruptedException, ExecutionException, Exception {
+			throws InterruptedException, ExecutionException {
 
 		// get solution plan 
 		SolutionPlan plan = goal.getPlan();
@@ -94,7 +95,6 @@ public class ExecutiveProcess implements Runnable {
 		Executive exec = ExecutiveBuilder.createAndSet(this.eClass, 0, plan.getHorizon());
 		// export plan 
 		PlanProtocolDescriptor desc = plan.export();
-		this.log.info("Ready to start (timeline-based) plan execution... ");
 		// set the executive according to the plan being executed
 		exec.initialize(desc);
 		
@@ -103,9 +103,21 @@ public class ExecutiveProcess implements Runnable {
 			// bind simulator
 			exec.link(this.agent.proxy);
 		}
-		
-		// run the executive starting at a given tick
-		boolean complete = exec.execute(goal.getExecutionTick(), goal);
+
+		// start plan execution
+		this.log.info("Ready to start plan execution...\n" +
+				"\t- goal execution tick: " + goal.getExecutionTick() + "\n");
+		// set complete flag
+		boolean complete = false;
+		try {
+
+			// run the executive starting at a given tick
+			complete = exec.execute(goal.getExecutionTick(), goal);
+
+		} catch (Exception ex) {
+			complete = false;
+			this.log.warn("Exception while executing the plan: \n- message: " + ex.getMessage() + "\n");
+		}
 
 		// stop simulator if necessary
 		if (this.agent.proxy != null) {
@@ -120,33 +132,44 @@ public class ExecutiveProcess implements Runnable {
 			ExecutionFailureCause cause = exec.getFailureCause();
 			// set failure cause
 			goal.setFailureCause(cause);
-			// set repaired 
-			goal.setRepaired(false);
-			// set goal interruption tick
-			goal.setExecutionTick(cause.getInterruptionTick());
-			// set execution trace by taking into account executed nodes
-			for (ExecutionNode node : exec.getNodes(ExecutionNodeStatus.EXECUTED)) {
-				// add the node to the goal execution trace
-				goal.addNodeToExecutionTrace(node);
+			// check failure cause
+			if (cause.equals(ExecutionFailureCauseType.NODE_EXECUTION_ERROR)) {
+
+				// clear executive clock
+				goal.clearExecutionTrace();
+				goal.setExecutionTick(0);
 			}
-			
-			// get the name of goal components
-			Set<String> components = new HashSet<>();
-			for (TokenDescription t : goal.getTaskDescription().getGoals()) {
-				components.add(t.getComponent());
-			}
-			
-			// set execution trace by taking into account also (virtual) nodes in-execution
-			for (ExecutionNode node : exec.getNodes(ExecutionNodeStatus.IN_EXECUTION)) {
-				// do not consider nodes belonging to "goal component"
-				if (!components.contains(node.getComponent())) {
+			else {
+
+				// prepare for planning adaptation/re-planning
+				goal.setRepaired(false);
+				// set goal interruption tick
+				goal.setExecutionTick(cause.getInterruptionTick());
+
+				// set execution trace by taking into account executed nodes
+				for (ExecutionNode node : exec.getNodes(ExecutionNodeStatus.EXECUTED)) {
 					// add the node to the goal execution trace
 					goal.addNodeToExecutionTrace(node);
 				}
+
+				// get the name of goal components
+				Set<String> components = new HashSet<>();
+				for (TokenDescription t : goal.getTaskDescription().getGoals()) {
+					components.add(t.getComponent());
+				}
+
+				// set execution trace by taking into account also (virtual) nodes in-execution
+				for (ExecutionNode node : exec.getNodes(ExecutionNodeStatus.IN_EXECUTION)) {
+					// do not consider nodes belonging to "goal component"
+					if (!components.contains(node.getComponent())) {
+						// add the node to the goal execution trace
+						goal.addNodeToExecutionTrace(node);
+					}
+				}
 			}
-			
+
 			// throw exception
-			throw new ExecutionException("Execution failure... try to repair the plan through replanning... \n"
+			throw new ExecutionException("Execution failure... \n"
 					+ "\t- cause: " + cause + "\n", cause);
 		}
 	}
