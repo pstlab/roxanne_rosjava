@@ -24,23 +24,8 @@ ROXANNE aims at creating a ROS compliatn framework facilitating the use of timel
 
 ## Tutorial
 
-* [Background on Automated Planning and Robotics](/tutorial/background/intro.md)
-  * [Timeline-based Planning and Execution](/tutorial/background/timelines.md)
-  * [Deliberative Control](/tutorial/background/deliberative.md)
-  * [Goal Oriented Autonomous Agents](/tutorial/background/goaa.md)
- 
- 
-* [ROXANNE](/tutorial/overview/intro.md)
-  * [Framework Architecture](/tutorial/overview/architecture.md)
-  * [Acting Node Structure](/tutorial/overview/acting.md)
-  * [Timeline-based Reasoning](/tutorial/overview/solving.md)
-  * [Timeline-based Execution](/tutorial/overview/execution.md)
-  * [Configuring and Exetending ROXANNE](/tutorial/overview/config-roxanne.md)
-
-* [Description Language and Modeling](/tutorial/modeling/intro.md)
-  * [Modeling Language](/tutorial/modeling/language.md)
-  * [Hierarhical Approach](/tutorial/modeling/hierarhical.md)
-  * [Additional Resources](/tutorial/modeling/additional.md)
+* [Framework Architecture](/tutorial/overview/architecture.md)
+* [Acting Node Structure](/tutorial/overview/acting.md)
 
 ## Acknowledgment
 
