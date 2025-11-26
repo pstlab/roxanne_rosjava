@@ -443,7 +443,7 @@ public class RosJavaPlatformProxy extends PlatformProxy {
     }
 
     /**
-     * The default behavior is to dispatch any node associated to the tokens
+     * The default behavior is to dispatch any node associated with the tokens
      * of primitive state variables.
      *
      * Check the platform configuration file with the dispatching and feedback specifications
